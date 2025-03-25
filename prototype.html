@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原型设计 - 商户权益中心需求文档</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3, h4 {
+            color: #4fa1d5;
+            margin-top: 1.5em;
+        }
+
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; }
+
+        /* 固定导航栏样式 */
+        .fixed-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-title {
+            font-weight: bold;
+            color: #4fa1d5;
+            margin-right: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            background-color: #4fa1d5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav-button:hover {
+            background-color: #3a87b7;
+        }
+
+        .nav-button.active {
+            background-color: #3a87b7;
+            font-weight: bold;
+        }
+
+        /* 为固定导航条腾出空间 */
+        .main-content {
+            margin-top: 70px;
+        }
+
+        .prototype-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 50px;
+            padding: 20px 0;
+            justify-items: center;
+        }
+        
+        .prototype-item {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            width: 380px;
+            margin-bottom: 15px;
+        }
+        
+        .prototype-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .prototype-frame-container {
+            width: 380px;
+            height: 840px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: -10px;
+        }
+        
+        .prototype-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            transform: scale(0.8);
+            transform-origin: top center;
+        }
+        
+        .prototype-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4fa1d5;
+            padding: 6px 12px;
+            margin: 0;
+        }
+        
+        .prototype-desc {
+            font-size: 14px;
+            color: #666;
+            padding: 0 12px 10px;
+            margin: 0;
+        }
+        
+        @media (min-width: 768px) {
+            .prototype-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .prototype-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* 新增样式 */
+        .prototype-categories {
+            margin: 20px 0;
+        }
+        .category-section {
+            margin-bottom: 30px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #f9fafb;
+        }
+        .prototype-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .prototype-links .nav-button {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .prototype-links .nav-button:before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .toc {
+            background-color: #f0f5ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .toc li {
+            margin-bottom: 8px;
+        }
+        .toc a {
+            color: #0052D9;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .section-header {
+            background-color: #edf2ff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .flow-diagram {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .user-flow-img {
+            width: 100%;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        .badge-h5 {
+            background-color: #e6f7ff;
+            color: #0089ff;
+        }
+        .badge-web {
+            background-color: #f0f9eb;
+            color: #67c23a;
+        }
+        .prototype-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .prototype-table th, .prototype-table td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            text-align: left;
+        }
+        .prototype-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+        .prototype-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .version-info {
+            text-align: right;
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 40px;
+        }
+        .highlight-callout {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .inner-table td {
+            padding: 8px;
+            border: none;
+            vertical-align: top;
+        }
+        .inner-table tr:nth-child(even) {
+            background-color: transparent;
+        }
+        .prototype-table ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 固定导航栏 -->
+    <div class="fixed-nav">
+        <div class="nav-container">
+            <div class="nav-title">商户权益中心需求文档</div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="window.location.href='index.html'">1. 概述</button>
+                <button class="nav-button" onclick="window.location.href='requirements.html'">2. 需求说明</button>
+                <button class="nav-button" onclick="window.location.href='architecture.html'">3. 系统架构</button>
+                <button class="nav-button active" onclick="window.location.href='prototype.html'">4. 原型设计</button>
+                <button class="nav-button" onclick="window.location.href='interaction.html'">5. 交互设计</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <!-- 原型设计 -->
+        <div id="prototype">
+            <h2>4. 原型设计</h2>
+            
+            <!-- 目录导航 -->
+            <div class="toc">
+                <h3 style="margin-top: 0;">目录</h3>
+                <ul>
+                    <li><a href="#prototype-nav">4.1 原型分类导航</a></li>
+                    <li><a href="#prototype-overview">4.2 原型页面全览</a></li>
+                    <li><a href="#component-design">4.3 核心组件设计</a></li>
+                    <li><a href="#visual-specs">4.4 视觉规范与设计系统</a></li>
+                    <li><a href="#delivery-standards">4.5 原型交付标准</a></li>
+                    <li><a href="#detailed-specs">4.6 详细设计规范</a></li>
+                </ul>
+            </div>
+            
+            <div class="highlight-callout">
+                <p><strong>开发与测试人员注意事项：</strong>本文档提供完整的原型设计导览，包括H5端和Web后台管理端所有页面的链接。请使用4.1节的导航直接访问各原型页面，并参考交互设计文档中的用户流程图了解不同页面间的关联关系。</p>
+            </div>
+            
+            <!-- 4.1 原型分类导航 -->
+            <div id="prototype-nav" class="section-header">
+                <h3>4.1 原型分类导航</h3>
+            </div>
+            
+            <div class="prototype-categories">
+                <div class="category-section">
+                    <h4>A-H5 原型 <span class="badge badge-h5">移动端</span></h4>
+                    <p>主要是 prototype_h5 文件夹中的页面，包括权益内容和代理商相关：</p>
+                    
+                    <table class="prototype-table">
+                        <thead>
+                            <tr>
+                                <th width="30%">原型名称</th>
+                                <th width="50%">功能描述</th>
+                                <th width="20%">链接</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>权益中心首页</td>
+                                <td>展示权益包列表、推荐权益和活动信息的入口页面</td>
+                                <td><a href="prototype_h5/merchant_fee_discount.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                            <tr>
+                                <td>权益详情页</td>
+                                <td>展示单个权益包的详细信息、使用规则和购买入口</td>
+                                <td><a href="prototype_h5/benefit_detail.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                            <tr>
+                                <td>我的权益页</td>
+                                <td>展示用户已购买的权益及使用状态，支持权益管理</td>
+                                <td><a href="prototype_h5/my_benefits.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                            <tr>
+                                <td>权益使用记录</td>
+                                <td>展示权益的使用历史和剩余情况，支持记录筛选</td>
+                                <td><a href="prototype_h5/usage_records.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                            <tr>
+                                <td>购买确认页</td>
+                                <td>确认购买信息并完成支付流程</td>
+                                <td><a href="prototype_h5/purchase_confirm.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                            <tr>
+                                <td>代理推广页</td>
+                                <td>代理商专属推广工具，支持生成和分享推广码</td>
+                                <td><a href="prototype_h5/agent.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="category-section">
+                    <h4>B-Web 原型 <span class="badge badge-web">管理后台</span></h4>
+                    <p>主要是 admin 文件夹中的页面，包括后台管理：</p>
+                    
+                    <table class="prototype-table">
+                        <thead>
+                            <tr>
+                                <th width="30%">原型名称</th>
+                                <th width="50%">功能描述</th>
+                                <th width="20%">链接</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>权益配置管理</td>
+                                <td>管理系统中所有权益的配置，包括创建、编辑、上下架权益</td>
+                                <td><a href="admin/admin_benefit_config.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                            <tr>
+                                <td>商户权益管理</td>
+                                <td>管理商户已购买的权益，包括查询、修改、延期等操作</td>
+                                <td><a href="admin/admin_merchant_benefit_config.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                            <tr>
+                                <td>系统配置管理</td>
+                                <td>管理系统基础配置，包括佣金比例、活动规则等设置</td>
+                                <td><a href="admin/admin_config.html" target="_blank" class="nav-button">查看原型</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 4.2 原型页面全览 -->
+            <div id="prototype-overview" class="section-header">
+                <h3>4.2 原型页面全览</h3>
+            </div>
+            
+            <div class="highlight-callout" style="margin-bottom: 20px;">
+                <p><strong>新版原型预览：</strong>我们更新了原型展示方式，采用带有真实手机外壳的设计，以提供更接近实际使用场景的视觉体验。每个原型都包含完整的手机框架（尺寸为380×822像素），包括顶部刘海和侧边按钮，让您直观感受到实际手机中的界面效果。以下预览内容等比例缩小显示。</p>
+            </div>
+            
+            <div class="prototype-grid">
+                <div class="prototype-item">
+                    <div class="prototype-frame-container" style="display: flex; justify-content: center; align-items: center;">
+                        <iframe src="preview/merchant_fee_discount_preview.html" class="prototype-frame" title="权益中心首页" style="top: 50%; transform: translateY(-50%);"></iframe>
+                    </div>
+                    <div class="prototype-title">权益中心首页 <span class="badge badge-h5">H5</span></div>
+                    <div class="prototype-desc">展示权益包列表、推荐权益和活动信息</div>
+                </div>
+                <div class="prototype-item">
+                    <div class="prototype-frame-container" style="display: flex; justify-content: center; align-items: center;">
+                        <iframe src="preview/benefit_detail_preview.html" class="prototype-frame" title="权益详情页" style="top: 50%; transform: translateY(-50%);"></iframe>
+                    </div>
+                    <div class="prototype-title">权益详情页 <span class="badge badge-h5">H5</span></div>
+                    <div class="prototype-desc">展示单个权益包的详细信息和购买入口</div>
+                </div>
+                <div class="prototype-item">
+                    <div class="prototype-frame-container">
+                        <iframe src="preview/my_benefits_preview.html" class="prototype-frame" title="我的权益页" style="top: 50%; transform: translateY(-50%);"></iframe>
+                    </div>
+                    <div class="prototype-title">我的权益页 <span class="badge badge-h5">H5</span></div>
+                    <div class="prototype-desc">展示用户已购买的权益及使用状态</div>
+                </div>
+                <div class="prototype-item">
+                    <div class="prototype-frame-container" style="display: flex; justify-content: center; align-items: center;">
+                        <iframe src="preview/benefit_usage_record_preview.html" class="prototype-frame" title="权益使用记录" style="top: 50%; transform: translateY(-50%);"></iframe>
+                    </div>
+                    <div class="prototype-title">权益使用记录 <span class="badge badge-h5">H5</span></div>
+                    <div class="prototype-desc">展示权益的使用历史和剩余情况</div>
+                </div>
+                <div class="prototype-item">
+                    <div class="prototype-frame-container" style="display: flex; justify-content: center; align-items: center;">
+                        <iframe src="preview/purchase_confirm_preview.html" class="prototype-frame" title="购买确认页" style="top: 50%; transform: translateY(-50%);"></iframe>
+                    </div>
+                    <div class="prototype-title">购买确认页 <span class="badge badge-h5">H5</span></div>
+                    <div class="prototype-desc">确认购买信息并完成支付</div>
+                </div>
+                <div class="prototype-item">
+                    <div class="prototype-frame-container" style="display: flex; justify-content: center; align-items: center;">
+                        <iframe src="preview/agent_promotion_preview.html" class="prototype-frame" title="代理推广页" style="top: 50%; transform: translateY(-50%);"></iframe>
+                    </div>
+                    <div class="prototype-title">代理推广页 <span class="badge badge-h5">H5</span></div>
+                    <div class="prototype-desc">代理商专属推广工具和数据</div>
+                </div>
+            </div>
+            
+            <!-- 4.3 核心组件设计 -->
+            <div id="component-design" class="section-header">
+                <h3>4.3 核心组件设计</h3>
+            </div>
+            
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="25%">组件名称</th>
+                        <th width="25%">功能说明</th>
+                        <th width="50%">设计规范</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>权益卡片组件</strong></td>
+                        <td>展示单个权益包的基本信息，作为权益列表的基础单元</td>
+                        <td>
+                    <ul class="text-sm space-y-2">
+                        <li>卡片尺寸：宽度100%，高度自适应</li>
+                        <li>包含：权益图标、标题、描述、价格、标签</li>
+                        <li>交互：点击整张卡片进入详情页</li>
+                        <li>状态：普通、推荐、热门、已购买</li>
+                    </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>权益详情组件</strong></td>
+                        <td>展示权益的详细信息和使用状态</td>
+                        <td>
+                    <ul class="text-sm space-y-2">
+                        <li>包含：权益状态指示器、使用规则列表</li>
+                        <li>数据展示：总数量、已使用、剩余数量</li>
+                        <li>交互：展开/收起详情、一键使用</li>
+                    </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>导航组件</strong></td>
+                        <td>提供页面间的导航功能，确保用户可以方便地在应用中移动</td>
+                        <td>
+                    <ul class="text-sm space-y-2">
+                        <li>顶部导航栏：返回按钮、页面标题、功能按钮</li>
+                        <li>底部标签栏：首页、我的权益、个人中心</li>
+                        <li>交互：滑动手势支持、页面切换动效</li>
+                    </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>代理推广组件</strong></td>
+                        <td>提供代理商推广功能，支持生成推广码和查看业绩</td>
+                        <td>
+                            <ul class="text-sm space-y-2">
+                                <li>二维码生成与分享功能</li>
+                                <li>推广数据统计卡片</li>
+                                <li>佣金计算与展示</li>
+                                <li>推广链接生成</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="highlight-callout" style="margin-top: 20px;">
+                <p><strong>查看组件示例：</strong>所有核心组件的完整演示和交互示例可在<a href="prototype_h5/component_demo.html" target="_blank" class="nav-button" style="display: inline-block; margin-left: 10px;">组件库演示页面</a>中查看。组件库提供了每个组件在不同状态下的视觉效果和交互行为。</p>
+            </div>
+            
+            <!-- 4.4 视觉规范与设计系统 -->
+            <div id="visual-specs" class="section-header">
+                <h3>4.4 视觉规范与设计系统</h3>
+            </div>
+            
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="20%">规范类别</th>
+                        <th width="80%">详细规范</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>色彩系统</strong></td>
+                        <td>
+                            <table class="inner-table" style="width:100%; border-collapse: collapse;">
+                                <tr>
+                                    <td width="25%"><strong>主色调</strong></td>
+                                    <td width="75%">拉卡拉蓝 (#4fa1d5) <span style="display:inline-block; width:20px; height:20px; background-color:#4fa1d5; vertical-align:middle; margin-left:5px;"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>辅助色</strong></td>
+                                    <td>
+                                        成功绿 (#3BB974) <span style="display:inline-block; width:20px; height:20px; background-color:#3BB974; vertical-align:middle; margin-left:5px;"></span><br>
+                                        警告黄 (#F2C94C) <span style="display:inline-block; width:20px; height:20px; background-color:#F2C94C; vertical-align:middle; margin-left:5px;"></span><br>
+                                        错误红 (#F87171) <span style="display:inline-block; width:20px; height:20px; background-color:#F87171; vertical-align:middle; margin-left:5px;"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>中性色</strong></td>
+                                    <td>
+                                        标题黑 (#1F2937) <span style="display:inline-block; width:20px; height:20px; background-color:#1F2937; vertical-align:middle; margin-left:5px;"></span><br>
+                                        正文灰 (#4B5563) <span style="display:inline-block; width:20px; height:20px; background-color:#4B5563; vertical-align:middle; margin-left:5px;"></span><br>
+                                        背景灰 (#F9FAFB) <span style="display:inline-block; width:20px; height:20px; background-color:#F9FAFB; vertical-align:middle; margin-left:5px; border:1px solid #e5e7eb;"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>渐变色</strong></td>
+                                    <td>
+                                        主题渐变 (从#4fa1d5到#78C6E8)<br>
+                                        金卡渐变 (从#F2C94C到#F29A4C)<br>
+                                        钻石卡渐变 (从#9A73E4到#7A59C5)
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>字体与排版</strong></td>
+                        <td>
+                            <table class="inner-table" style="width:100%; border-collapse: collapse;">
+                                <tr>
+                                    <td width="25%"><strong>主要字体</strong></td>
+                                    <td width="75%">Roboto (移动端)、思源黑体 (中文优化)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>标题大小</strong></td>
+                                    <td>大标题 20px、中标题 18px、小标题 16px</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>正文大小</strong></td>
+                                    <td>正文 14px、辅助文字 12px</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>行高</strong></td>
+                                    <td>1.5倍行高，确保良好可读性</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>组件规范</strong></td>
+                        <td>
+                            <table class="inner-table" style="width:100%; border-collapse: collapse;">
+                                <tr>
+                                    <td width="25%"><strong>圆角</strong></td>
+                                    <td width="75%">小圆角 4px、中圆角 8px、大圆角 16px</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>阴影</strong></td>
+                                    <td>轻微阴影 2px、中等阴影 4px、强阴影 8px</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>间距</strong></td>
+                                    <td>基础单位 4px，内边距 16px，外边距 24px</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>图标</strong></td>
+                                    <td>线性图标，统一24x24尺寸</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>响应式设计</strong></td>
+                        <td>
+                            <table class="inner-table" style="width:100%; border-collapse: collapse;">
+                                <tr>
+                                    <td width="25%"><strong>移动端</strong></td>
+                                    <td width="75%">基础设计宽度375px</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>平板</strong></td>
+                                    <td>768px断点</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>桌面</strong></td>
+                                    <td>1024px、1440px断点</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>后台管理</strong></td>
+                                    <td>最小宽度1280px</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- 4.5 原型交付标准 -->
+            <div id="delivery-standards" class="section-header">
+                <h3>4.5 原型交付标准</h3>
+            </div>
+            
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="25%">交付项</th>
+                        <th width="25%">格式</th>
+                        <th width="50%">说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>设计稿</strong></td>
+                        <td>Figma</td>
+                        <td>高保真Figma设计稿，包含组件库和交互原型</td>
+                    </tr>
+                    <tr>
+                        <td><strong>交互原型</strong></td>
+                        <td>HTML/CSS</td>
+                        <td>可交互的HTML/CSS实现原型，用于开发参考</td>
+                    </tr>
+                    <tr>
+                        <td><strong>设计规范</strong></td>
+                        <td>PDF/HTML</td>
+                        <td>包含所有视觉元素和组件说明的设计规范文档</td>
+                    </tr>
+                    <tr>
+                        <td><strong>标注文档</strong></td>
+                        <td>Figma/Zeplin</td>
+                        <td>包含尺寸、间距、颜色等具体参数的标注文档</td>
+                    </tr>
+                    <tr>
+                        <td><strong>系统架构</strong></td>
+                        <td>SVG</td>
+                        <td>系统架构图，详见<a href="images/system_architecture.svg" target="_blank" rel="noopener">系统架构</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="highlight-callout">
+                <h4 style="margin-top: 0;">原型使用方法</h4>
+                <ol>
+                    <li><strong>访问原型：</strong>通过4.1节的导航链接访问各原型页面</li>
+                    <li><strong>页面交互：</strong>原型支持点击交互，蓝色元素通常表示可点击区域</li>
+                    <li><strong>导航关系：</strong>参考交互设计文档中的用户流程图了解页面间的跳转关系</li>
+                    <li><strong>查看组件规范：</strong>4.3节提供了核心组件的设计规范</li>
+                    <li><strong>视觉规范参考：</strong>开发时请参考4.4节的视觉规范确保一致性</li>
+                </ol>
+                
+                <h4>常见问题</h4>
+                <ul>
+                    <li><strong>原型加载不出来？</strong>请确保使用最新的Chrome/Edge/Firefox浏览器</li>
+                    <li><strong>找不到某个页面？</strong>请在4.1节原型分类导航中查找</li>
+                    <li><strong>需要查看原始设计稿？</strong>请访问Figma设计稿：<a href="https://figma.com/file/xxx" target="_blank" rel="noopener">点击查看</a></li>
+                    <li><strong>有其他问题？</strong>请联系设计团队负责人：张三 (zhangsan@example.com)</li>
+                </ul>
+            </div>
+            
+            <div class="version-info">
+                <p>文档版本：v1.2.0 | 最后更新：2025年3月19日</p>
+            </div>
+
+            <!-- 4.6 详细设计规范 -->
+            <div id="detailed-specs" class="section-header">
+                <h3>4.6 详细设计规范</h3>
+            </div>
+
+            <div class="highlight-callout">
+                <p><strong>重要说明：</strong>本节提供了详细的设计规范，用于确保设计实现的一致性和高质量。开发人员和设计师应当严格遵循这些规范。</p>
+            </div>
+
+            <h4>4.6.1 组件细节规范</h4>
+
+            <div class="highlight-callout" style="margin-bottom: 20px;">
+                <p><strong>组件库演示：</strong>可通过<a href="prototype_h5/component_demo.html" target="_blank" class="nav-button" style="display: inline-block; margin-left: 10px;">访问组件库</a>查看所有组件的实际效果和交互示例。组件库包含本文档中描述的所有UI组件，并提供了不同状态和使用场景的演示。</p>
+            </div>
+
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="20%">组件</th>
+                        <th width="35%">细节规范</th>
+                        <th width="25%">响应状态</th>
+                        <th width="20%">可访问性要求</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>按钮</strong></td>
+                        <td>
+                            <ul>
+                                <li>主按钮：#4fa1d5，白色文字，高度44px</li>
+                                <li>次按钮：#FFFFFF，#4fa1d5边框和文字</li>
+                                <li>文字按钮：无背景，#4fa1d5文字</li>
+                                <li>内边距：水平16px，垂直10px</li>
+                                <li>圆角：4px</li>
+                                <li>字号：14px</li>
+                                <li>字重：500</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>默认态：原色</li>
+                                <li>悬停态：#3D8EB6 (亮度-10%)</li>
+                                <li>按下态：#2C7EA2 (亮度-20%)</li>
+                                <li>禁用态：50%透明度</li>
+                                <li>加载态：显示加载动画</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>焦点状态明确</li>
+                                <li>键盘可访问</li>
+                                <li>文字对比度≥4.5:1</li>
+                                <li>支持屏幕阅读器</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>输入框</strong></td>
+                        <td>
+                            <ul>
+                                <li>高度：44px (单行)</li>
+                                <li>内边距：水平12px，垂直10px</li>
+                                <li>边框：1px，#E5E7EB</li>
+                                <li>圆角：4px</li>
+                                <li>字号：14px</li>
+                                <li>占位符颜色：#9CA3AF</li>
+                                <li>文本颜色：#1F2937</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>默认态：灰色边框</li>
+                                <li>聚焦态：#4fa1d5边框，轻微阴影</li>
+                                <li>错误态：#F87171边框</li>
+                                <li>禁用态：灰色背景</li>
+                                <li>只读态：浅灰背景</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>必须有标签</li>
+                                <li>错误提示清晰</li>
+                                <li>支持键盘操作</li>
+                                <li>支持屏幕阅读器</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>权益卡片</strong></td>
+                        <td>
+                            <ul>
+                                <li>卡片高度：自适应</li>
+                                <li>边距：内边距16px</li>
+                                <li>圆角：8px</li>
+                                <li>阴影：0 2px 8px rgba(0,0,0,0.1)</li>
+                                <li>边框：可选，1px #E5E7EB</li>
+                                <li>标题字号：16px，字重600</li>
+                                <li>描述字号：14px，字重400</li>
+                                <li>价格字号：18px，字重600</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>默认态：白底</li>
+                                <li>悬停态：轻微抬升</li>
+                                <li>热门状态：特殊标识</li>
+                                <li>已购状态：标签提示</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>内容结构化</li>
+                                <li>焦点状态明确</li>
+                                <li>整卡可点击</li>
+                                <li>状态明确区分</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>标签</strong></td>
+                        <td>
+                            <ul>
+                                <li>高度：22px</li>
+                                <li>内边距：水平8px</li>
+                                <li>圆角：2px或11px（胶囊型）</li>
+                                <li>字号：12px</li>
+                                <li>颜色：根据标签类型</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>信息标签：蓝色</li>
+                                <li>成功标签：绿色</li>
+                                <li>警告标签：黄色</li>
+                                <li>错误标签：红色</li>
+                                <li>中性标签：灰色</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>颜色不作为唯一标识</li>
+                                <li>文字对比度达标</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>4.6.2 交互与动效规范</h4>
+
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="25%">交互类型</th>
+                        <th width="35%">规范说明</th>
+                        <th width="40%">实现细节</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>转场动效</strong></td>
+                        <td>
+                            <ul>
+                                <li>页面切换：滑动过渡</li>
+                                <li>弹窗显示：渐显+缩放</li>
+                                <li>列表加载：依次渐显</li>
+                                <li>下拉刷新：旋转动画</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>持续时间：200-300ms</li>
+                                <li>缓动函数：ease-out或cubic-bezier(0.33, 1, 0.68, 1)</li>
+                                <li>页面切换方向：新页面从右进，旧页面从左出</li>
+                                <li>弹窗初始缩放：0.95，最终1.0</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>反馈动效</strong></td>
+                        <td>
+                            <ul>
+                                <li>按钮点击：轻微缩放</li>
+                                <li>开关切换：滑动+颜色变化</li>
+                                <li>成功提示：上浮渐隐</li>
+                                <li>加载状态：旋转或跳动</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>按钮缩放值：0.98</li>
+                                <li>点击反馈时长：100ms</li>
+                                <li>toast显示时长：2000ms</li>
+                                <li>加载动画：循环旋转360度，600ms/周期</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>手势交互</strong></td>
+                        <td>
+                            <ul>
+                                <li>列表滑动：流畅滚动</li>
+                                <li>下拉刷新：阻尼效果</li>
+                                <li>左右滑动：切换选项卡</li>
+                                <li>卡片滑动：显示操作按钮</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>滚动惯性：减速率0.8</li>
+                                <li>下拉刷新触发阈值：80px</li>
+                                <li>阻尼系数：0.6</li>
+                                <li>滑动切换阈值：屏幕宽度30%</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>4.6.3 自适应与响应式布局</h4>
+
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="20%">设备类型</th>
+                        <th width="20%">断点范围</th>
+                        <th width="30%">布局变化</th>
+                        <th width="30%">特殊处理</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>小屏手机</strong></td>
+                        <td>320px - 374px</td>
+                        <td>
+                            <ul>
+                                <li>单列布局</li>
+                                <li>字体缩小1px</li>
+                                <li>内边距缩小至12px</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>隐藏非必要元素</li>
+                                <li>长文本自动截断</li>
+                                <li>按钮可占满宽度</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>标准手机</strong></td>
+                        <td>375px - 428px</td>
+                        <td>
+                            <ul>
+                                <li>单列布局</li>
+                                <li>标准字体大小</li>
+                                <li>内边距16px</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>标准尺寸设计</li>
+                                <li>底部安全区域预留</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>平板设备</strong></td>
+                        <td>768px - 1023px</td>
+                        <td>
+                            <ul>
+                                <li>双列布局</li>
+                                <li>内容区域最大宽度720px</li>
+                                <li>卡片尺寸增大</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>横竖屏自适应</li>
+                                <li>更多内容同屏展示</li>
+                                <li>侧边导航可见</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>桌面设备</strong></td>
+                        <td>≥1024px</td>
+                        <td>
+                            <ul>
+                                <li>多列布局</li>
+                                <li>内容区域居中</li>
+                                <li>最大宽度1200px</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>更丰富的交互方式</li>
+                                <li>悬停状态设计</li>
+                                <li>快捷键支持</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>4.6.4 命名规范与资源组织</h4>
+
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="25%">类别</th>
+                        <th width="35%">命名规则</th>
+                        <th width="40%">示例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>CSS类名</strong></td>
+                        <td>
+                            <ul>
+                                <li>采用BEM命名法</li>
+                                <li>模块名__元素名--修饰符</li>
+                                <li>全小写，连字符分隔</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li><code>benefit-card</code> (模块)</li>
+                                <li><code>benefit-card__title</code> (元素)</li>
+                                <li><code>benefit-card__button--primary</code> (修饰符)</li>
+                                <li><code>benefit-list__item--featured</code> (状态)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>图片资源</strong></td>
+                        <td>
+                            <ul>
+                                <li>功能-类型-状态-尺寸</li>
+                                <li>使用连字符分隔</li>
+                                <li>使用2x、3x表示倍率</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li><code>icon-home-normal-24px.png</code></li>
+                                <li><code>icon-home-active-24px.png</code></li>
+                                <li><code>bg-benefit-card-default.jpg</code></li>
+                                <li><code>logo-merchant-center-48px@2x.png</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>颜色变量</strong></td>
+                        <td>
+                            <ul>
+                                <li>颜色-色调-亮度</li>
+                                <li>功能性命名</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li><code>--color-blue-500: #4fa1d5;</code></li>
+                                <li><code>--color-blue-400: #78C6E8;</code></li>
+                                <li><code>--color-blue-600: #3D8EB6;</code></li>
+                                <li><code>--color-primary: var(--color-blue-500);</code></li>
+                                <li><code>--color-text-primary: #1F2937;</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>文件组织</strong></td>
+                        <td>
+                            <ul>
+                                <li>按功能和类型分组</li>
+                                <li>组件文件独立</li>
+                                <li>共享资源集中</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li><code>/styles/variables.css</code></li>
+                                <li><code>/styles/components/benefit-card.css</code></li>
+                                <li><code>/images/icons/</code></li>
+                                <li><code>/images/backgrounds/</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>4.6.5 可访问性规范</h4>
+
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="25%">领域</th>
+                        <th width="35%">规范要求</th>
+                        <th width="40%">实现方法</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>颜色对比度</strong></td>
+                        <td>
+                            <ul>
+                                <li>正文文本：≥4.5:1</li>
+                                <li>大号文本：≥3:1</li>
+                                <li>非文本UI组件：≥3:1</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>使用对比检查工具验证所有文本</li>
+                                <li>不依赖颜色作为唯一信息传达方式</li>
+                                <li>提供高对比度模式选项</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>键盘操作</strong></td>
+                        <td>
+                            <ul>
+                                <li>所有交互元素可通过键盘访问</li>
+                                <li>焦点状态明确可见</li>
+                                <li>焦点顺序符合逻辑</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>焦点状态：#4fa1d5边框+阴影</li>
+                                <li>自定义焦点样式：outline: 2px solid #4fa1d5;</li>
+                                <li>Tab索引遵循页面自然流</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>语义化结构</strong></td>
+                        <td>
+                            <ul>
+                                <li>使用语义化HTML元素</li>
+                                <li>正确的ARIA角色</li>
+                                <li>适当的标题层级</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>使用nav、main、article等语义标签</li>
+                                <li>使用h1-h6表示标题层级</li>
+                                <li>使用button而非div实现按钮</li>
+                                <li>表单元素关联label</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>响应式适配</strong></td>
+                        <td>
+                            <ul>
+                                <li>支持200%字体缩放</li>
+                                <li>内容在各尺寸设备可访问</li>
+                                <li>触摸目标足够大</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>使用相对单位(rem, em)定义尺寸</li>
+                                <li>触摸目标最小尺寸44x44px</li>
+                                <li>避免固定高度容器溢出</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>4.6.6 品牌一致性规范</h4>
+
+            <table class="prototype-table">
+                <thead>
+                    <tr>
+                        <th width="25%">元素</th>
+                        <th width="75%">规范说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Logo使用</strong></td>
+                        <td>
+                            <ul>
+                                <li>拉卡拉蓝色Logo：#4fa1d5，正常使用场景</li>
+                                <li>白色Logo：深色背景使用</li>
+                                <li>安全区域：Logo周围0.5x高度的空白区域</li>
+                                <li>最小尺寸：移动端24px高度，桌面端32px高度</li>
+                                <li>禁止变形、旋转或应用特效</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>品牌色应用</strong></td>
+                        <td>
+                            <ul>
+                                <li>拉卡拉蓝(#4fa1d5)用于主要按钮、强调元素和品牌标识</li>
+                                <li>辅助色作为功能性提示和次要元素</li>
+                                <li>保持色彩使用的一致性，避免引入额外色彩</li>
+                                <li>重要操作和主要引导路径优先使用品牌主色</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>图像风格</strong></td>
+                        <td>
+                            <ul>
+                                <li>插图风格：线性商务风格，配合品牌色</li>
+                                <li>图标风格：统一的线条粗细，圆角处理</li>
+                                <li>照片风格：明亮、专业、真实的商业场景</li>
+                                <li>权益包图片：统一的模板样式，确保视觉一致性</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>文案风格</strong></td>
+                        <td>
+                            <ul>
+                                <li>语气：专业、简洁、友好</li>
+                                <li>按钮文案：动词+名词，3-6字为宜</li>
+                                <li>提示文案：明确、直接，避免技术术语</li>
+                                <li>错误提示：说明问题并提供解决方法</li>
+                                <li>产品名称：首次出现使用全称，后续可使用简称</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-callout">
+                <h4 style="margin-top: 0;">设计规范应用检查清单</h4>
+                <ol>
+                    <li><strong>颜色一致性</strong>：所有UI元素是否使用规范中定义的颜色？</li>
+                    <li><strong>排版规范</strong>：字体、字号、行高是否符合规范？</li>
+                    <li><strong>组件应用</strong>：是否使用了统一的组件库？自定义组件是否遵循规范？</li>
+                    <li><strong>间距一致</strong>：页面内部间距是否一致？组件间距是否符合规范？</li>
+                    <li><strong>响应式实现</strong>：在不同尺寸设备上布局是否合理？</li>
+                    <li><strong>交互反馈</strong>：所有可交互元素是否有明确的状态反馈？</li>
+                    <li><strong>可访问性</strong>：是否满足基本的可访问性要求？</li>
+                    <li><strong>品牌一致性</strong>：设计是否符合品牌视觉语言？</li>
+                </ol>
+            </div>
+
+            <!-- 在目录导航部分添加组件库链接 -->
+            <div class="prototype-links" style="margin-top: 15px;">
+                <p><strong>快速访问：</strong></p>
+                <a href="prototype_h5/component_demo.html" target="_blank" class="nav-button" style="margin-right: 10px;" rel="noopener">组件库演示</a>
+                <a href="images/system_architecture.svg" target="_blank" class="nav-button" style="margin-right: 10px;" rel="noopener">系统架构图</a>
+                <a href="https://figma.com/file/xxx" target="_blank" class="nav-button" rel="noopener">Figma设计稿</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

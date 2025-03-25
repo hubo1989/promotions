@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用记录</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #6fb5de;
+            --primary-dark: #3a89ba;
+            --primary-bg: #ECF5FA;
+            --secondary-color: #03dac6;
+            --background: #F7F9FC;
+            --surface: #ffffff;
+            --error: #E53935;
+            --success: #00C48C;
+            --warning: #FF9800;
+            --text-primary: #1A1A1A;
+            --text-secondary: #5E6C84;
+            --text-tertiary: #8993A4;
+            --text-on-primary: #ffffff;
+            --border-color: #E5E9F2;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --elevated-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --phone-width: 380px;
+            --phone-height: 822px;
+            --phone-border-width: 16px;
+            --phone-border-radius: 48px;
+            --phone-notch-width: 126px;
+            --phone-notch-height: 28px;
+            --content-width: 348px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-md: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 22px;
+            --touch-target-size: 44px;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            margin: 2rem auto;
+            position: relative;
+            border: var(--phone-border-width) solid #222;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            background-color: #fff;
+            overflow: hidden;
+            width: var(--phone-width);
+            height: var(--phone-height);
+            color: var(--text-primary);
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--phone-notch-width);
+            height: var(--phone-notch-height);
+            background-color: #222;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 1000;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            top: 120px;
+            right: calc(var(--phone-border-width) * -1 - 1px);
+            width: 4px;
+            height: 40px;
+            background-color: #444;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+
+        /* 调整内容容器的样式 */
+        .content-wrapper {
+            width: var(--content-width);
+            height: calc(100% - var(--phone-border-width) * 2);
+            display: flex;
+            flex-direction: column;
+            padding-top: calc(var(--phone-notch-height) + var(--spacing-sm));
+            margin: var(--phone-border-width) auto;
+            position: relative;
+            z-index: 1;
+            background-color: white;
+        }
+
+        /* 调整主内容区域的内边距 */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-md);
+            padding-bottom: var(--spacing-lg);
+        }
+
+        /* 添加滚动条样式 */
+        .main-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .main-content::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+
+        .material-card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .month-divider {
+            position: sticky;
+            top: 0;
+            background-color: var(--background);
+            z-index: 10;
+            padding: var(--spacing-sm) var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .nav-header {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            height: var(--touch-target-size);
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-md);
+            position: relative;
+            z-index: 10;
+            box-shadow: var(--card-shadow);
+            margin-top: var(--spacing-sm);
+        }
+        
+        .header-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .options-button {
+            width: var(--touch-target-size);
+            height: var(--touch-target-size);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .options-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <!-- 顶部导航栏 -->
+        <div class="nav-header">
+            <div class="options-button">
+                <a href="benefit_detail_preview.html">
+                    <i class="fas fa-arrow-left text-gray-600"></i>
+                </a>
+            </div>
+            <div class="flex-1 flex justify-center">
+                <h1 class="header-title">使用记录</h1>
+            </div>
+            <div class="options-button">
+                <span class="material-icons text-gray-600">filter_list</span>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 权益卡片摘要 -->
+            <div class="material-card p-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                            <span class="material-icons text-[var(--primary-color)]" style="font-size: 16px;">workspace_premium</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[16px] font-medium text-gray-900">黄金VIP会员</h3>
+                            <div class="flex items-center">
+                                <span class="material-icons text-[var(--primary-color)] mr-1" style="font-size: 11px;">confirmation_number</span>
+                                <span class="text-[11px] text-gray-600">剩余30张抵扣券</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 记录列表 -->
+            <div class="record-list">
+                <!-- 2023年11月 -->
+                <div class="month-divider">
+                    <p class="text-[12px] font-medium text-gray-600">2023年11月</p>
+                </div>
+                
+                <div class="material-card">
+                    <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                        <div>
+                            <p class="text-[12px] text-gray-900">交易抵扣</p>
+                            <p class="text-[10px] text-gray-500">2023-11-28 16:45:28</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[12px] text-gray-900">-1张</p>
+                            <p class="text-[10px] text-gray-500">订单号: 2023112800935</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                        <div>
+                            <p class="text-[12px] text-gray-900">交易抵扣</p>
+                            <p class="text-[10px] text-gray-500">2023-11-22 10:18:05</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[12px] text-gray-900">-1张</p>
+                            <p class="text-[10px] text-gray-500">订单号: 2023112200841</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                        <div>
+                            <p class="text-[12px] text-gray-900">交易抵扣</p>
+                            <p class="text-[10px] text-gray-500">2023-11-15 14:32:45</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[12px] text-gray-900">-1张</p>
+                            <p class="text-[10px] text-gray-500">订单号: 2023111500721</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                        <div>
+                            <p class="text-[12px] text-gray-900">交易抵扣</p>
+                            <p class="text-[10px] text-gray-500">2023-11-10 09:15:22</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[12px] text-gray-900">-1张</p>
+                            <p class="text-[10px] text-gray-500">订单号: 2023111000583</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3">
+                        <div>
+                            <p class="text-[12px] text-gray-900">会员权益赠送</p>
+                            <p class="text-[10px] text-gray-500">2023-11-01 00:00:00</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[12px] text-green-600">+30张</p>
+                            <p class="text-[10px] text-gray-500">系统发放</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 2023年10月 -->
+                <div class="month-divider">
+                    <p class="text-[12px] font-medium text-gray-600">2023年10月</p>
+                </div>
+                
+                <div class="material-card">
+                    <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                        <div>
+                            <p class="text-[12px] text-gray-900">交易抵扣</p>
+                            <p class="text-[10px] text-gray-500">2023-10-28 13:22:10</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[12px] text-gray-900">-1张</p>
+                            <p class="text-[10px] text-gray-500">订单号: 2023102800475</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                        <div>
+                            <p class="text-[12px] text-gray-900">交易抵扣</p>
+                            <p class="text-[10px] text-gray-500">2023-10-15 09:45:38</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[12px] text-gray-900">-1张</p>
+                            <p class="text-[10px] text-gray-500">订单号: 2023101500362</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3">
+                        <div>
+                            <p class="text-[12px] text-gray-900">会员权益赠送</p>
+                            <p class="text-[10px] text-gray-500">2023-10-01 00:00:00</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[12px] text-green-600">+5张</p>
+                            <p class="text-[10px] text-gray-500">系统发放</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 添加页面导航功能
+        const pages = [
+            'agent_promotion_preview.html',
+            'benefit_detail_preview.html',
+            'benefit_usage_record_preview.html',
+            'merchant_fee_discount_preview.html',
+            'my_benefits_preview.html',
+            'purchase_confirm_preview.html'
+        ];
+        
+        // 获取当前页面名称
+        const currentPage = window.location.pathname.split('/').pop();
+        const currentIndex = pages.indexOf(currentPage);
+        
+        // 添加返回按钮功能
+        const backButton = document.querySelector('.options-button .fa-arrow-left');
+        if (backButton) {
+            backButton.parentElement.style.cursor = 'pointer';
+            backButton.parentElement.addEventListener('click', function() {
+                // 修改为返回上一级页面，而不是浏览器的后退功能
+                // 定义页面层级结构，将业务员推广页面设为最高级页面
+                const pageHierarchy = {
+                    'benefit_detail_preview.html': 'my_benefits_preview.html',
+                    'benefit_usage_record_preview.html': 'my_benefits_preview.html',
+                    'merchant_fee_discount_preview.html': 'my_benefits_preview.html',
+                    'my_benefits_preview.html': 'agent_promotion_preview.html',
+                    'purchase_confirm_preview.html': 'my_benefits_preview.html'
+                };
+                
+                // 获取上一级页面
+                const parentPage = pageHierarchy[currentPage];
+                if (parentPage) {
+                    window.location.href = parentPage;
+                } else {
+                    // 如果没有定义上一级页面，则回到业务员推广页面
+                    window.location.href = 'agent_promotion_preview.html';
+                }
+            });
+        }
+        
+        // 添加底部操作栏按钮功能
+        const actionButtons = document.querySelectorAll('.action-button');
+        if (actionButtons.length > 0) {
+            actionButtons.forEach((button, index) => {
+                button.style.cursor = 'pointer';
+                button.addEventListener('click', function() {
+                    // 当按钮被点击时，跳转到下一个页面
+                    const nextPage = (currentIndex + index + 1) % pages.length;
+                    window.location.href = pages[nextPage];
+                });
+            });
+        }
+        
+        // 添加其他按钮的功能（如"立即使用"等）
+        const otherButtons = document.querySelectorAll('button');
+        if (otherButtons.length > 0) {
+            otherButtons.forEach(button => {
+                button.style.cursor = 'pointer';
+                button.addEventListener('click', function() {
+                    const nextIndex = (currentIndex + 1) % pages.length;
+                    window.location.href = pages[nextIndex];
+                });
+            });
+        }
+        
+        // 添加交互效果 - 点击效果
+        const allClickableElements = document.querySelectorAll('.action-button, button, .options-button');
+        allClickableElements.forEach(element => {
+            element.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            element.addEventListener('mouseup', function() {
+                this.style.transform = 'scale(1)';
+            });
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    });
+</script>
+</html> 

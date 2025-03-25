@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1158" height="700" viewBox="0 0 1158 700">
+  <!-- 背景 -->
+  <rect width="1158" height="700" fill="#f9fafb" />
+  
+  <!-- 标题 -->
+  <text x="579" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#0052D9">用户权益购买操作流程</text>
+  
+  <!-- 开始节点 -->
+  <ellipse cx="579" cy="85" rx="40" ry="25" fill="#0052D9" />
+  <text x="579" y="90" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="white">开始</text>
+  
+  <!-- 连接线 -->
+  <line x1="579" y1="110" x2="579" y2="140" stroke="#4B5563" stroke-width="2" />
+  
+  <!-- 扫描代理推广二维码 -->
+  <a xlink:href="agent.html" target="_top">
+    <rect x="479" y="140" width="200" height="50" rx="8" fill="#E1EFFE" stroke="#0052D9" stroke-width="2" />
+    <text x="579" y="170" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">扫描代理推广二维码</text>
+  </a>
+  
+  <!-- 连接线 -->
+  <line x1="579" y1="190" x2="579" y2="220" stroke="#4B5563" stroke-width="2" />
+  
+  <!-- 进入代理推广页 -->
+  <a xlink:href="agent.html" target="_top">
+    <rect x="479" y="220" width="200" height="50" rx="8" fill="#E1EFFE" stroke="#0052D9" stroke-width="2" />
+    <text x="579" y="250" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">进入代理推广页</text>
+  </a>
+  
+  <!-- 连接线 -->
+  <line x1="579" y1="270" x2="579" y2="300" stroke="#4B5563" stroke-width="2" />
+  
+  <!-- 查看权益详情 -->
+  <a xlink:href="benefit_detail.html" target="_top">
+    <rect x="479" y="300" width="200" height="50" rx="8" fill="#E1EFFE" stroke="#0052D9" stroke-width="2" />
+    <text x="579" y="330" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">查看权益详情</text>
+  </a>
+  
+  <!-- 连接线 -->
+  <line x1="579" y1="350" x2="579" y2="380" stroke="#4B5563" stroke-width="2" />
+  
+  <!-- 点击购买按钮 -->
+  <a xlink:href="purchase_confirm.html" target="_top">
+    <rect x="479" y="380" width="200" height="50" rx="8" fill="#E1EFFE" stroke="#0052D9" stroke-width="2" />
+    <text x="579" y="410" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">点击购买按钮</text>
+  </a>
+  
+  <!-- 连接线 -->
+  <line x1="579" y1="430" x2="579" y2="460" stroke="#4B5563" stroke-width="2" />
+  
+  <!-- 确认购买信息 -->
+  <a xlink:href="purchase_confirm.html" target="_top">
+    <rect x="479" y="460" width="200" height="50" rx="8" fill="#E1EFFE" stroke="#0052D9" stroke-width="2" />
+    <text x="579" y="490" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">确认购买信息</text>
+  </a>
+  
+  <!-- 连接线 -->
+  <line x1="579" y1="510" x2="579" y2="540" stroke="#4B5563" stroke-width="2" />
+  
+  <!-- 支付成功? -->
+  <polygon points="579,540 629,570 579,600 529,570" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2" />
+  <text x="579" y="575" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">支付成功?</text>
+  
+  <!-- 否连接线 -->
+  <line x1="529" y1="570" x2="400" y2="570" stroke="#4B5563" stroke-width="2" />
+  <text x="460" y="560" font-family="Arial" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">否</text>
+  
+  <!-- 支付失败处理 -->
+  <rect x="300" y="545" width="200" height="50" rx="8" fill="#FEE2E2" stroke="#EF4444" stroke-width="2" />
+  <text x="400" y="575" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">支付失败处理</text>
+  
+  <!-- 返回连接线 -->
+  <path d="M 300 570 L 250 570 L 250 410 L 479 410" fill="none" stroke="#4B5563" stroke-width="2" />
+  <text x="310" y="500" font-family="Arial" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">返回重试</text>
+  
+  <!-- 是连接线 -->
+  <line x1="629" y1="570" x2="750" y2="570" stroke="#4B5563" stroke-width="2" />
+  <text x="690" y="560" font-family="Arial" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">是</text>
+  
+  <!-- 购买成功显示 -->
+  <rect x="750" y="545" width="200" height="50" rx="8" fill="#D1FAE5" stroke="#10B981" stroke-width="2" />
+  <text x="850" y="575" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">购买成功显示</text>
+  
+  <!-- 成功后连接线 -->
+  <line x1="850" y1="595" x2="850" y2="625" stroke="#4B5563" stroke-width="2" />
+  
+  <!-- 进入权益使用记录 -->
+  <a xlink:href="usage_records.html" target="_top">
+    <rect x="750" y="625" width="200" height="50" rx="8" fill="#E1EFFE" stroke="#0052D9" stroke-width="2" />
+    <text x="850" y="655" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1F2937">进入权益使用记录</text>
+  </a>
+  
+  <!-- 图例 -->
+  <rect x="950" y="85" width="20" height="20" rx="4" fill="#E1EFFE" stroke="#0052D9" stroke-width="2" />
+  <text x="980" y="100" font-family="Arial" font-size="14" fill="#1F2937">操作步骤</text>
+  
+  <polygon points="960,125 970,135 960,145 950,135" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2" />
+  <text x="990" y="140" font-family="Arial" font-size="14" fill="#1F2937">判断节点</text>
+  
+  <rect x="950" y="160" width="20" height="20" rx="4" fill="#D1FAE5" stroke="#10B981" stroke-width="2" />
+  <text x="990" y="175" font-family="Arial" font-size="14" fill="#1F2937">成功状态</text>
+  
+  <rect x="950" y="195" width="20" height="20" rx="4" fill="#FEE2E2" stroke="#EF4444" stroke-width="2" />
+  <text x="990" y="210" font-family="Arial" font-size="14" fill="#1F2937">失败状态</text>
+  
+  <!-- 流程说明 -->
+  <text x="579" y="690" font-family="Arial" font-size="14" font-style="italic" text-anchor="middle" fill="#6B7280">
+    用户通过扫描代理推广二维码进入代理推广页，查看权益详情后进行购买，支付成功后可查看权益使用记录
+  </text>
+</svg>

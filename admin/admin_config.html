@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员权益后台配置</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./shared-styles.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- 侧边导航栏 -->
+        <div id="navigation-container"></div>
+
+        <!-- 主要内容区域 -->
+        <div class="flex-1 overflow-y-auto h-screen">
+            <!-- 顶部导航栏 -->
+            <nav class="bg-white shadow-md sticky top-0 z-10">
+                <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img src="https://placehold.co/32x32/5046e4/white?text=V" alt="Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold">权益包管理系统</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-700">管理员</span>
+                            <img src="https://placehold.co/32x32/5046e4/white?text=A" alt="Avatar" class="h-8 w-8 rounded-full">
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container mx-auto px-6 py-6">
+                <!-- 页面标题和操作按钮 -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">权益包管理</h2>
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center" id="create-package-btn">
+                        <i class="fas fa-plus mr-2"></i>
+                        <span>创建权益包</span>
+                    </button>
+                </div>
+
+                <!-- 筛选和排序工具栏 -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6 flex flex-wrap items-center justify-between">
+                    <div class="flex space-x-4 mb-2 sm:mb-0">
+                        <div class="relative">
+                            <select id="status-filter" aria-label="按状态筛选" class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option>全部状态</option>
+                                <option>待发布</option>
+                                <option>已上线</option>
+                                <option>已下线</option>
+                                <option>已过期</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+                        </div>
+                        <div class="relative">
+                            <select id="type-filter" aria-label="按类型筛选" class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option>全部类型</option>
+                                <option>基础会员</option>
+                                <option>高级会员</option>
+                                <option>企业会员</option>
+                                <option>定制会员</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="relative">
+                            <select id="sort-order" aria-label="排序方式" class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option>创建时间</option>
+                                <option>销售量</option>
+                                <option>价格</option>
+                                <option>使用率</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+                        </div>
+                        <button id="export-data-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-download mr-2"></i>
+                            <span>导出数据</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 权益包列表 -->
+                <div id="package-container" class="grid grid-cols-1 gap-6 mb-6">
+                    <!-- 权益包卡片由 JS 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认对话框 -->
+    <div class="modal" id="delete-confirm-modal">
+        <div class="modal-content p-6 max-w-md">
+            <div class="text-center">
+                <div class="mb-4">
+                    <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">确认删除权益包</h3>
+                <p class="text-gray-600 mb-6" id="delete-confirm-text"></p>
+                <div class="flex justify-center space-x-3">
+                    <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200" id="cancel-delete-btn">取消</button>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" id="confirm-delete-btn">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下线确认对话框 -->
+    <div class="modal" id="offline-confirm-modal">
+        <div class="modal-content p-6 max-w-md">
+            <div class="text-center">
+                <div class="mb-4">
+                    <i class="fas fa-exclamation-circle text-4xl text-amber-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">确认下线权益包</h3>
+                <p class="text-gray-600 mb-6" id="offline-confirm-text">确定要下线该权益包吗？已购买用户的权益将不受影响。</p>
+                <div class="flex justify-center space-x-3">
+                    <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200" id="cancel-offline-btn">取消</button>
+                    <button class="bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700" id="confirm-offline-btn">确认下线</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+
+    <!-- 载入共享脚本 -->
+    <script src="./components/loader.js"></script>
+    <script src="./components/package-card.js"></script>
+    <script src="./js/package-management.js"></script>
+    <script>
+        // 在页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化权益包数据
+            initializePackages();
+            
+            // 设置事件监听器
+            setupEventListeners();
+        });
+        
+        // 初始化权益包数据
+        function initializePackages() {
+            const packageContainer = document.getElementById('package-container');
+            
+            // 示例权益包数据
+            const packageData = [
+                {
+                    title: '黄金VIP会员',
+                    status: '已上线',
+                    packageId: 'BP10023',
+                    icon: 'fa-crown',
+                    iconBg: 'amber',
+                    stats: {
+                        '价格': '¥59.00',
+                        '有效期': '90天',
+                        '销售量': '1,234',
+                        '使用率': '78.5%'
+                    },
+                    benefits: [
+                        { name: '满5000-10元手续费抵扣券', value: '30张', icon: 'fa-ticket-alt' },
+                        { name: '信用卡评测权益', value: '无限次', icon: 'fa-chart-line' },
+                        { name: '专属一对一客服支持', value: '包含', icon: 'fa-headset' }
+                    ],
+                    dates: {
+                        '创建时间': '2023-06-15',
+                        '上线时间': '2023-06-20'
+                    }
+                },
+                {
+                    title: '铂金VIP会员',
+                    status: '已下线',
+                    packageId: 'BP10024',
+                    icon: 'fa-gem',
+                    iconBg: 'purple',
+                    stats: {
+                        '价格': '¥109.00',
+                        '有效期': '180天',
+                        '销售量': '856',
+                        '使用率': '82.3%'
+                    },
+                    benefits: [
+                        { name: '满5000-10元手续费抵扣券', value: '50张', icon: 'fa-ticket-alt' },
+                        { name: '信用卡评测权益', value: '无限次', icon: 'fa-chart-line' },
+                        { name: '专属一对一客服支持', value: '包含', icon: 'fa-headset' },
+                        { name: '增值税发票服务', value: '包含', icon: 'fa-file-invoice' }
+                    ],
+                    dates: {
+                        '创建时间': '2023-07-10',
+                        '上线时间': '2023-07-15',
+                        '下线时间': '2023-09-20'
+                    }
+                }
+            ];
+            
+            // 渲染权益包卡片
+            let packagesHTML = '';
+            const packageInstances = [];
+            
+            packageData.forEach(data => {
+                const packageCard = new PackageCard(data);
+                
+                // 设置事件处理函数 - 在渲染前设置
+                packageCard.onEdit = function(id) {
+                    window.location.href = `./admin_benefit_config.html?id=${data.packageId}`;
+                    return false;
+                };
+                
+                packageCard.onCopy = function(id) {
+                    window.location.href = `./admin_benefit_config.html?id=${data.packageId}&copy=true`;
+                    return false;
+                };
+                
+                packageCard.onDelete = function(id) {
+                    const deleteConfirmText = document.getElementById('delete-confirm-text');
+                    deleteConfirmText.textContent = `确定要删除权益包 "${data.title}" 吗？此操作不可恢复。`;
+                    
+                    // 保存当前要删除的packageId
+                    document.getElementById('delete-confirm-modal').dataset.packageId = data.packageId;
+                    document.getElementById('delete-confirm-modal').classList.add('show');
+                    return false;
+                };
+                
+                packageCard.onSetOffline = function(id) {
+                    // 保存当前要下线的packageId
+                    document.getElementById('offline-confirm-modal').dataset.packageId = data.packageId;
+                    document.getElementById('offline-confirm-modal').classList.add('show');
+                    return false;
+                };
+                
+                packagesHTML += packageCard.render();
+                packageInstances.push(packageCard);
+            });
+            
+            packageContainer.innerHTML = packagesHTML;
+            
+            // 渲染后附加事件监听器
+            packageInstances.forEach(packageCard => {
+                packageCard.attachEventListeners();
+            });
+        }
+        
+        // 设置页面事件监听器
+        function setupEventListeners() {
+            // 创建权益包按钮
+            const createBtn = document.getElementById('create-package-btn');
+            if (createBtn) {
+                createBtn.addEventListener('click', function() {
+                    window.location.href = './admin_benefit_config.html?new=true';
+                });
+            }
+            
+            // 筛选器变更事件
+            const filters = document.querySelectorAll('#status-filter, #type-filter, #sort-order');
+            filters.forEach(filter => {
+                filter.addEventListener('change', function() {
+                    // 实际应用中应该根据筛选条件重新加载数据
+                    console.log('Filter changed:', this.id, this.value);
+                });
+            });
+            
+            // 导出数据按钮
+            const exportBtn = document.getElementById('export-data-btn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', function() {
+                    showNotification('数据导出成功');
+                });
+            }
+            
+            // 删除确认对话框
+            const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+            
+            if (cancelDeleteBtn) {
+                cancelDeleteBtn.addEventListener('click', function() {
+                    deleteConfirmModal.classList.remove('show');
+                });
+            }
+            
+            if (confirmDeleteBtn) {
+                confirmDeleteBtn.addEventListener('click', function() {
+                    const packageId = deleteConfirmModal.dataset.packageId;
+                    if (packageId) {
+                        // 在实际应用中执行删除操作
+                        console.log(`删除权益包: ${packageId}`);
+                        showNotification('权益包已删除');
+                        
+                        // 刷新列表（实际应用中应该只删除对应元素）
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    }
+                    deleteConfirmModal.classList.remove('show');
+                });
+            }
+            
+            // 下线确认对话框
+            const offlineConfirmModal = document.getElementById('offline-confirm-modal');
+            const cancelOfflineBtn = document.getElementById('cancel-offline-btn');
+            const confirmOfflineBtn = document.getElementById('confirm-offline-btn');
+            
+            if (cancelOfflineBtn) {
+                cancelOfflineBtn.addEventListener('click', function() {
+                    offlineConfirmModal.classList.remove('show');
+                });
+            }
+            
+            if (confirmOfflineBtn) {
+                confirmOfflineBtn.addEventListener('click', function() {
+                    const packageId = offlineConfirmModal.dataset.packageId;
+                    if (packageId) {
+                        // 在实际应用中执行下线操作
+                        console.log(`下线权益包: ${packageId}`);
+                        showNotification('权益包已下线');
+                        
+                        // 刷新列表（实际应用中应该只更新对应元素）
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    }
+                    offlineConfirmModal.classList.remove('show');
+                });
+            }
+            
+            // 点击模态框外部关闭
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('show');
+                }
+            });
+        }
+        
+        // 显示通知消息
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 bg-${type === 'success' ? 'green' : 'red'}-100 border-l-4 border-${type === 'success' ? 'green' : 'red'}-500 text-${type === 'success' ? 'green' : 'red'}-700 p-4 rounded shadow-md z-50`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <div class="py-1"><svg class="h-6 w-6 text-${type === 'success' ? 'green' : 'red'}-500 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12'}" />
+                    </svg></div>
+                    <div>${message}</div>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            // 3秒后自动消失
+            setTimeout(() => {
+                notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

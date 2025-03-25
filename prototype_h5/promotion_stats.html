@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推广数据统计</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="typography.css">
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #6fb8e0;
+            --primary-dark: #3a89bb;
+            --primary-bg: #ecf5fb;
+            --secondary-color: #03dac6;
+            --background: #F7F9FC;
+            --surface: #ffffff;
+            --error: #E53935;
+            --success: #00C48C;
+            --warning: #FF9800;
+            --text-primary: #1A1A1A;
+            --text-secondary: #505A6C;
+            --text-tertiary: #6F7A8C;
+            --text-on-primary: #ffffff;
+            --border-color: #E5E7EB;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --elevated-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --border-radius-md: 8px;
+            --border-radius-sm: 4px;
+        }
+
+        /* 标准化注释和需求说明样式 */
+        .annotation {
+            font-size: 14px;
+            color: #333;
+            padding: 8px 12px;
+            background: #f0f7ff;
+            border-left: 3px solid var(--primary-color);
+            border-radius: 4px;
+            margin: 8px 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            line-height: 1.5;
+        }
+        .design-doc {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .design-doc h3, .design-doc h4 {
+            color: var(--primary-color);
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+        .design-doc ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+        .design-doc li {
+            margin-bottom: 4px;
+        }
+        .requirement {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- 左侧原型区域 -->
+        <div class="w-[450px] flex-shrink-0 h-screen bg-gray-50 relative overflow-auto">
+            <div class="sticky top-0 w-full bg-gray-200 text-center py-2 text-sm text-gray-600">
+                <i class="fas fa-mobile-alt mr-2"></i>移动端预览
+            </div>
+            <iframe src="../preview/promotion_stats_preview.html" class="w-full h-[calc(100vh-40px)] border-0"></iframe>
+            <div class="absolute bottom-4 left-0 right-0 text-center text-gray-500 text-sm animate-bounce">
+                <i class="fas fa-chevron-up"></i> 上下滑动查看完整内容 <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+        
+        <!-- 右侧标注区域 -->
+        <div class="flex-1 p-8 bg-white">
+            <h1 class="text-3xl font-bold mb-8">推广数据统计页面说明文档</h1>
+            
+            <section class="mb-8">
+                <h2 class="text-xl font-bold mb-4">1. 页面概述</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    推广数据统计是面向推广人员的数据分析页面，提供推广业绩查看、数据趋势分析等功能。页面采用移动端优先设计，确保良好的触控体验。
+                </p>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-xl font-bold mb-4">2. 功能模块</h2>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">2.1 顶部导航栏</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>返回按钮：点击返回代理推广页面</li>
+                            <li>页面标题：显示"推广数据统计"</li>
+                            <li>更多按钮：点击展开更多操作选项</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">2.2 数据概览卡片</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>展示核心指标：累计推广商户数、活跃商户数、累计佣金和本月新增商户</li>
+                            <li>采用渐变背景和大字体突出显示数据，提高可读性</li>
+                            <li>数据实时更新，反映最新业绩状况</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">2.3 日期筛选</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>提供近7天、近30天和全部三个时间范围选择</li>
+                            <li>默认选中近7天</li>
+                            <li>点击切换后，页面所有数据和图表将根据所选时间范围刷新</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">2.4 业绩趋势图</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>展示所选时间范围内每日的推广商户数和佣金额变化趋势</li>
+                            <li>使用折线图直观展示数据波动</li>
+                            <li>横轴为日期，竖轴为数量/金额</li>
+                            <li>支持触摸查看具体数值</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">2.5 商户分布</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>使用饼图展示推广商户的分布情况</li>
+                            <li>按权益包类型或商户类型进行分类展示</li>
+                            <li>支持点击查看详细分类数据</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">2.6 推广订单列表</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>按时间倒序展示所有推广成功的订单</li>
+                            <li>每个订单显示：商户名称、ID、权益包名称、订单金额、佣金和时间</li>
+                            <li>使用不同颜色标签区分订单结算状态</li>
+                            <li>支持点击筛选功能，可按结算状态、权益类型等条件筛选</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-xl font-bold mb-4">3. 交互说明</h2>
+                <div class="space-y-4 text-gray-700">
+                    <p><strong>点击操作：</strong>所有可点击区域需要有明确的视觉反馈，最小点击区域为44x44px。</p>
+                    <p><strong>时间筛选：</strong>点击日期筛选标签，刷新页面数据为所选时间范围。</p>
+                    <p><strong>图表互动：</strong>点击图表，显示该点详细数据。</p>
+                    <p><strong>筛选功能：</strong>点击"筛选"，打开筛选面板，可设置多条件筛选。</p>
+                    <p><strong>上滑操作：</strong>加载更多订单记录。</p>
+                </div>
+            </section>
+
+            <section class="mb-8">
+                <h2 class="text-xl font-bold mb-4">4. 跳转关系</h2>
+                <div class="space-y-4 text-gray-700">
+                    <p><strong>入口：</strong>从代理推广页的"查看详情"按钮进入此页面</p>
+                    <p><strong>返回：</strong>点击返回按钮返回代理推广页</p>
+                    <p><strong>详情查看：</strong>点击订单记录可查看订单详情</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-bold mb-4">5. 数据规则说明</h2>
+                <div class="space-y-4 text-gray-700">
+                    <p><strong>5.1 名词解释</strong></p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>活跃商户：指最近30天内有交易的推广商户</li>
+                        <li>待结算佣金：指商户购买权益但尚未达到结算周期的佣金</li>
+                        <li>已结算佣金：已发放到代理商账户的佣金</li>
+                        <li>结算周期：每月15日结算上月1日至月底的佣金</li>
+                    </ul>
+
+                    <p><strong>5.2 数据加载异常</strong></p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>加载时显示骨架屏和加载动画</li>
+                        <li>网络连接中断时显示网络错误提示，提供重试按钮</li>
+                        <li>数据请求超时时显示超时提示，自动尝试重新加载</li>
+                    </ul>
+
+                    <p><strong>5.3 数据为空</strong></p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>无推广数据时，数据概览区域显示"0"值，同时各图表区域显示空状态图形和提示</li>
+                        <li>无推广订单时，列表区域显示"暂无推广订单"的空状态提示</li>
+                        <li>筛选结果为空时，显示"没有符合条件的数据"并提供重置筛选条件的选项</li>
+                    </ul>
+
+                    <p><strong>5.4 图表渲染问题</strong></p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>图表渲染失败时，显示友好的错误提示并提供刷新选项</li>
+                        <li>数据量过大导致图表显示拥挤时，自动调整显示密度</li>
+                        <li>当数据极差过大时，优化显示比例确保清晰可读</li>
+                    </ul>
+
+                    <p><strong>5.5 切换时段问题</strong></p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>时段切换中数据加载失败时，保留原时段数据并显示切换失败提示</li>
+                        <li>自定义日期范围超过系统限制（如超过365天）时，显示错误提示</li>
+                        <li>日期选择无效（如结束日期早于开始日期）时，提供校正提示</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html> 

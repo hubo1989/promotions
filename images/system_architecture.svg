@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="2200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- 渐变定义 -->
+        <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#0052D9;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+        </linearGradient>
+        <!-- 阴影定义 -->
+        <filter id="dropShadow">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="2" dy="2"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.3"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <!-- 箭头标记 -->
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#0052D9"/>
+        </marker>
+    </defs>
+
+ 
+    <!-- 功能架构部分 -->
+    <g transform="translate(0,0)">
+        <!-- 功能架构标题 -->
+        <rect x="300" y="20" width="600" height="60" rx="10" fill="url(#headerGradient)" filter="url(#dropShadow)"/>
+        <text x="600" y="60" text-anchor="middle" fill="white" font-size="24" font-weight="bold">商户权益中心功能架构</text>
+  
+  <!-- 入口节点 -->
+        <g transform="translate(0,100)">
+            <a onclick="window.location.href='../prototype_h5/agent.html'" style="cursor:pointer">
+                <rect x="220" y="20" width="160" height="60" rx="8" fill="#10B981" filter="url(#dropShadow)"/>
+                <text x="300" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">业务员推广</text>
+            </a>
+
+            <a onclick="window.location.href='../prototype_h5/merchant_fee_discount.html'" style="cursor:pointer">
+                <rect x="620" y="20" width="160" height="60" rx="8" fill="#10B981" filter="url(#dropShadow)"/>
+                <text x="700" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">App浏览权益</text>
+            </a>
+
+            <!-- 连接线 -->
+            <line x1="300" y1="80" x2="300" y2="150" stroke="#4B5563" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <line x1="700" y1="80" x2="700" y2="150" stroke="#4B5563" stroke-width="2" marker-end="url(#arrowhead)"/>
+        </g>
+  
+  <!-- 一级节点 -->
+        <g transform="translate(0,220)">
+            <a onclick="window.location.href='../prototype_h5/agent.html'" style="cursor:pointer">
+                <rect x="220" y="20" width="160" height="60" rx="8" fill="#0052D9" filter="url(#dropShadow)"/>
+                <text x="300" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">代理推广页</text>
+            </a>
+
+            <a onclick="window.location.href='../prototype_h5/merchant_fee_discount.html'" style="cursor:pointer">
+                <rect x="620" y="20" width="160" height="60" rx="8" fill="#0052D9" filter="url(#dropShadow)"/>
+                <text x="700" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">权益中心首页</text>
+            </a>
+
+            <!-- 平级跳转连接线 -->
+            <line x1="380" y1="50" x2="620" y2="50" stroke="#FF0000" stroke-width="4" stroke-dasharray="12,6"/>
+            <polygon points="610,45 620,50 610,55" fill="#FF0000"/>
+            <text x="500" y="40" text-anchor="middle" fill="#FF0000" font-size="14" font-weight="bold">平级跳转</text>
+
+            <!-- 一级到二级的连接线 -->
+            <line x1="300" y1="80" x2="300" y2="140" stroke="#4B5563" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <line x1="700" y1="80" x2="500" y2="140" stroke="#4B5563" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <line x1="700" y1="80" x2="700" y2="140" stroke="#4B5563" stroke-width="2" marker-end="url(#arrowhead)"/>
+        </g>
+  
+  <!-- 二级节点 -->
+        <g transform="translate(0,340)">
+            <a onclick="window.location.href='../prototype_h5/promotion_stats.html'" style="cursor:pointer">
+                <rect x="220" y="20" width="160" height="60" rx="8" fill="#6366F1" filter="url(#dropShadow)"/>
+                <text x="300" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">推广数据统计</text>
+            </a>
+
+            <a onclick="window.location.href='../prototype_h5/purchase_confirm.html'" style="cursor:pointer">
+                <rect x="420" y="20" width="160" height="60" rx="8" fill="#6366F1" filter="url(#dropShadow)"/>
+                <text x="500" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">购买确认页</text>
+            </a>
+
+            <a onclick="window.location.href='../prototype_h5/my_benefits.html'" style="cursor:pointer">
+                <rect x="620" y="20" width="160" height="60" rx="8" fill="#6366F1" filter="url(#dropShadow)"/>
+                <text x="700" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">我的权益页</text>
+            </a>
+
+            <!-- 数据流向连接线 -->
+            <line x1="420" y1="50" x2="380" y2="50" stroke="#FF9900" stroke-width="3" stroke-dasharray="10,5"/>
+            <polygon points="390,45 380,50 390,55" fill="#FF9900"/>
+            <text x="400" y="100" text-anchor="middle" fill="#FF9900" font-size="14" font-weight="bold">数据反馈</text>
+
+
+            <!-- 二级到三级的连接线 -->
+            <line x1="700" y1="80" x2="700" y2="140" stroke="#4B5563" stroke-width="2" marker-end="url(#arrowhead)"/>
+        </g>
+  
+  <!-- 三级节点 -->
+        <g transform="translate(0,460)">
+            <a onclick="window.location.href='../prototype_h5/benefit_detail.html'" style="cursor:pointer">
+                <rect x="620" y="20" width="160" height="60" rx="8" fill="#8B5CF6" filter="url(#dropShadow)"/>
+                <text x="700" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">权益详情页</text>
+            </a>
+
+            <!-- 三级到四级的连接线 -->
+            <line x1="700" y1="80" x2="700" y2="140" stroke="#4B5563" stroke-width="2" marker-end="url(#arrowhead)"/>
+        </g>
+
+        <!-- 四级节点 -->
+        <g transform="translate(0,580)">
+            <a onclick="window.location.href='../prototype_h5/usage_records.html'" style="cursor:pointer">
+                <rect x="620" y="20" width="160" height="60" rx="8" fill="#EC4899" filter="url(#dropShadow)"/>
+                <text x="700" y="55" text-anchor="middle" fill="white" font-size="16" font-weight="bold">权益使用记录</text>
+            </a>
+        </g>
+
+        <!-- 图例 -->
+        <g transform="translate(820,100)">
+            <rect x="20" y="20" width="20" height="20" rx="4" fill="#10B981"/>
+            <text x="50" y="35" font-size="14" fill="#1F2937">入口页面</text>
+
+            <rect x="20" y="50" width="20" height="20" rx="4" fill="#0052D9"/>
+            <text x="50" y="65" font-size="14" fill="#1F2937">一级页面</text>
+
+            <rect x="20" y="80" width="20" height="20" rx="4" fill="#6366F1"/>
+            <text x="50" y="95" font-size="14" fill="#1F2937">二级页面</text>
+
+            <rect x="20" y="110" width="20" height="20" rx="4" fill="#8B5CF6"/>
+            <text x="50" y="125" font-size="14" fill="#1F2937">三级页面</text>
+            
+            <rect x="20" y="140" width="20" height="20" rx="4" fill="#EC4899"/>
+            <text x="50" y="155" font-size="14" fill="#1F2937">四级页面</text>
+
+            <line x1="20" y1="180" x2="40" y2="180" stroke="#FF0000" stroke-width="4" stroke-dasharray="12,6"/>
+            <polygon points="35,175 40,180 35,185" fill="#FF0000"/>
+            <text x="90" y="185" font-size="14" fill="#1F2937">平级页面跳转</text>
+
+            <line x1="20" y1="210" x2="40" y2="210" stroke="#FF9900" stroke-width="3" stroke-dasharray="10,5"/>
+            <polygon points="35,205 40,210 35,215" fill="#FF9900"/>
+            <text x="90" y="215" font-size="14" fill="#1F2937">数据流向</text>
+        </g>
+    </g>
+
+    <!-- 分隔线 -->
+    <line x1="100" y1="680" x2="1100" y2="680" stroke="#E5E7EB" stroke-width="2" stroke-dasharray="10,5"/>
+
+    <!-- 系统架构部分 -->
+    <g transform="translate(0,700)">
+        <!-- 系统架构标题 -->
+        <rect x="300" y="20" width="600" height="60" rx="10" fill="url(#headerGradient)" filter="url(#dropShadow)"/>
+        <text x="600" y="60" text-anchor="middle" fill="white" font-size="24" font-weight="bold">商户权益中心系统架构</text>
+
+        <!-- 用户层 -->
+        <g transform="translate(0,100)">
+            <rect x="200" y="20" width="800" height="100" rx="10" fill="#E8F0FE" stroke="#0052D9" stroke-width="2"/>
+            <text x="600" y="50" text-anchor="middle" font-size="20" fill="#0052D9">用户访问层</text>
+            
+            <a onclick="window.location.href='../prototype_h5/merchant_fee_discount.html'" style="cursor:pointer">
+                <rect x="250" y="70" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="340" y="95" text-anchor="middle" font-size="14">商户Web端</text>
+            </a>
+            
+            <a onclick="window.location.href='../prototype_h5/agent.html'" style="cursor:pointer">
+                <rect x="510" y="70" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="600" y="95" text-anchor="middle" font-size="14">代理商Web端</text>
+            </a>
+            
+            <a onclick="window.location.href='../admin/admin_config.html'" style="cursor:pointer">
+                <rect x="770" y="70" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="860" y="95" text-anchor="middle" font-size="14">运营管理后台</text>
+            </a>
+        </g>
+
+        <!-- 应用层 -->
+        <g transform="translate(0,250)">
+            <rect x="200" y="20" width="800" height="200" rx="10" fill="#E8F0FE" stroke="#0052D9" stroke-width="2"/>
+            <text x="600" y="50" text-anchor="middle" font-size="20" fill="#0052D9">应用服务层</text>
+            
+            <g>
+                <rect x="250" y="80" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="340" y="105" text-anchor="middle" font-size="14">权益包管理服务</text>
+            </g>
+            
+            <g>
+                <rect x="510" y="80" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="600" y="105" text-anchor="middle" font-size="14">商户权益服务</text>
+            </g>
+            
+            <g>
+                <rect x="770" y="80" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="860" y="105" text-anchor="middle" font-size="14">代理推广服务</text>
+            </g>
+            
+            <g>
+                <rect x="250" y="150" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="340" y="175" text-anchor="middle" font-size="14">订单支付服务</text>
+            </g>
+            
+            <g>
+                <rect x="510" y="150" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="600" y="175" text-anchor="middle" font-size="14">数据统计服务</text>
+            </g>
+            
+            <g>
+                <rect x="770" y="150" width="180" height="40" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="860" y="175" text-anchor="middle" font-size="14">系统管理服务</text>
+            </g>
+        </g>
+
+        <!-- 数据层 -->
+        <g transform="translate(0,500)">
+            <rect x="200" y="20" width="800" height="150" rx="10" fill="#E8F0FE" stroke="#0052D9" stroke-width="2"/>
+            <text x="600" y="50" text-anchor="middle" font-size="20" fill="#0052D9">数据存储层</text>
+            
+            <rect x="250" y="80" width="220" height="60" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+            <text x="360" y="110" text-anchor="middle" font-size="14">MySQL</text>
+            <text x="360" y="130" text-anchor="middle" font-size="12" fill="#666">核心业务数据</text>
+            
+            <rect x="490" y="80" width="220" height="60" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+            <text x="600" y="110" text-anchor="middle" font-size="14">Redis</text>
+            <text x="600" y="130" text-anchor="middle" font-size="12" fill="#666">缓存层</text>
+            
+            <rect x="730" y="80" width="220" height="60" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+            <text x="840" y="110" text-anchor="middle" font-size="14">MongoDB</text>
+            <text x="840" y="130" text-anchor="middle" font-size="12" fill="#666">日志/统计数据</text>
+        </g>
+
+        <!-- 技术方案 -->
+        <g transform="translate(0,700)">
+            <rect x="200" y="20" width="800" height="400" rx="10" fill="#E8F0FE" stroke="#0052D9" stroke-width="2"/>
+            <text x="600" y="50" text-anchor="middle" font-size="20" fill="#0052D9">技术方案</text>
+            
+            <!-- 前端技术栈 -->
+            <g transform="translate(0,80)">
+                <rect x="250" y="0" width="220" height="150" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="360" y="30" text-anchor="middle" font-size="16" fill="#0052D9">前端技术栈</text>
+                <text x="360" y="60" text-anchor="middle" font-size="14">VUE 3.0</text>
+                <text x="360" y="90" text-anchor="middle" font-size="14">Ant Design 5.0</text>
+                <text x="360" y="120" text-anchor="middle" font-size="14">TYPESCRIPT</text>
+            </g>
+            
+            <!-- 后端技术栈 -->
+            <g transform="translate(240,80)">
+                <rect x="250" y="0" width="220" height="150" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="360" y="30" text-anchor="middle" font-size="16" fill="#0052D9">后端技术栈</text>
+                <text x="360" y="60" text-anchor="middle" font-size="14">Spring Boot 3.0</text>
+                <text x="360" y="90" text-anchor="middle" font-size="14">MyBatis Plus</text>
+                <text x="360" y="120" text-anchor="middle" font-size="14">Spring Security</text>
+            </g>
+            
+            <!-- 中间件 -->
+            <g transform="translate(480,80)">
+                <rect x="250" y="0" width="220" height="150" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="360" y="30" text-anchor="middle" font-size="16" fill="#0052D9">中间件</text>
+                <text x="360" y="60" text-anchor="middle" font-size="14">RabbitMQ</text>
+                <text x="360" y="90" text-anchor="middle" font-size="14">Elasticsearch</text>
+                <text x="360" y="120" text-anchor="middle" font-size="14">Redis Cluster</text>
+            </g>
+            
+            <!-- 部署运维 -->
+            <g transform="translate(240,250)">
+                <rect x="250" y="0" width="220" height="120" rx="5" fill="#FFFFFF" stroke="#0052D9" stroke-width="1"/>
+                <text x="360" y="30" text-anchor="middle" font-size="16" fill="#0052D9">部署运维</text>
+                <text x="360" y="60" text-anchor="middle" font-size="14">Docker + K8s</text>
+                <text x="360" y="90" text-anchor="middle" font-size="14">Jenkins Pipeline</text>
+            </g>
+        </g>
+
+        <!-- 连接线 -->
+        <g stroke="#0052D9" stroke-width="2" fill="none">
+            <!-- 用户层到应用层 -->
+            <path d="M600,220 L600,270" marker-end="url(#arrowhead)"/>
+            <!-- 应用层到数据层 -->
+            <path d="M600,470 L600,520" marker-end="url(#arrowhead)"/>
+            <!-- 数据层到技术方案 -->
+            <path d="M600,670 L600,720" marker-end="url(#arrowhead)"/>
+        </g>
+    </g>
+</svg> 

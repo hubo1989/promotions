@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件库展示</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="components.css">
+    <style>
+        /* 页面特定样式，与组件无关 */
+        :root {
+            --phone-width: 350px;
+            --phone-border-width: 16px;
+            --phone-border-radius: 36px;
+            --phone-notch-width: 120px;
+            --phone-notch-height: 24px;
+        }
+        
+        body {
+            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+        }
+        
+        .page-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .component-example {
+            margin: 1.5rem 0;
+        }
+        
+        /* 优化的手机设备预览框 */
+        .example-preview {
+            position: relative;
+            width: var(--phone-width);
+            min-height: 120px;
+            max-height: 600px;
+            margin: 2rem auto 2rem;
+            padding: 2rem 1.25rem 1.25rem;
+            border: var(--phone-border-width) solid #222;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            background-color: #fff;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+        
+        /* 改进手机显示屏上方的刘海 */
+        .example-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--phone-notch-width);
+            height: var(--phone-notch-height);
+            background-color: #222;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            z-index: 10;
+        }
+        
+        /* 手机电源按钮 */
+        .example-preview::after {
+            content: '';
+            position: absolute;
+            top: 80px;
+            right: calc(var(--phone-border-width) * -1 - 1px);
+            width: 4px;
+            height: 30px;
+            background-color: #444;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        /* 全宽预览区域，用于Web端响应式展示 */
+        .example-preview--fullwidth {
+            width: 100%;
+            border: 1px dashed var(--gray-300);
+            border-radius: var(--border-radius-md);
+            box-shadow: none;
+            max-height: none;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .example-preview--fullwidth::before,
+        .example-preview--fullwidth::after {
+            display: none;
+        }
+        
+        /* 代码展示优化 */
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 1.25rem;
+            border-radius: 8px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+            color: #333;
+            border: 1px solid #e9ecef;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .color-item {
+            padding: 0.875rem;
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .color-preview {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: var(--border-radius-sm);
+            margin-right: 0.75rem;
+            vertical-align: middle;
+            border: 1px solid var(--gray-200);
+        }
+        
+        /* 设备选择器样式优化 */
+        .device-selector {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+            gap: 0.5rem;
+        }
+        
+        .device-selector button {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            background-color: #f0f0f0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .device-selector button.active {
+            background-color: var(--primary-color, #007bff);
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+        }
+        
+        /* 改进组件间距及布局 */
+        .component-spacing > * + * {
+            margin-top: 1rem;
+        }
+        
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+        }
+        
+        .flex-row {
+            display: flex;
+            gap: 0.625rem;
+            flex-wrap: wrap;
+        }
+        
+        /* 响应式布局示例样式 */
+        .responsive-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            .responsive-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .responsive-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* 主题切换样式 */
+        .theme-toggle {
+            position: fixed;
+            top: 80px;
+            right: 16px;
+            z-index: 1000;
+            background-color: #fff;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: 1px solid #eaeaea;
+        }
+        
+        /* 栅格系统 */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+        
+        .col {
+            position: relative;
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+        
+        .col-demo {
+            background-color: rgba(0, 123, 255, 0.15);
+            border: 1px solid rgba(0, 123, 255, 0.2);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+        
+        .col-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+        .col-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+        .col-3 { flex: 0 0 25%; max-width: 25%; }
+        .col-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+        .col-6 { flex: 0 0 50%; max-width: 50%; }
+        .col-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+        .col-12 { flex: 0 0 100%; max-width: 100%; }
+        
+        /* Web端导航栏样式 */
+        .web-navbar {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 0.75rem 1.25rem;
+        }
+        
+        .web-navbar__brand {
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-right: 2rem;
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .web-navbar__nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .web-navbar__item {
+            margin-right: 1.5rem;
+        }
+        
+        .web-navbar__link {
+            text-decoration: none;
+            color: #555;
+            padding: 0.5rem 0;
+            transition: color 0.2s;
+        }
+        
+        .web-navbar__link:hover,
+        .web-navbar__link--active {
+            color: var(--primary-color, #007bff);
+        }
+        
+        .web-navbar__actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* 侧边栏导航 */
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            padding: 1.5rem 0;
+            height: 100%;
+        }
+        
+        .sidebar__nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar__item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar__link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: #495057;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .sidebar__link:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+        
+        .sidebar__link--active {
+            background-color: rgba(0, 123, 255, 0.15);
+            color: var(--primary-color, #007bff);
+            font-weight: 500;
+        }
+        
+        .sidebar__icon {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Web端表格 */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+            text-align: left;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+        
+        /* 组件显示控制 */
+        .mobile-component {
+            display: block;
+        }
+        
+        .web-component {
+            display: none;
+        }
+        
+        body.web-view .mobile-component {
+            display: none;
+        }
+        
+        body.web-view .web-component {
+            display: block;
+        }
+        
+        /* 卡片组件预览专用样式 */
+        .card-preview {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 确保卡片在预览区域内完全显示 */
+        .example-preview .card {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar--fixed">
+        <button class="navbar__button" aria-label="打开菜单">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="navbar__title">组件库展示</h1>
+        <button class="navbar__button" aria-label="设置">
+            <i class="fas fa-cog"></i>
+        </button>
+    </div>
+    
+    <div class="container" style="max-width: 1200px; margin: 72px auto 0; padding: 0 1rem;">
+        <!-- 组件库概述 -->
+        <section class="page-section">
+            <h1 class="text-h1">通用组件库</h1>
+            <p class="text-body">本组件库提供了一套统一的UI组件，适用于移动端和Web端应用开发，使用BEM命名规范确保代码的一致性和可维护性。通过使用预定义的组件和样式，可以提高开发效率，并确保设计一致性。</p>
+            
+            <div class="device-selector">
+                <button class="device-btn active" data-device="mobile">移动端</button>
+                <button class="device-btn" data-device="web">Web端</button>
+            </div>
+            
+            <div class="card">
+                <div class="card__body">
+                    <h2 class="text-h2">如何使用</h2>
+                    <p class="text-body">在HTML文件头部引入components.css文件：</p>
+                    <div class="code-block">
+                        &lt;link rel="stylesheet" href="components.css"&gt;
+                    </div>
+                    <p class="text-body mt-4">如果需要使用图标，还需引入Font Awesome：</p>
+                    <div class="code-block">
+                        &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"&gt;
+                    </div>
+                </div>
+            </div>
+
+            <section class="page-section">
+                <h1 class="text-h1">设计规范</h1>
+                <div class="card">
+                    <div class="card__body">
+                        <h2 class="text-h2">设计原则</h2>
+                        <ul>
+                            <li>一致性：保持视觉和交互设计的一致性，降低用户学习成本</li>
+                            <li>易用性：简洁直观的界面设计，清晰的信息层级</li>
+                            <li>响应性：适配不同设备尺寸，提供流畅的交互体验</li>
+                            <li>可访问性：考虑无障碍设计，支持键盘操作和屏幕阅读</li>
+                        </ul>
+                        
+                        <h2 class="text-h2 mt-4">设计标准</h2>
+                        <ul>
+                            <li>最小点击区域：44x44px，确保移动端操作准确性</li>
+                            <li>文字大小：正文 15px，小字 12px，标题 18-24px</li>
+                            <li>颜色对比度：符合 WCAG 2.0 AA 级标准</li>
+                            <li>间距系统：基于 4px 倍数，保持布局整洁统一</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </section>
+        
+        <!-- 移动端组件部分 -->
+        <div class="mobile-component">
+            <!-- 卡片组件 -->
+            <section class="page-section" id="cards">
+                <h2 class="text-h2">卡片</h2>
+                <p class="text-body">卡片是用于展示内容的容器组件，提供多种样式和布局选项。</p>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">基础卡片</h3>
+                    <div class="example-preview">
+                        <div class="card-preview">
+                            <div class="card">
+                                <div class="card__body">
+                                    <p class="text-body">这是一个基础卡片的内容区域。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="card"&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="card__body"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="text-body"&gt;这是一个基础卡片的内容区域。&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">带标题的卡片</h3>
+                    <div class="example-preview">
+                        <div class="card-preview">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3 class="text-h3">卡片标题</h3>
+                                </div>
+                                <div class="card__body">
+                                    <p class="text-body">这是卡片的内容区域，可包含各种元素。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="card"&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="card__header"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;h3 class="text-h3"&gt;卡片标题&lt;/h3&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="card__body"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="text-body"&gt;这是卡片的内容区域，可包含各种元素。&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">完整卡片（头部、内容、底部）</h3>
+                    <div class="example-preview">
+                        <div class="card-preview">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3 class="text-h3">卡片标题</h3>
+                                </div>
+                                <div class="card__body">
+                                    <p class="text-body">这是卡片的内容区域，可包含各种元素。</p>
+                                </div>
+                                <div class="card__footer">
+                                    <button class="btn btn-text">取消</button>
+                                    <button class="btn btn-primary">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="card"&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="card__header"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;h3 class="text-h3"&gt;卡片标题&lt;/h3&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="card__body"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="text-body"&gt;这是卡片的内容区域，可包含各种元素。&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="card__footer"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="btn btn-text"&gt;取消&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="btn btn-primary"&gt;确认&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">交互式卡片</h3>
+                    <div class="example-preview">
+                        <div class="card-preview">
+                            <div class="card card--interactive">
+                                <div class="card__body">
+                                    <h3 class="text-h3">交互式卡片</h3>
+                                    <p class="text-body">这种卡片可以响应点击等交互。轻触此卡片查看效果。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="card card--interactive"&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="card__body"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;h3 class="text-h3"&gt;交互式卡片&lt;/h3&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="text-body"&gt;这种卡片可以响应点击等交互。轻触此卡片查看效果。&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 导航组件 -->
+            <section class="page-section" id="navigation">
+                <h2 class="text-h2">导航组件</h2>
+                <p class="text-body">用于页面导航的组件，包括顶部导航栏和底部导航栏。</p>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">顶部导航栏</h3>
+                    <div class="example-preview">
+                        <div class="navbar" style="position: relative; margin: -1.25rem -1rem 1rem;">
+                            <button class="navbar__button" aria-label="返回">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h1 class="navbar__title">页面标题</h1>
+                            <button class="navbar__button" aria-label="更多选项">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </div>
+                        <div style="padding: 1rem 0;">
+                            <p class="text-body">导航栏下方的页面内容区域...</p>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="navbar"&gt;<br>
+                        &nbsp;&nbsp;&lt;button class="navbar__button" aria-label="返回"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;i class="fas fa-arrow-left"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&lt;h1 class="navbar__title"&gt;页面标题&lt;/h1&gt;<br>
+                        &nbsp;&nbsp;&lt;button class="navbar__button" aria-label="更多选项"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;i class="fas fa-ellipsis-h"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;/button&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 按钮组件 -->
+            <section class="page-section" id="buttons">
+                <h2 class="text-h2">按钮</h2>
+                <p class="text-body">按钮用于触发操作，提供多种样式和状态。</p>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">基础按钮样式</h3>
+                    <div class="example-preview">
+                        <div class="flex-column">
+                            <button class="btn btn-primary">主要按钮</button>
+                            <button class="btn btn-secondary">次要按钮</button>
+                            <button class="btn btn-text">文本按钮</button>
+                            <button class="btn btn-outline">描边按钮</button>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;button class="btn btn-primary"&gt;主要按钮&lt;/button&gt;<br>
+                        &lt;button class="btn btn-secondary"&gt;次要按钮&lt;/button&gt;<br>
+                        &lt;button class="btn btn-text"&gt;文本按钮&lt;/button&gt;<br>
+                        &lt;button class="btn btn-outline"&gt;描边按钮&lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">按钮尺寸</h3>
+                    <div class="example-preview">
+                        <div class="flex-column" style="align-items: flex-start; gap: 1.5rem;">
+                            <div>
+                                <span class="text-muted" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">小按钮：</span>
+                                <button class="btn btn-primary btn--sm" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">小按钮</button>
+                            </div>
+                            
+                            <div>
+                                <span class="text-muted" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">默认大小：</span>
+                                <button class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">默认大小</button>
+                            </div>
+                            
+                            <div style="width: 100%;">
+                                <span class="text-muted" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">大按钮（全宽）：</span>
+                                <button class="btn btn-primary btn--lg" style="width: 100%; padding: 0.75rem 1rem; font-size: 1rem; font-weight: 500; text-align: center;">大按钮</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;button class="btn btn-primary btn--sm"&gt;小按钮&lt;/button&gt;<br>
+                        &lt;button class="btn btn-primary"&gt;默认大小&lt;/button&gt;<br>
+                        &lt;button class="btn btn-primary btn--lg" style="width: 100%;"&gt;大按钮&lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">图标按钮</h3>
+                    <div class="example-preview">
+                        <div class="flex-column" style="gap: 1.5rem;">
+                            <!-- 带图标的文本按钮 -->
+                            <div>
+                                <span class="text-muted" style="display: block; margin-bottom: 0.75rem; font-size: 0.875rem;">带图标的文本按钮：</span>
+                                <div class="flex-row" style="gap: 1rem;">
+                                    <button class="btn btn-primary" style="display: inline-flex; align-items: center; height: 44px; padding: 0 1.25rem; font-size: 0.9375rem;">
+                                        <i class="fas fa-save" style="margin-right: 0.625rem;"></i>
+                                        保存
+                                    </button>
+                                    <button class="btn btn-secondary" style="display: inline-flex; align-items: center; height: 44px; padding: 0 1.25rem; font-size: 0.9375rem;">
+                                        <i class="fas fa-download" style="margin-right: 0.625rem;"></i>
+                                        下载
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- 方形图标按钮 -->
+                            <div>
+                                <span class="text-muted" style="display: block; margin-bottom: 0.75rem; font-size: 0.875rem;">方形图标按钮：</span>
+                                <div class="flex-row" style="gap: 0.75rem;">
+                                    <button class="btn btn-icon" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-heart" style="font-size: 1.125rem;"></i>
+                                    </button>
+                                    <button class="btn btn-icon" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.05);">
+                                        <i class="fas fa-star" style="font-size: 1.125rem;"></i>
+                                    </button>
+                                    <button class="btn btn-icon btn-primary" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-check" style="font-size: 1.125rem;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- 圆形图标按钮 -->
+                            <div>
+                                <span class="text-muted" style="display: block; margin-bottom: 0.75rem; font-size: 0.875rem;">圆形图标按钮：</span>
+                                <div class="flex-row" style="gap: 0.75rem;">
+                                    <button class="btn btn-icon btn--circle" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                                        <i class="fas fa-plus" style="font-size: 1.125rem;"></i>
+                                    </button>
+                                    <button class="btn btn-icon btn--circle btn-secondary" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                                        <i class="fas fa-edit" style="font-size: 1.125rem;"></i>
+                                    </button>
+                                    <button class="btn btn-icon btn--circle btn-primary" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,123,255,0.3);">
+                                        <i class="fas fa-arrow-right" style="font-size: 1.125rem;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- 悬浮操作按钮 (FAB) -->
+                            <div>
+                                <span class="text-muted" style="display: block; margin-bottom: 0.75rem; font-size: 0.875rem;">悬浮操作按钮：</span>
+                                <div class="flex-row" style="gap: 0.75rem;">
+                                    <button class="btn btn-icon btn--circle btn-primary" style="width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
+                                        <i class="fas fa-plus" style="font-size: 1.5rem;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;!-- 带图标的文本按钮 --&gt;<br>
+                        &lt;button class="btn btn-primary"&gt;<br>
+                        &nbsp;&nbsp;&lt;i class="fas fa-save" style="margin-right: 0.625rem;"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;保存<br>
+                        &lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">按钮状态</h3>
+                    <div class="example-preview">
+                        <div class="flex-column">
+                            <button class="btn btn-primary">正常状态</button>
+                            <button class="btn btn-primary" disabled>禁用状态</button>
+                            <button class="btn btn-primary btn--loading">
+                                <span class="btn__spinner"></span>
+                                加载中...
+                            </button>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;button class="btn btn-primary"&gt;正常状态&lt;/button&gt;<br>
+                        &lt;button class="btn btn-primary" disabled&gt;禁用状态&lt;/button&gt;<br>
+                        &lt;button class="btn btn-primary btn--loading"&gt;<br>
+                        &nbsp;&nbsp;&lt;span class="btn__spinner"&gt;&lt;/span&gt;<br>
+                        &nbsp;&nbsp;加载中...<br>
+                        &lt;/button&gt;
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 表单控件 -->
+            <section class="page-section" id="form-controls">
+                <h2 class="text-h2">表单控件</h2>
+                <p class="text-body">用于收集用户输入的各类表单控件。</p>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">输入框</h3>
+                    <div class="example-preview">
+                        <div class="flex-column" style="gap: 1.5rem; margin: 0 -0.5rem;">
+                            <!-- 标准输入框 -->
+                            <div class="form-group" style="width: calc(100% + 1rem); margin: 0 -0.5rem;">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; padding: 0 0.5rem; font-size: 0.875rem; color: #444; font-weight: 500;">用户名</label>
+                                <input type="text" 
+                                       class="form-input" 
+                                       id="demo-input" 
+                                       placeholder="请输入用户名"
+                                       style="width: 100%; height: 44px; padding: 0 0.875rem; font-size: 0.9375rem; border: 1px solid #dfe1e5; border-radius: 8px; transition: all 0.2s; background-color: #fff; box-sizing: border-box;">
+                                <span class="form-hint" style="display: block; margin-top: 0.375rem; padding: 0 0.5rem; font-size: 0.75rem; color: #666;">支持使用字母、数字和下划线</span>
+                            </div>
+                            
+                            <!-- 带图标的输入框 -->
+                            <div class="form-group" style="width: calc(100% + 1rem); margin: 0 -0.5rem;">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; padding: 0 0.5rem; font-size: 0.875rem; color: #444; font-weight: 500;">搜索</label>
+                                <div class="form-input-wrapper" style="position: relative; width: 100%; box-sizing: border-box;">
+                                    <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #666; font-size: 0.9375rem;"></i>
+                                    <input type="text" 
+                                           class="form-input" 
+                                           id="demo-input-icon" 
+                                           placeholder="搜索..."
+                                           style="width: 100%; height: 44px; padding: 0 1rem 0 2.5rem; font-size: 0.9375rem; border: 1px solid #dfe1e5; border-radius: 22px; transition: all 0.2s; background-color: #fff; box-sizing: border-box;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">选择控件</h3>
+                    <div class="example-preview">
+                        <div class="flex-column" style="gap: 1.75rem; margin: 0 -0.5rem;">
+                            <!-- 复选框组 -->
+                            <fieldset class="form-fieldset" style="border: none; padding: 0 0.5rem; margin: 0; width: 100%; box-sizing: border-box;">
+                                <legend class="form-legend" style="font-size: 0.875rem; font-weight: 500; color: #444; margin-bottom: 0.875rem;">通知设置</legend>
+                                <div style="display: flex; flex-direction: column; gap: 0.875rem; width: 100%;">
+                                    <div class="checkbox" style="display: flex; align-items: center; width: 100%; min-height: 44px; padding: 0.5rem 0;">
+                                        <div style="position: relative; width: 20px; height: 20px; flex-shrink: 0;">
+                                            <input type="checkbox" id="demo-checkbox-1" class="checkbox__input" style="position: absolute; width: 20px; height: 20px; opacity: 0; cursor: pointer;">
+                                            <div style="width: 20px; height: 20px; border: 2px solid #1a73e8; border-radius: 4px; background-color: #fff; transition: all 0.2s;"></div>
+                                        </div>
+                                        <label for="demo-checkbox-1" style="margin-left: 0.75rem; font-size: 0.9375rem; color: #202124; cursor: pointer;">电子邮件通知</label>
+                                    </div>
+                                    
+                                    <div class="checkbox" style="display: flex; align-items: center; width: 100%; min-height: 44px; padding: 0.5rem 0;">
+                                        <div style="position: relative; width: 20px; height: 20px; flex-shrink: 0;">
+                                            <input type="checkbox" id="demo-checkbox-2" class="checkbox__input" checked style="position: absolute; width: 20px; height: 20px; opacity: 0; cursor: pointer;">
+                                            <div style="width: 20px; height: 20px; border: 2px solid #1a73e8; border-radius: 4px; background-color: #1a73e8; transition: all 0.2s;">
+                                                <i class="fas fa-check" style="color: white; font-size: 12px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+                                            </div>
+                                        </div>
+                                        <label for="demo-checkbox-2" style="margin-left: 0.75rem; font-size: 0.9375rem; color: #202124; cursor: pointer;">浏览器推送</label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            
+                            <!-- 开关控件 -->
+                            <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%; padding: 0 0.5rem; box-sizing: border-box;">
+                                <div class="switch" style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; padding: 0.5rem 0;">
+                                    <div style="flex: 1; margin-right: 1rem;">
+                                        <label for="demo-switch-1" style="font-size: 0.9375rem; color: #202124; display: block;">自动保存</label>
+                                        <span style="font-size: 0.75rem; color: #5f6368; display: block; margin-top: 0.25rem;">每5分钟自动保存您的更改</span>
+                                    </div>
+                                    <div style="position: relative; width: 46px; height: 28px; flex-shrink: 0;">
+                                        <input type="checkbox" id="demo-switch-1" class="switch__input" checked style="position: absolute; width: 0; height: 0; opacity: 0;">
+                                        <label for="demo-switch-1" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1a73e8; border-radius: 14px; transition: .3s;">
+                                            <span style="position: absolute; content: ''; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; border-radius: 50%; transition: .3s; box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="switch" style="display: flex; justify-content: space-between; align-items: center; min-height: 44px; padding: 0.5rem 0;">
+                                    <div style="flex: 1; margin-right: 1rem;">
+                                        <label for="demo-switch-2" style="font-size: 0.9375rem; color: #202124; display: block;">位置服务</label>
+                                        <span style="font-size: 0.75rem; color: #5f6368; display: block; margin-top: 0.25rem;">允许应用访问您的位置信息</span>
+                                    </div>
+                                    <div style="position: relative; width: 46px; height: 28px; flex-shrink: 0;">
+                                        <input type="checkbox" id="demo-switch-2" class="switch__input" style="position: absolute; width: 0; height: 0; opacity: 0;">
+                                        <label for="demo-switch-2" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #dadce0; border-radius: 14px; transition: .3s;">
+                                            <span style="position: absolute; content: ''; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; border-radius: 50%; transition: .3s; box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Web端组件部分 -->
+        <div class="web-component">
+            <!-- 表单控件 -->
+            <section class="page-section" id="web-form-controls">
+                <h2 class="text-h2">Web 端表单控件</h2>
+                <p class="text-body">适用于管理控制台的表单控件，包含输入框、选择器、开关等组件。</p>
+                
+                <div class="component-example">
+                    <div class="example-preview example-preview--fullwidth">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                            <!-- 基础输入框 -->
+                            <div class="form-group">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #444; font-weight: 500;">标准输入框</label>
+                                <input type="text" 
+                                       class="form-input" 
+                                       placeholder="请输入内容"
+                                       style="width: 100%; height: 36px; padding: 0 0.875rem; font-size: 0.875rem; border: 1px solid #dfe1e5; border-radius: 4px; transition: all 0.2s;">
+                            </div>
+
+                            <!-- 下拉选择框 -->
+                            <div class="form-group">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #444; font-weight: 500;">下拉选择</label>
+                                <select class="form-select" style="width: 100%; height: 36px; padding: 0 0.875rem; font-size: 0.875rem; border: 1px solid #dfe1e5; border-radius: 4px; background-color: #fff;">
+                                    <option value="">请选择选项</option>
+                                    <option value="1">选项一</option>
+                                    <option value="2">选项二</option>
+                                    <option value="3">选项三</option>
+                                </select>
+                            </div>
+
+                            <!-- 搜索框 -->
+                            <div class="form-group">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #444; font-weight: 500;">搜索框</label>
+                                <div style="position: relative;">
+                                    <input type="search" 
+                                           class="form-input" 
+                                           placeholder="搜索..."
+                                           style="width: 100%; height: 36px; padding: 0 2.5rem 0 0.875rem; font-size: 0.875rem; border: 1px solid #dfe1e5; border-radius: 4px;">
+                                    <button style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); border: none; background: none; color: #666; cursor: pointer;">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 日期选择器 -->
+                            <div class="form-group">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #444; font-weight: 500;">日期选择</label>
+                                <input type="date" 
+                                       class="form-input" 
+                                       style="width: 100%; height: 36px; padding: 0 0.875rem; font-size: 0.875rem; border: 1px solid #dfe1e5; border-radius: 4px;">
+                            </div>
+
+                            <!-- 文件上传 -->
+                            <div class="form-group">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #444; font-weight: 500;">文件上传</label>
+                                <div style="border: 2px dashed #dfe1e5; border-radius: 4px; padding: 1rem; text-align: center;">
+                                    <button class="btn btn-secondary" style="font-size: 0.875rem; padding: 0.375rem 1rem;">
+                                        <i class="fas fa-upload" style="margin-right: 0.5rem;"></i>
+                                        选择文件
+                                    </button>
+                                    <div style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">支持 jpg、png、pdf 格式</div>
+                                </div>
+                            </div>
+
+                            <!-- 多行文本框 -->
+                            <div class="form-group">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #444; font-weight: 500;">多行文本框</label>
+                                <textarea class="form-input" 
+                                          placeholder="请输入描述"
+                                          style="width: 100%; min-height: 100px; padding: 0.875rem; font-size: 0.875rem; border: 1px solid #dfe1e5; border-radius: 4px; resize: vertical;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 表格示例 -->
+                        <div style="margin-top: 2rem;">
+                            <h3 style="font-size: 1rem; margin-bottom: 1rem;">数据表格</h3>
+                            <table class="table" style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <th style="padding: 0.75rem; border-bottom: 2px solid #dee2e6; font-weight: 500; text-align: left;">ID</th>
+                                        <th style="padding: 0.75rem; border-bottom: 2px solid #dee2e6; font-weight: 500; text-align: left;">名称</th>
+                                        <th style="padding: 0.75rem; border-bottom: 2px solid #dee2e6; font-weight: 500; text-align: left;">状态</th>
+                                        <th style="padding: 0.75rem; border-bottom: 2px solid #dee2e6; font-weight: 500; text-align: left;">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">001</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">示例项目</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                            <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 500; line-height: 1; border-radius: 0.25rem; background-color: #e8f5e9; color: #2e7d32;">正常</span>
+                                        </td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                            <button class="btn btn-text" style="font-size: 0.875rem; padding: 0.25rem 0.5rem; color: #1a73e8;">编辑</button>
+                                            <button class="btn btn-text" style="font-size: 0.875rem; padding: 0.25rem 0.5rem; color: #d93025;">删除</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">002</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">测试项目</td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                            <span style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 500; line-height: 1; border-radius: 0.25rem; background-color: #fbe9e7; color: #d84315;">异常</span>
+                                        </td>
+                                        <td style="padding: 0.75rem; border-bottom: 1px solid #dee2e6;">
+                                            <button class="btn btn-text" style="font-size: 0.875rem; padding: 0.25rem 0.5rem; color: #1a73e8;">编辑</button>
+                                            <button class="btn btn-text" style="font-size: 0.875rem; padding: 0.25rem 0.5rem; color: #d93025;">删除</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 分页控件 -->
+                        <div style="margin-top: 1rem; display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem;">
+                            <button class="btn btn-outline" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;" disabled>上一页</button>
+                            <button class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">1</button>
+                            <button class="btn btn-outline" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">2</button>
+                            <button class="btn btn-outline" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">3</button>
+                            <button class="btn btn-outline" style="padding: 0.375rem 0.75rem; font-size: 0.875rem;">下一页</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 复杂交互控件 -->
+            <section class="page-section" id="web-complex-controls">
+                <h2 class="text-h2">复杂交互控件</h2>
+                <p class="text-body">包含多选、排序、拖动等高级交互功能的控件。</p>
+                
+                <div class="component-example">
+                    <div class="example-preview example-preview--fullwidth">
+                        <!-- 多选下拉框 -->
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="font-size: 1rem; margin-bottom: 1rem;">多选下拉框</h3>
+                            <div class="form-group" style="max-width: 400px;">
+                                <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: #444;">选择标签</label>
+                                <div class="multiselect" style="position: relative;">
+                                    <div class="multiselect-tags" style="min-height: 36px; padding: 2px; border: 1px solid #dfe1e5; border-radius: 4px; display: flex; flex-wrap: wrap; gap: 4px; cursor: pointer;">
+                                        <span class="tag" style="background: #e8f0fe; color: #1a73e8; padding: 2px 8px; border-radius: 4px; font-size: 0.875rem; display: flex; align-items: center; gap: 4px;">
+                                            开发
+                                            <button class="tag-remove" style="border: none; background: none; color: #1a73e8; padding: 0; cursor: pointer; font-size: 0.75rem;">×</button>
+                                        </span>
+                                        <span class="tag" style="background: #e8f0fe; color: #1a73e8; padding: 2px 8px; border-radius: 4px; font-size: 0.875rem; display: flex; align-items: center; gap: 4px;">
+                                            设计
+                                            <button class="tag-remove" style="border: none; background: none; color: #1a73e8; padding: 0; cursor: pointer; font-size: 0.75rem;">×</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 可排序列表 -->
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="font-size: 1rem; margin-bottom: 1rem;">可排序列表</h3>
+                            <div class="sortable-list" style="max-width: 400px; border: 1px solid #dfe1e5; border-radius: 4px; overflow: hidden;">
+                                <div class="sortable-item" style="padding: 0.75rem; background: white; border-bottom: 1px solid #dfe1e5; display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-grip-vertical" style="color: #9aa0a6; cursor: move;"></i>
+                                    <div style="flex: 1;">项目 1</div>
+                                    <div class="item-actions">
+                                        <button class="btn btn-icon" style="color: #666;" title="编辑">
+                                            <i class="fas fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="sortable-item" style="padding: 0.75rem; background: white; border-bottom: 1px solid #dfe1e5; display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-grip-vertical" style="color: #9aa0a6; cursor: move;"></i>
+                                    <div style="flex: 1;">项目 2</div>
+                                    <div class="item-actions">
+                                        <button class="btn btn-icon" style="color: #666;" title="编辑">
+                                            <i class="fas fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="sortable-item" style="padding: 0.75rem; background: white; display: flex; align-items: center; gap: 0.75rem;">
+                                    <i class="fas fa-grip-vertical" style="color: #9aa0a6; cursor: move;"></i>
+                                    <div style="flex: 1;">项目 3</div>
+                                    <div class="item-actions">
+                                        <button class="btn btn-icon" style="color: #666;" title="编辑">
+                                            <i class="fas fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 拖拽上传区域 -->
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="font-size: 1rem; margin-bottom: 1rem;">拖拽上传</h3>
+                            <div class="upload-zone" style="max-width: 600px; border: 2px dashed #dfe1e5; border-radius: 8px; padding: 2rem; text-align: center; background-color: #f8f9fa;">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #1a73e8; margin-bottom: 1rem;"></i>
+                                <div style="font-size: 1rem; color: #444; margin-bottom: 0.5rem;">拖拽文件到此处，或</div>
+                                <button class="btn btn-primary" style="font-size: 0.875rem;">
+                                    选择文件
+                                </button>
+                                <div style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;">支持 jpg、png、pdf 格式，单个文件最大 10MB</div>
+                            </div>
+                        </div>
+
+                        <!-- 树形选择器 -->
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="font-size: 1rem; margin-bottom: 1rem;">树形选择器</h3>
+                            <div class="tree-select" style="max-width: 400px; border: 1px solid #dfe1e5; border-radius: 4px; padding: 0.5rem;">
+                                <div class="tree-node" style="margin-bottom: 0.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem;">
+                                        <button class="btn btn-icon" style="padding: 0; width: 20px; height: 20px; color: #666;">
+                                            <i class="fas fa-caret-down"></i>
+                                        </button>
+                                        <div class="checkbox" style="display: flex; align-items: center;">
+                                            <input type="checkbox" id="tree-1" style="margin-right: 0.5rem;">
+                                            <label for="tree-1" style="font-size: 0.875rem;">部门架构</label>
+                                        </div>
+                                    </div>
+                                    <div class="tree-children" style="margin-left: 1.5rem;">
+                                        <div class="tree-node" style="margin-top: 0.5rem;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem;">
+                                                <button class="btn btn-icon" style="padding: 0; width: 20px; height: 20px; color: #666;">
+                                                    <i class="fas fa-caret-right"></i>
+                                                </button>
+                                                <div class="checkbox" style="display: flex; align-items: center;">
+                                                    <input type="checkbox" id="tree-1-1" style="margin-right: 0.5rem;">
+                                                    <label for="tree-1-1" style="font-size: 0.875rem;">研发部</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tree-node" style="margin-top: 0.5rem;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem;">
+                                                <button class="btn btn-icon" style="padding: 0; width: 20px; height: 20px; color: #666;">
+                                                    <i class="fas fa-caret-right"></i>
+                                                </button>
+                                                <div class="checkbox" style="display: flex; align-items: center;">
+                                                    <input type="checkbox" id="tree-1-2" style="margin-right: 0.5rem;">
+                                                    <label for="tree-1-2" style="font-size: 0.875rem;">设计部</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 日期范围选择器 -->
+                        <div style="margin-bottom: 2rem;">
+                            <h3 style="font-size: 1rem; margin-bottom: 1rem;">日期范围选择器</h3>
+                            <div class="date-range" style="display: flex; align-items: center; gap: 0.5rem; max-width: 400px;">
+                                <input type="date" 
+                                       class="form-input" 
+                                       style="flex: 1; height: 36px; padding: 0 0.875rem; font-size: 0.875rem; border: 1px solid #dfe1e5; border-radius: 4px;">
+                                <span style="color: #666;">至</span>
+                                <input type="date" 
+                                       class="form-input" 
+                                       style="flex: 1; height: 36px; padding: 0 0.875rem; font-size: 0.875rem; border: 1px solid #dfe1e5; border-radius: 4px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 错误和异常处理组件 -->
+            <section class="page-section" id="error-states">
+                <h2 class="text-h2">错误和异常处理</h2>
+                <p class="text-body">用于展示各种错误状态和异常情况的组件，提供友好的用户反馈和解决方案。</p>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">网络错误</h3>
+                    <div class="example-preview">
+                        <div class="error-state error-state--network">
+                            <i class="fas fa-wifi-slash error-state__icon"></i>
+                            <h3 class="error-state__title">网络连接异常</h3>
+                            <p class="error-state__message">请检查您的网络连接后重试</p>
+                            <div class="error-state__action">
+                                <button class="btn btn-primary">重新加载</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="error-state error-state--network"&gt;<br>
+                        &nbsp;&nbsp;&lt;i class="fas fa-wifi-slash error-state__icon"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;h3 class="error-state__title"&gt;网络连接异常&lt;/h3&gt;<br>
+                        &nbsp;&nbsp;&lt;p class="error-state__message"&gt;请检查您的网络连接后重试&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="error-state__action"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="btn btn-primary"&gt;重新加载&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">数据为空</h3>
+                    <div class="example-preview">
+                        <div class="error-state error-state--empty">
+                            <i class="fas fa-inbox error-state__icon"></i>
+                            <h3 class="error-state__title">暂无数据</h3>
+                            <p class="error-state__message">您当前没有任何权益包</p>
+                            <div class="error-state__action">
+                                <button class="btn btn-primary">前往购买</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="error-state error-state--empty"&gt;<br>
+                        &nbsp;&nbsp;&lt;i class="fas fa-inbox error-state__icon"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;h3 class="error-state__title"&gt;暂无数据&lt;/h3&gt;<br>
+                        &nbsp;&nbsp;&lt;p class="error-state__message"&gt;您当前没有任何权益包&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="error-state__action"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="btn btn-primary"&gt;前往购买&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">请求超时</h3>
+                    <div class="example-preview">
+                        <div class="error-state error-state--timeout">
+                            <i class="fas fa-clock error-state__icon"></i>
+                            <h3 class="error-state__title">请求超时</h3>
+                            <p class="error-state__message">服务器响应超时，请稍后再试</p>
+                            <div class="error-state__action">
+                                <button class="btn btn-primary">重新加载</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="error-state error-state--timeout"&gt;<br>
+                        &nbsp;&nbsp;&lt;i class="fas fa-clock error-state__icon"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;h3 class="error-state__title"&gt;请求超时&lt;/h3&gt;<br>
+                        &nbsp;&nbsp;&lt;p class="error-state__message"&gt;服务器响应超时，请稍后再试&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="error-state__action"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="btn btn-primary"&gt;重新加载&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">权限不足</h3>
+                    <div class="example-preview">
+                        <div class="error-state error-state--permission">
+                            <i class="fas fa-lock error-state__icon"></i>
+                            <h3 class="error-state__title">权限不足</h3>
+                            <p class="error-state__message">您暂无权限访问此功能，请联系管理员</p>
+                            <div class="error-state__action">
+                                <button class="btn btn-primary">返回首页</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="error-state error-state--permission"&gt;<br>
+                        &nbsp;&nbsp;&lt;i class="fas fa-lock error-state__icon"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;h3 class="error-state__title"&gt;权限不足&lt;/h3&gt;<br>
+                        &nbsp;&nbsp;&lt;p class="error-state__message"&gt;您暂无权限访问此功能，请联系管理员&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="error-state__action"&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="btn btn-primary"&gt;返回首页&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&lt;/div&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">加载状态</h3>
+                    <div class="example-preview">
+                        <div class="loading-state">
+                            <div class="loading-spinner"></div>
+                            <p class="loading-text">数据加载中，请稍候...</p>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;div class="loading-state"&gt;<br>
+                        &nbsp;&nbsp;&lt;div class="loading-spinner"&gt;&lt;/div&gt;<br>
+                        &nbsp;&nbsp;&lt;p class="loading-text"&gt;数据加载中，请稍候...&lt;/p&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="component-example">
+                    <h3 class="text-h3">消息提示</h3>
+                    <div class="example-preview">
+                        <div style="position: relative; height: 80px;">
+                            <div class="toast">
+                                <i class="fas fa-info-circle toast__icon"></i>
+                                <span class="toast__message">操作已完成</span>
+                            </div>
+                        </div>
+                        <div style="position: relative; height: 80px; margin-top: 20px;">
+                            <div class="toast toast--success">
+                                <i class="fas fa-check-circle toast__icon"></i>
+                                <span class="toast__message">操作成功</span>
+                            </div>
+                        </div>
+                        <div style="position: relative; height: 80px; margin-top: 20px;">
+                            <div class="toast toast--error">
+                                <i class="fas fa-exclamation-circle toast__icon"></i>
+                                <span class="toast__message">操作失败，请重试</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+                        &lt;!-- 默认提示 --&gt;<br>
+                        &lt;div class="toast"&gt;<br>
+                        &nbsp;&nbsp;&lt;i class="fas fa-info-circle toast__icon"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;span class="toast__message"&gt;操作已完成&lt;/span&gt;<br>
+                        &lt;/div&gt;<br><br>
+                        
+                        &lt;!-- 成功提示 --&gt;<br>
+                        &lt;div class="toast toast--success"&gt;<br>
+                        &nbsp;&nbsp;&lt;i class="fas fa-check-circle toast__icon"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;span class="toast__message"&gt;操作成功&lt;/span&gt;<br>
+                        &lt;/div&gt;<br><br>
+                        
+                        &lt;!-- 错误提示 --&gt;<br>
+                        &lt;div class="toast toast--error"&gt;<br>
+                        &nbsp;&nbsp;&lt;i class="fas fa-exclamation-circle toast__icon"&gt;&lt;/i&gt;<br>
+                        &nbsp;&nbsp;&lt;span class="toast__message"&gt;操作失败，请重试&lt;/span&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <!-- 在页面底部添加JavaScript代码 -->
+    <script>
+        // 设备切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const deviceButtons = document.querySelectorAll('.device-btn');
+            const body = document.body;
+            
+            // 为每个设备按钮添加点击事件
+            deviceButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 移除所有按钮的active类
+                    deviceButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // 为当前点击的按钮添加active类
+                    this.classList.add('active');
+                    
+                    // 根据按钮的data-device属性切换视图
+                    const deviceType = this.getAttribute('data-device');
+                    
+                    if (deviceType === 'web') {
+                        body.classList.add('web-view');
+                    } else {
+                        body.classList.remove('web-view');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

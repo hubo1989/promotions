@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推广</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #2B7AE3;
+            --primary-dark: #003BA9;
+            --primary-bg: #ECF2FF;
+            --secondary-color: #03dac6;
+            --background: #F7F9FC;
+            --surface: #ffffff;
+            --error: #E53935;
+            --success: #00C48C;
+            --warning: #FF9800;
+            --text-primary: #1A1A1A;
+            --text-secondary: #5E6C84;
+            --text-tertiary: #8993A4;
+            --text-on-primary: #ffffff;
+            --border-color: #E5E9F2;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --elevated-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --phone-width: 380px;
+            --phone-height: 822px;
+            --phone-border-width: 16px;
+            --phone-border-radius: 48px;
+            --phone-notch-width: 126px;
+            --phone-notch-height: 28px;
+            --content-width: 348px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-md: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 22px;
+            --touch-target-size: 44px;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            margin: 2rem auto;
+            position: relative;
+            border: var(--phone-border-width) solid #222;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            background-color: #fff;
+            overflow: hidden;
+            width: var(--phone-width);
+            height: var(--phone-height);
+            color: var(--text-primary);
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--phone-notch-width);
+            height: var(--phone-notch-height);
+            background-color: #222;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 1000;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            top: 120px;
+            right: calc(var(--phone-border-width) * -1 - 1px);
+            width: 4px;
+            height: 40px;
+            background-color: #444;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .material-card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid var(--border-color);
+        }
+        
+        .nav-header {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            height: var(--touch-target-size);
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-md);
+            position: relative;
+            z-index: 10;
+            box-shadow: var(--card-shadow);
+            margin-top: var(--spacing-sm);
+        }
+        
+        .header-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .poster-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .poster-image {
+            width: 100%;
+            height: 360px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .invitation-container {
+            background: linear-gradient(to right, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: var(--spacing-md);
+            margin-top: -20px;
+            margin-left: var(--spacing-md);
+            margin-right: var(--spacing-md);
+            position: relative;
+            z-index: 2;
+            box-shadow: var(--elevated-shadow);
+            border: 1px solid rgba(229, 233, 242, 0.8);
+        }
+        
+        .qr-code {
+            width: 110px;
+            height: 110px;
+            background-color: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eee;
+            padding: var(--spacing-sm);
+        }
+        
+        .invitation-code {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: var(--font-size-lg);
+            letter-spacing: 1px;
+            padding: var(--spacing-md);
+        }
+        
+        .bottom-action-bar {
+            background: var(--surface);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+            border-top: 1px solid var(--border-color);
+            position: absolute;
+            padding: var(--spacing-sm) 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+        }
+        
+        .action-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--spacing-sm);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-radius: 8px;
+            min-height: var(--touch-target-size);
+        }
+        
+        .action-button:hover {
+            background-color: var(--primary-bg);
+        }
+        
+        .action-button i {
+            font-size: var(--font-size-xl);
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .action-button span {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .action-button:hover i {
+            transform: scale(1.1);
+        }
+        
+        .options-button {
+            width: var(--touch-target-size);
+            height: var(--touch-target-size);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .options-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* 调整内容容器的样式 */
+        .content-wrapper {
+            width: var(--content-width);
+            height: calc(100% - var(--phone-border-width) * 2);
+            display: flex;
+            flex-direction: column;
+            padding-top: calc(var(--phone-notch-height) + var(--spacing-sm));
+            margin: var(--phone-border-width) auto;
+            position: relative;
+            z-index: 1;
+            background-color: white;
+        }
+
+        /* 调整主内容区域的内边距，避免被底部操作栏遮挡 */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-md);
+            padding-bottom: calc(80px + var(--spacing-lg));
+        }
+
+        /* 添加滚动条样式 */
+        .main-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .main-content::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <!-- 顶部导航栏 -->
+        <div class="nav-header">
+            <div class="w-[var(--touch-target-size)]">
+                <!-- 移除返回按钮，使其成为最高级页面 -->
+            </div>
+            <div class="flex-1 flex justify-center">
+                <h1 class="header-title">推广</h1>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <div class="material-card">
+                <!-- 海报背景图 -->
+                <div class="poster-container">
+                    <img src="https://images.unsplash.com/photo-1579621970588-a35d0e7ab9b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" 
+                         alt="推广海报" 
+                         class="poster-image">
+                </div>
+                
+                <!-- 邀请码和二维码区域 -->
+                <div class="flex items-center justify-between">
+                        <!-- 左侧邀请码 -->
+                        <div class="flex flex-col">
+                            <div class="invitation-code text-[12px] pl-[20px]">邀请码：ABCD1234</div>
+                            <div class="text-[12px] text-gray-500 mt-1 pl-[20px]">扫码立即申请</div>
+                        </div>
+                        <!-- 右侧二维码 -->
+                        <div class="qr-code">
+                            <svg viewBox="0 0 100 100" width="80" height="80">
+                                <!-- 简化的QR码SVG -->
+                                <rect x="10" y="10" width="80" height="80" fill="white"/>
+                                <g fill="black">
+                                    <!-- QR码图案 -->
+                                    <rect x="20" y="20" width="20" height="20"/>
+                                    <rect x="60" y="20" width="20" height="20"/>
+                                    <rect x="20" y="60" width="20" height="20"/>
+                                    <rect x="45" y="45" width="10" height="10"/>
+                                    <rect x="60" y="60" width="5" height="5"/>
+                                    <rect x="70" y="60" width="5" height="5"/>
+                                    <rect x="60" y="70" width="5" height="5"/>
+                                    <rect x="50" y="30" width="5" height="5"/>
+                                    <rect x="30" y="50" width="5" height="5"/>
+                                </g>
+                            </svg>
+                        </div>
+                </div>
+            </div>
+        </div>
+            
+        <!-- 底部推广操作栏 -->
+        <div class="bottom-action-bar">
+            <div class="flex justify-between items-center">
+                <div class="action-button flex-1">
+                    <i class="fas fa-share-alt"></i>
+                    <span>分享链接</span>
+                </div>
+                <div class="action-button flex-1">
+                    <i class="fas fa-copy"></i>
+                    <span>复制链接</span>
+                </div>
+                <div class="action-button flex-1">
+                    <i class="fas fa-qrcode"></i>
+                    <span>分享海报</span>
+                </div>
+                <div class="action-button flex-1">
+                    <i class="fas fa-download"></i>
+                    <span>保存海报</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 添加页面导航功能
+        const pages = [
+            'agent_promotion_preview.html',
+            'benefit_detail_preview.html',
+            'benefit_usage_record_preview.html',
+            'merchant_fee_discount_preview.html',
+            'my_benefits_preview.html',
+            'purchase_confirm_preview.html'
+        ];
+        
+        // 获取当前页面名称
+        const currentPage = window.location.pathname.split('/').pop();
+        const currentIndex = pages.indexOf(currentPage);
+        
+        // 添加底部操作栏按钮功能
+        const actionButtons = document.querySelectorAll('.action-button');
+        if (actionButtons.length > 0) {
+            actionButtons.forEach((button, index) => {
+                button.style.cursor = 'pointer';
+                // 移除跳转功能，仅保留点击效果
+                // 原来的代码会跳转到下一个页面
+                // button.addEventListener('click', function() {
+                //     const nextPage = (currentIndex + index + 1) % pages.length;
+                //     window.location.href = pages[nextPage];
+                // });
+            });
+        }
+        
+        // 添加其他按钮的功能（如"立即使用"等）
+        const otherButtons = document.querySelectorAll('button');
+        if (otherButtons.length > 0) {
+            otherButtons.forEach(button => {
+                button.style.cursor = 'pointer';
+                button.addEventListener('click', function() {
+                    const nextIndex = (currentIndex + 1) % pages.length;
+                    window.location.href = pages[nextIndex];
+                });
+            });
+        }
+        
+        // 添加交互效果 - 点击效果
+        const allClickableElements = document.querySelectorAll('.action-button, button, .options-button');
+        allClickableElements.forEach(element => {
+            element.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            element.addEventListener('mouseup', function() {
+                this.style.transform = 'scale(1)';
+            });
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    });
+</script>
+</html> 

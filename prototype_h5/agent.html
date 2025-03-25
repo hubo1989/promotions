@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推广员中心设计文档</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #2B7AE3;
+            --primary-dark: #003BA9;
+            --primary-bg: #ECF2FF;
+            --secondary-color: #7C3AED;
+            --light-gray: #F9FAFB;
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-full: 9999px;
+            --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --phone-width: 380px;
+            --phone-height: 822px;
+            --phone-border-radius: 48px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+            min-width: calc(var(--phone-width) + 600px);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .tap-area {
+            min-width: 44px;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chart-placeholder {
+            height: 150px;
+            background-color: rgba(243, 244, 246, 0.5);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-sm { font-size: 1rem; }
+        .icon-md { font-size: 1.5rem; }
+        .icon-lg { font-size: 2rem; }
+        .icon-xl { font-size: 2.5rem; }
+
+        /* 自定义样式 */
+        .balance-card {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+            border-radius: var(--border-radius-md);
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .metric-card {
+            background-color: white;
+            padding: 1rem;
+            text-align: center;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-xs);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: var(--border-radius-full);
+        }
+
+        .status-badge.success {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-badge.pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .copy-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius-sm);
+            padding: 0.25rem 0.5rem;
+            color: white;
+            font-size: 0.75rem;
+        }
+
+        /* 空状态样式 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            color: #D1D5DB;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #4B5563;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-message {
+            font-size: 0.875rem;
+            color: #6B7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .empty-state-action {
+            display: inline-block;
+        }
+
+        /* 左侧预览容器样式 */
+        .preview-container {
+            width: var(--phone-width);
+            height: var(--phone-height);
+            background: white;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            position: fixed;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* 右侧文档样式 */
+        .documentation {
+            margin-left: calc(var(--phone-width) + 120px);
+            padding: 40px 60px;
+            max-width: calc(100% - (var(--phone-width) + 120px));
+        }
+
+        /* 添加响应式布局 */
+        @media (max-width: 1280px) {
+            .documentation {
+                margin-left: calc(var(--phone-width) + 100px);
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .preview-container {
+                left: 40px;
+            }
+            
+            .documentation {
+                margin-left: calc(var(--phone-width) + 80px);
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- 左侧预览区域 -->
+    <div class="preview-container">
+        <iframe src="../preview/agent_promotion_preview.html" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+
+    <!-- 右侧文档区域 -->
+    <div class="documentation">
+        <h1 class="text-3xl font-bold mb-8">推广员中心页面说明文档</h1>
+        
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">1. 页面概述</h2>
+            <p class="text-gray-700 leading-relaxed">
+                推广员中心是面向推广人员的核心功能页面，提供推广数据查看、二维码分享等功能。页面采用移动端优先设计，确保良好的触控体验。
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">2. 功能模块</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.1 顶部导航栏</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>返回按钮：点击返回上一页面</li>
+                        <li>页面标题：显示"推广"</li>
+                        <li>更多选项：提供额外功能入口</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.2 推广海报</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>展示精美的推广海报背景</li>
+                        <li>包含推广二维码</li>
+                        <li>显示专属邀请码</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.3 底部操作栏</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>分享链接：复制推广链接到剪贴板</li>
+                        <li>复制链接：生成并复制推广链接</li>
+                        <li>分享海报：生成分享海报</li>
+                        <li>保存海报：将海报保存到本地</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">3. 交互说明</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>点击操作：</strong>所有可点击区域需要有明确的视觉反馈，最小点击区域为44x44px。</p>
+                <p><strong>分享功能：</strong>调用系统分享接口，支持分享到主流社交平台。</p>
+                <p><strong>海报保存：</strong>生成高清海报图片，保存到用户相册。</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold mb-4">4. 技术规范</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>设计规范：</strong>遵循Material Design设计语言</p>
+                <p><strong>响应式：</strong>适配主流移动设备屏幕</p>
+                <p><strong>性能要求：</strong>页面加载时间控制在3秒内</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold mb-4">5. 异常处理</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>5.1 网络异常</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>网络连接异常时，显示网络错误提示</li>
+                    <li>提供重新加载按钮，点击后重新获取数据</li>
+                    <li>本地已有数据时，优先展示缓存内容，同时提示"网络异常，显示的是缓存数据"</li>
+                </ul>
+
+                <p><strong>5.2 二维码生成失败</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>当二维码无法生成时，显示生成失败提示</li>
+                    <li>提供重试按钮，点击后重新生成二维码</li>
+                    <li>持续失败超过3次时，建议用户使用文本链接方式分享</li>
+                </ul>
+
+                <p><strong>5.3 分享权限问题</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>用户拒绝分享权限时，显示权限提示</li>
+                    <li>引导用户开启相关权限，并提供设置入口</li>
+                    <li>无法获取分享权限时，提供替代分享方式</li>
+                </ul>
+
+                <p><strong>5.4 链接复制反馈</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>链接复制成功时，显示"已复制到剪贴板"提示</li>
+                    <li>复制失败时，显示失败原因并提供重试选项</li>
+                    <li>复制操作超时时，显示超时提示</li>
+                </ul>
+
+                <p><strong>5.5 海报保存问题</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>保存失败时，显示具体原因（如存储空间不足、权限拒绝等）</li>
+                    <li>提供解决方案建议</li>
+                    <li>对于权限问题，引导用户到系统设置中开启相关权限</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

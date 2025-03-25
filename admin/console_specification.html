@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员权益后台控制台规范说明</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./shared-styles.css">
+    <style>
+        .spec-section {
+            margin-bottom: 2rem;
+        }
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        .spec-table th, .spec-table td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .spec-table th {
+            background-color: #f9fafb;
+        }
+        .spec-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .code-block {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .status-green {
+            background-color: #10b981;
+        }
+        .status-yellow {
+            background-color: #f59e0b;
+        }
+        .status-gray {
+            background-color: #6b7280;
+        }
+        .status-red {
+            background-color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <h1 class="text-3xl font-bold mb-6">会员权益后台控制台规范说明</h1>
+        <p class="text-gray-600 mb-8">本文档详细说明了会员权益后台控制台的设计规范、交互逻辑和功能模块。供开发和设计团队参考。</p>
+        
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">目录</h2>
+            <ul class="list-disc list-inside space-y-2 text-indigo-600">
+                <li><a href="#overview" class="hover:underline">1. 系统概述</a></li>
+                <li><a href="#architecture" class="hover:underline">2. 系统架构</a></li>
+                <li><a href="#page-structure" class="hover:underline">3. 页面结构</a></li>
+                <li><a href="#components" class="hover:underline">4. 组件说明</a></li>
+                <li><a href="#status-management" class="hover:underline">5. 状态管理</a></li>
+                <li><a href="#interaction" class="hover:underline">6. 交互规范</a></li>
+                <li><a href="#data-structure" class="hover:underline">7. 数据结构</a></li>
+                <li><a href="#api" class="hover:underline">8. API 接口</a></li>
+            </ul>
+        </div>
+        
+        <section id="overview" class="spec-section bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">1. 系统概述</h2>
+            <p class="mb-4">会员权益管理后台是一个用于创建、管理和监控会员权益包的系统。管理员可以通过该系统完成以下核心功能：</p>
+            <ul class="list-disc list-inside space-y-2 mb-4 ml-4">
+                <li>创建、编辑、复制和删除权益包</li>
+                <li>管理权益包的上线和下线状态</li>
+                <li>配置权益包的基本信息、价格和有效期</li>
+                <li>为权益包添加和管理各种权益项</li>
+                <li>预览权益包在客户端的展示效果</li>
+                <li>查看权益包的使用数据和统计信息</li>
+            </ul>
+            <p>本控制台基于 HTML、CSS（TailwindCSS）和 JavaScript 构建，采用模块化的组件设计，确保系统的可扩展性和可维护性。</p>
+        </section>
+        
+        <section id="architecture" class="spec-section bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">2. 系统架构</h2>
+            <p class="mb-4">系统采用前端组件化的架构，主要分为以下几个部分：</p>
+            
+            <h3 class="text-xl font-bold mb-2">2.1 文件结构</h3>
+            <div class="code-block mb-6">
+                /admin
+                ├── admin_config.html         # 权益包管理页面
+                ├── admin_benefit_config.html # 权益项配置页面
+                ├── admin_dashboard.html      # 控制台首页
+                ├── console_specification.html # 控制台规范说明
+                ├── shared-styles.css         # 共享样式
+                ├── shared-scripts.js         # 共享脚本
+                ├── components/               # 组件目录
+                │   ├── loader.js             # 组件加载器
+                │   ├── navigation.html       # 导航组件
+                │   ├── package-card.js       # 权益包卡片组件 
+                │   └── benefit-card.js       # 权益项卡片组件
+                └── js/                       # 业务逻辑脚本
+                    └── package-management.js # 权益包管理逻辑
+            </div>
+            
+            <h3 class="text-xl font-bold mb-2">2.2 技术栈</h3>
+            <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                <li>前端框架：原生 HTML + JavaScript</li>
+                <li>CSS 框架：TailwindCSS</li>
+                <li>图标库：Font Awesome</li>
+                <li>响应式设计：支持桌面和平板设备</li>
+            </ul>
+            
+            <h3 class="text-xl font-bold mb-2">2.3 组件通信</h3>
+            <p class="mb-4">组件之间通过以下方式进行通信：</p>
+            <ul class="list-disc list-inside space-y-2 ml-4">
+                <li>基于事件的通信：组件暴露事件处理方法（如 onEdit, onDelete 等）</li>
+                <li>数据传递：通过构造函数参数传递数据</li>
+                <li>DOM 元素属性：使用 data-* 属性存储和传递信息</li>
+            </ul>
+        </section>
+        
+        <section id="page-structure" class="spec-section bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">3. 页面结构</h2>
+            
+            <h3 class="text-xl font-bold mb-2">3.1 通用页面布局</h3>
+            <p class="mb-4">所有页面共用以下布局结构：</p>
+            <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                <li>侧边导航栏：提供系统主要功能的导航</li>
+                <li>顶部导航栏：显示系统标题和用户信息</li>
+                <li>主内容区域：展示页面主要内容</li>
+                <li>模态框：用于各种操作确认和表单填写</li>
+                <li>通知系统：展示操作结果的反馈信息</li>
+            </ul>
+            
+            <h3 class="text-xl font-bold mb-2">3.2 权益包管理页面 (admin_config.html)</h3>
+            <p class="mb-4">权益包管理页面包含以下主要部分：</p>
+            <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                <li>标题区域：显示页面标题和"创建权益包"按钮</li>
+                <li>筛选工具栏：提供按状态、类型筛选和排序功能</li>
+                <li>权益包列表：以卡片形式展示所有权益包</li>
+                <li>删除确认对话框：确认删除权益包的操作</li>
+                <li>下线确认对话框：确认下线权益包的操作</li>
+            </ul>
+            
+            <h3 class="text-xl font-bold mb-2">3.3 权益配置页面 (admin_benefit_config.html)</h3>
+            <p class="mb-4">权益配置页面包含以下主要部分：</p>
+            <ul class="list-disc list-inside space-y-2 ml-4">
+                <li>面包屑导航：显示当前位置</li>
+                <li>标题区域：显示权益包名称和操作按钮（预览、保存）</li>
+                <li>基本信息区域：包含权益包的名称、价格、有效期等基础信息</li>
+                <li>权益项配置区域：管理权益包包含的权益项</li>
+                <li>预览模态框：预览权益包在客户端的展示效果</li>
+                <li>添加/编辑权益项模态框：添加或编辑权益项的表单</li>
+            </ul>
+        </section>
+        
+        <section id="components" class="spec-section bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">4. 组件说明</h2>
+            
+            <h3 class="text-xl font-bold mb-2">4.1 PackageCard 组件</h3>
+            <p class="mb-4">PackageCard 是一个用于展示权益包信息的卡片组件，包含以下功能：</p>
+            <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                <li>展示权益包基本信息：标题、状态、ID、图标</li>
+                <li>展示统计数据：价格、有效期、销售量、使用率</li>
+                <li>展示包含的权益项列表</li>
+                <li>提供编辑、复制、删除按钮</li>
+                <li>根据状态显示上线/下线按钮</li>
+                <li>状态校验：只有已下线的权益包才能编辑或删除</li>
+            </ul>
+            
+            <div class="code-block mb-6">
+                // PackageCard 组件使用示例
+                const packageCard = new PackageCard({
+                    title: '黄金VIP会员',
+                    status: '已上线',
+                    packageId: 'BP10023',
+                    icon: 'fa-crown',
+                    iconBg: 'amber',
+                    stats: {
+                        '价格': '¥59.00',
+                        '有效期': '90天',
+                        '销售量': '1,234',
+                        '使用率': '78.5%'
+                    },
+                    benefits: [
+                        { name: '满5000-10元手续费抵扣券', value: '30张', icon: 'fa-ticket-alt' },
+                        { name: '信用卡评测权益', value: '无限次', icon: 'fa-chart-line' }
+                    ],
+                    dates: {
+                        '创建时间': '2023-06-15',
+                        '上线时间': '2023-06-20'
+                    }
+                });
+            </div>
+            
+            <h3 class="text-xl font-bold mb-2">4.2 模态框组件</h3>
+            <p class="mb-4">系统中的模态框包括：</p>
+            <ul class="list-disc list-inside space-y-2 mb-4 ml-4">
+                <li>删除确认模态框：确认删除操作</li>
+                <li>下线确认模态框：确认下线操作</li>
+                <li>添加权益项模态框：添加新的权益项</li>
+                <li>编辑权益项模态框：编辑现有权益项</li>
+                <li>预览模态框：预览权益包在客户端展示效果</li>
+            </ul>
+            <p class="mb-6">模态框的一般结构包括：标题栏、内容区域和按钮区域。所有模态框支持点击外部区域关闭。</p>
+            
+            <h3 class="text-xl font-bold mb-2">4.3 通知系统</h3>
+            <p class="mb-4">通知系统用于展示操作结果的反馈信息，包括成功和错误两种类型，支持自动消失。用法示例：</p>
+            <div class="code-block">
+                // 显示成功通知
+                showNotification('权益包创建成功');
+                
+                // 显示错误通知
+                showNotification('操作失败：权限不足', 'error');
+                
+                // 显示状态通知（黄色警告）
+                packageCard.showStatusNotification('只有已下线的权益包才能修改');
+            </div>
+        </section>
+        
+        <section id="status-management" class="spec-section bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">5. 状态管理</h2>
+            
+            <h3 class="text-xl font-bold mb-2">5.1 权益包状态</h3>
+            <p class="mb-4">权益包有以下几种状态：</p>
+            <table class="spec-table mb-6">
+                <thead>
+                    <tr>
+                        <th>状态</th>
+                        <th>说明</th>
+                        <th>颜色标识</th>
+                        <th>可执行操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="status-indicator status-yellow"></span> 待发布</td>
+                        <td>权益包已创建但尚未上线</td>
+                        <td>黄色 (yellow)</td>
+                        <td>上线、复制</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-indicator status-green"></span> 已上线</td>
+                        <td>权益包已上线，客户可见</td>
+                        <td>绿色 (green)</td>
+                        <td>下线、复制</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-indicator status-gray"></span> 已下线</td>
+                        <td>权益包已手动下线</td>
+                        <td>灰色 (gray)</td>
+                        <td>上线、编辑、删除、复制</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-indicator status-red"></span> 已过期</td>
+                        <td>权益包已自动过期</td>
+                        <td>红色 (red)</td>
+                        <td>复制</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 class="text-xl font-bold mb-2">5.2 状态流转规则</h3>
+            <p class="mb-4">权益包状态的流转规则如下：</p>
+            <ul class="list-disc list-inside space-y-2 ml-4">
+                <li>新创建的权益包默认为"待发布"状态</li>
+                <li>"待发布"状态可以转变为"已上线"状态</li>
+                <li>"已上线"状态可以转变为"已下线"状态</li>
+                <li>"已下线"状态可以转变为"已上线"状态</li>
+                <li>只有"已下线"状态的权益包才能进行编辑和删除操作</li>
+                <li>任何状态的权益包都可以进行复制操作</li>
+                <li>尝试编辑或删除非"已下线"状态的权益包将显示警告通知</li>
+            </ul>
+        </section>
+        
+        <section id="interaction" class="spec-section bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">6. 交互规范</h2>
+            
+            <h3 class="text-xl font-bold mb-2">6.1 按钮操作规范</h3>
+            <table class="spec-table mb-6">
+                <thead>
+                    <tr>
+                        <th>按钮</th>
+                        <th>操作</th>
+                        <th>交互行为</th>
+                        <th>状态限制</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>编辑</td>
+                        <td>编辑权益包</td>
+                        <td>跳转到权益配置页面</td>
+                        <td>仅限"已下线"状态，否则显示状态警告</td>
+                    </tr>
+                    <tr>
+                        <td>复制</td>
+                        <td>复制权益包</td>
+                        <td>跳转到权益配置页面（复制模式）</td>
+                        <td>无限制</td>
+                    </tr>
+                    <tr>
+                        <td>删除</td>
+                        <td>删除权益包</td>
+                        <td>显示确认对话框</td>
+                        <td>仅限"已下线"状态，否则显示状态警告</td>
+                    </tr>
+                    <tr>
+                        <td>上线</td>
+                        <td>将权益包上线</td>
+                        <td>直接执行上线操作</td>
+                        <td>仅限"待发布"或"已下线"状态</td>
+                    </tr>
+                    <tr>
+                        <td>下线</td>
+                        <td>将权益包下线</td>
+                        <td>显示确认对话框</td>
+                        <td>仅限"已上线"状态</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 class="text-xl font-bold mb-2">6.2 模态框交互</h3>
+            <p class="mb-4">系统中使用了以下模态框：</p>
+            <table class="spec-table mb-6">
+                <thead>
+                    <tr>
+                        <th>模态框类型</th>
+                        <th>触发方式</th>
+                        <th>功能说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>删除确认模态框</td>
+                        <td>点击"删除"按钮</td>
+                        <td>确认是否删除权益包，防止误操作</td>
+                    </tr>
+                    <tr>
+                        <td>下线确认模态框</td>
+                        <td>点击"下线"按钮</td>
+                        <td>确认是否下线权益包，提示用户影响</td>
+                    </tr>
+                    <tr>
+                        <td>添加权益项模态框</td>
+                        <td>点击"添加权益项"按钮</td>
+                        <td>填写新权益项的详细信息</td>
+                    </tr>
+                    <tr>
+                        <td>编辑权益项模态框</td>
+                        <td>点击权益项的"编辑"按钮</td>
+                        <td>编辑现有权益项的详细信息</td>
+                    </tr>
+                    <tr>
+                        <td>预览模态框</td>
+                        <td>点击"预览"按钮</td>
+                        <td>预览权益包在客户端的展示效果</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p class="mb-4">模态框的通用交互规则：</p>
+            <ul class="list-disc list-inside space-y-2 mb-6 ml-4">
+                <li>点击模态框外部区域可关闭模态框</li>
+                <li>点击关闭按钮（×）可关闭模态框</li>
+                <li>点击"取消"按钮可关闭模态框</li>
+                <li>确认类模态框需要二次确认才能执行危险操作</li>
+                <li>表单类模态框需要验证输入内容</li>
+            </ul>
+            
+            <h3 class="text-xl font-bold mb-2">6.3 通知反馈</h3>
+            <p class="mb-4">系统提供三种通知类型：</p>
+            <ul class="list-disc list-inside space-y-2 ml-4">
+                <li>成功通知（绿色）：操作成功时显示</li>
+                <li>错误通知（红色）：操作失败时显示</li>
+                <li>警告通知（黄色）：操作受限或需要注意时显示，例如尝试编辑非已下线的权益包</li>
+                <li>所有通知会在3秒后自动消失，并有渐变过渡效果</li>
+            </ul>
+        </section>
+        
+        <section id="data-structure" class="spec-section bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">7. 数据结构</h2>
+            
+            <h3 class="text-xl font-bold mb-2">7.1 权益包数据结构</h3>
+            <div class="code-block mb-6">
+                {
+                    id: "package-xyz123",        // 组件内部ID
+                    title: "黄金VIP会员",         // 权益包名称
+                    status: "已上线",             // 权益包状态：已上线、待发布、已下线、已过期
+                    packageId: "BP10023",        // 业务ID
+                    icon: "fa-crown",            // 图标类名
+                    iconBg: "amber",             // 图标背景色
+                    stats: {                     // 统计数据
+                        "价格": "¥59.00",
+                        "有效期": "90天",
+                        "销售量": "1,234",
+                        "使用率": "78.5%"
+                    },
+                    benefits: [                  // 包含的权益项
+                        { 
+                            name: "满5000-10元手续费抵扣券", 
+                            value: "30张", 
+                            icon: "fa-ticket-alt" 
+                        },
+                        // 更多权益项...
+                    ],
+                    dates: {                     // 日期信息
+                        "创建时间": "2023-06-15",
+                        "上线时间": "2023-06-20",  
+                        "下线时间": "2023-09-20"   // 仅已下线状态有
+                    },
+                    editable: true               // 是否可编辑
+                }
+            </div>
+            
+            <h3 class="text-xl font-bold mb-2">7.2 权益项数据结构</h3>
+            <div class="code-block mb-6">
+                {
+                    id: "benefit-1",                       // 权益项ID
+                    title: "满5000-10元手续费抵扣券",        // 权益项名称
+                    type: "抵扣券",                        // 权益项类型：抵扣券、服务权益等
+                    description: "单笔交易满5000元可抵扣10元手续费", // 描述
+                    icon: "fa-ticket-alt",                // 图标类名
+                    iconColor: "amber",                   // 图标颜色
+                    properties: {                         // 权益项属性
+                        "数量": "30张",
+                        "使用限制": "每笔交易限用1张"
+                    }
+                }
+            </div>
+            
+            <h3 class="text-xl font-bold mb-2">7.3 状态校验逻辑</h3>
+            <p class="mb-4">系统实现了以下状态校验逻辑：</p>
+            <div class="code-block">
+                // 编辑按钮状态校验
+                editBtn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const status = editBtn.getAttribute('data-status');
+                    if (status !== '已下线') {
+                        this.showStatusNotification('只有已下线的权益包才能修改');
+                        return;
+                    }
+                    this.onEdit(this.id);
+                });
+
+                // 删除按钮状态校验
+                deleteBtn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const status = deleteBtn.getAttribute('data-status');
+                    if (status !== '已下线') {
+                        this.showStatusNotification('只有已下线的权益包才能删除');
+                        return;
+                    }
+                    this.onDelete(this.id);
+                });
+            </div>
+        </section>
+        
+        <section id="api" class="spec-section bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-2xl font-bold mb-4">8. API 接口</h2>
+            <p class="mb-4">系统主要使用以下API接口与后端交互：</p>
+            
+            <h3 class="text-xl font-bold mb-2">8.1 权益包管理接口</h3>
+            <table class="spec-table mb-6">
+                <thead>
+                    <tr>
+                        <th>接口名称</th>
+                        <th>请求方式</th>
+                        <th>接口路径</th>
+                        <th>功能描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>获取权益包列表</td>
+                        <td>GET</td>
+                        <td>/api/v1/packages</td>
+                        <td>获取所有权益包列表，支持分页和筛选</td>
+                    </tr>
+                    <tr>
+                        <td>获取权益包详情</td>
+                        <td>GET</td>
+                        <td>/api/v1/packages/{packageId}</td>
+                        <td>获取指定权益包的详细信息</td>
+                    </tr>
+                    <tr>
+                        <td>创建权益包</td>
+                        <td>POST</td>
+                        <td>/api/v1/packages</td>
+                        <td>创建新的权益包</td>
+                    </tr>
+                    <tr>
+                        <td>更新权益包</td>
+                        <td>PUT</td>
+                        <td>/api/v1/packages/{packageId}</td>
+                        <td>更新指定权益包的信息</td>
+                    </tr>
+                    <tr>
+                        <td>删除权益包</td>
+                        <td>DELETE</td>
+                        <td>/api/v1/packages/{packageId}</td>
+                        <td>删除指定权益包</td>
+                    </tr>
+                    <tr>
+                        <td>设置权益包状态</td>
+                        <td>PATCH</td>
+                        <td>/api/v1/packages/{packageId}/status</td>
+                        <td>更新指定权益包的状态（上线/下线）</td>
+                    </tr>
+                    <tr>
+                        <td>复制权益包</td>
+                        <td>POST</td>
+                        <td>/api/v1/packages/{packageId}/copy</td>
+                        <td>复制指定权益包创建新的权益包</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 class="text-xl font-bold mb-2">8.2 权益项管理接口</h3>
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th>接口名称</th>
+                        <th>请求方式</th>
+                        <th>接口路径</th>
+                        <th>功能描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>获取权益项列表</td>
+                        <td>GET</td>
+                        <td>/api/v1/packages/{packageId}/benefits</td>
+                        <td>获取指定权益包的所有权益项</td>
+                    </tr>
+                    <tr>
+                        <td>添加权益项</td>
+                        <td>POST</td>
+                        <td>/api/v1/packages/{packageId}/benefits</td>
+                        <td>向指定权益包添加新的权益项</td>
+                    </tr>
+                    <tr>
+                        <td>更新权益项</td>
+                        <td>PUT</td>
+                        <td>/api/v1/packages/{packageId}/benefits/{benefitId}</td>
+                        <td>更新指定权益项的信息</td>
+                    </tr>
+                    <tr>
+                        <td>删除权益项</td>
+                        <td>DELETE</td>
+                        <td>/api/v1/packages/{packageId}/benefits/{benefitId}</td>
+                        <td>从指定权益包中删除权益项</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html> 

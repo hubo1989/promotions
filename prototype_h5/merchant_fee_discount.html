@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商户手续费优惠设计文档</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #6fb8e0;
+            --primary-dark: #3a89bb;
+            --primary-bg: #ecf5fb;
+            --secondary-color: #03dac6;
+            --light-gray: #F9FAFB;
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --border-radius-full: 9999px;
+            --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --phone-width: 380px;
+            --phone-height: 822px;
+            --phone-border-radius: 48px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+            min-width: calc(var(--phone-width) + 600px);
+        }
+
+        /* 左侧预览容器样式 */
+        .preview-container {
+            width: var(--phone-width);
+            height: var(--phone-height);
+            background: white;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            position: fixed;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* 右侧文档样式 */
+        .documentation {
+            margin-left: calc(var(--phone-width) + 120px);
+            padding: 40px 60px;
+            max-width: calc(100% - (var(--phone-width) + 120px));
+        }
+
+        /* 添加响应式布局 */
+        @media (max-width: 1280px) {
+            .documentation {
+                margin-left: calc(var(--phone-width) + 100px);
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .preview-container {
+                left: 40px;
+            }
+            
+            .documentation {
+                margin-left: calc(var(--phone-width) + 80px);
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- 左侧预览区域 -->
+    <div class="preview-container">
+        <iframe src="../preview/merchant_fee_discount_preview.html" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+
+    <!-- 右侧文档区域 -->
+    <div class="documentation">
+        <h1 class="text-3xl font-bold mb-8">商户手续费优惠页面说明文档</h1>
+        
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">1. 页面概述</h2>
+            <p class="text-gray-700 leading-relaxed">
+                商户手续费优惠页面展示用户当前的手续费率、优惠情况、历史记录和个性化建议，帮助商户了解和利用各种手续费优惠。
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">2. 功能模块</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.1 顶部导航栏</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>返回按钮：点击返回商户中心首页</li>
+                        <li>页面标题：显示"商户手续费优惠"</li>
+                        <li>更多按钮：提供额外操作选项</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.2 当前费率状态卡片</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>使用渐变背景突出显示当前费率</li>
+                        <li>大字体展示当前费率数值，增强可读性</li>
+                        <li>对比显示原始费率和节省金额，强调优惠价值</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.3 费率说明卡片</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>展示用户当前享有的各类费率优惠</li>
+                        <li>使用图标和分类展示不同类型的优惠</li>
+                        <li>清晰说明每种优惠的具体内容和条件</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.4 优惠历史卡片</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>展示最近的优惠使用记录</li>
+                        <li>显示优惠类型、金额、交易信息和时间</li>
+                        <li>提供"查看全部"入口，可查看完整历史记录</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.5 优惠建议卡片</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>根据用户情况提供个性化优惠建议</li>
+                        <li>展示建议的优惠方案、预期收益和操作按钮</li>
+                        <li>直观对比不同方案的性价比，引导用户选择最合适的方案</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">2.6 费率计算器</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>提供交互式计算工具，可预估手续费</li>
+                        <li>支持输入不同的交易金额和支付方式</li>
+                        <li>实时计算并显示预计手续费</li>
+                        <li>帮助用户直观了解优惠后的实际费用</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">3. 交互说明</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>3.1 页面导航</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>点击返回按钮：返回商户中心首页</li>
+                    <li>点击更多按钮：显示更多操作选项（如帮助、反馈等）</li>
+                </ul>
+
+                <p><strong>3.2 功能操作</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>点击"查看全部"：跳转至完整的优惠历史记录页面</li>
+                    <li>点击"了解详情"：跳转至会员升级介绍页面</li>
+                    <li>点击"立即购买"：跳转至抵扣包购买页面</li>
+                    <li>使用费率计算器：输入交易金额和选择支付方式后点击"计算手续费"按钮</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold mb-4">4. 业务逻辑</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>4.1 费率计算</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>基础手续费 = 交易金额 × 基础费率</li>
+                    <li>实际手续费 = 基础手续费 - 各类优惠金额</li>
+                    <li>节省金额 = 交易金额 × (原费率 - 当前费率)</li>
+                </ul>
+
+                <p><strong>4.2 优惠类型</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>基础费率优惠：根据商户等级和交易量确定的基础费率折扣</li>
+                    <li>抵扣券优惠：单次交易使用的手续费抵扣券</li>
+                    <li>会员特权：会员等级对应的每月手续费减免额度</li>
+                </ul>
+
+                <p><strong>4.3 优惠建议逻辑</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>根据用户交易量和当前会员等级推荐最优的会员升级方案</li>
+                    <li>基于用户交易习惯推荐性价比最高的手续费抵扣包</li>
+                    <li>建议显示预期收益，帮助用户评估投资回报</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold mb-4">5. 异常处理</h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>5.1 数据加载异常</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>数据加载中显示加载动画，超过2秒未返回显示loading状态</li>
+                    <li>网络异常时显示网络错误提示，并提供重试按钮</li>
+                    <li>服务器错误时区分不同HTTP状态码，显示对应提示信息</li>
+                </ul>
+
+                <p><strong>5.2 空数据处理</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>当用户无任何优惠记录时，历史记录区域显示空状态提示</li>
+                    <li>无适用优惠建议时，建议区域显示"暂无适合您的优惠建议"</li>
+                    <li>无交易数据时，计算区域显示引导用户开始交易的建议</li>
+                </ul>
+
+                <p><strong>5.3 参数错误处理</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>计算器输入非法数值时（如负数或超大金额），显示错误提示</li>
+                    <li>参数超出系统支持范围时，界面提示"金额超过计算范围"</li>
+                    <li>字符输入限制，仅允许输入数字和小数点</li>
+                </ul>
+
+                <p><strong>5.4 操作失败处理</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>跳转失败时，显示错误提示并建议重试</li>
+                    <li>点击"立即购买"按钮失败时，显示具体原因并提供解决方案</li>
+                    <li>数据加载超时时，显示超时提示并自动重试</li>
+                </ul>
+
+                <p><strong>5.5 权限问题</strong></p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>当用户无权查看特定优惠时，显示权限提示</li>
+                    <li>说明如何获取查看权限（如升级会员等）</li>
+                    <li>对受限内容区域使用锁定图标和蒙层直观展示</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

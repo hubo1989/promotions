@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互设计 - 商户权益中心需求文档</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3, h4 {
+            color: #4fa1d5;
+            margin-top: 1.5em;
+        }
+
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; }
+
+        /* 固定导航栏样式 */
+        .fixed-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-title {
+            font-weight: bold;
+            color: #4fa1d5;
+            margin-right: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            background-color: #4fa1d5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav-button:hover {
+            background-color: #3a87b7;
+        }
+
+        .nav-button.active {
+            background-color: #3a87b7;
+            font-weight: bold;
+        }
+
+        /* 为固定导航条腾出空间 */
+        .main-content {
+            margin-top: 70px;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+
+        /* 表格样式 */
+        .interaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .interaction-table th, .interaction-table td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .interaction-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+        
+        .interaction-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .interaction-table ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        /* 流程图说明文字样式 */
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-gray-600 {
+            color: #6b7280;
+        }
+        
+        .mt-4 {
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 固定导航栏 -->
+    <div class="fixed-nav">
+        <div class="nav-container">
+            <div class="nav-title">商户权益中心需求文档</div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="window.location.href='index.html'">1. 概述</button>
+                <button class="nav-button" onclick="window.location.href='requirements.html'">2. 需求说明</button>
+                <button class="nav-button" onclick="window.location.href='architecture.html'">3. 系统架构</button>
+                <button class="nav-button" onclick="window.location.href='prototype.html'">4. 原型设计</button>
+                <button class="nav-button active" onclick="window.location.href='interaction.html'">5. 交互设计</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <!-- 交互设计 -->
+        <div id="interaction">
+            <h2>5. 交互设计</h2>
+            
+            <h3>5.1 交互原则</h3>
+            <p>商户权益中心的交互设计遵循以下原则：</p>
+            <ul>
+                <li><strong>简洁明了</strong> - 界面简洁，操作流程清晰，减少用户认知负担</li>
+                <li><strong>一致性</strong> - 保持视觉和交互的一致性，提高用户熟悉度</li>
+                <li><strong>反馈及时</strong> - 操作后给予及时反馈，增强用户信心</li>
+                <li><strong>容错性</strong> - 预防用户错误，提供明确的错误提示和恢复机制</li>
+            </ul>
+            
+            <h3>5.2 交互流程图</h3>
+            <h4>5.2.1 权益购买流程</h4>
+            <div class="purchase-flow-diagram">
+                <object data="images/purchase_flow.svg" type="image/svg+xml" width="100%" height="700"></object>
+            </div>
+            <p class="text-center text-gray-600 mt-4">用户通过扫描代理推广二维码进行权益购买的完整操作流程，包含从入口到支付完成的全部步骤</p>
+            
+            <!-- 添加的购买流程说明表格 -->
+            <table class="interaction-table">
+                <thead>
+                    <tr>
+                        <th width="25%">环节</th>
+                        <th width="75%">说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>关键决策点</strong></td>
+                        <td>用户在权益选择和支付确认环节有明确的决策点，系统需提供充分信息支持决策</td>
+                    </tr>
+                    <tr>
+                        <td><strong>中断恢复机制</strong></td>
+                        <td>支付过程中如遇网络中断或用户主动退出，系统支持订单保留和恢复</td>
+                    </tr>
+                    <tr>
+                        <td><strong>转化优化点</strong></td>
+                        <td>详情页停留时间、加入购物车到下单转化率、支付页面退出率是关键优化指标</td>
+                    </tr>
+                    <tr>
+                        <td><strong>异常处理</strong></td>
+                        <td>支付失败后提供明确原因和解决建议，支持一键重试和客服咨询入口</td>
+                    </tr>
+                    <tr>
+                        <td><strong>完成后引导</strong></td>
+                        <td>购买完成后引导用户立即使用或查看相关推荐，增强用户粘性</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h4>5.2.2 推广流程图</h4>
+            <div class="promotion-flow-diagram">
+                <object data="images/promotion_flow.svg" type="image/svg+xml" width="100%" height="700"></object>
+                <p class="text-center text-gray-600 mt-4">业务推广完整流程，展示从业务员获取推广码到最终收益分配的全过程</p>
+            </div>
+            
+            <!-- 添加的推广流程说明表格 -->
+            <table class="interaction-table">
+                <thead>
+                    <tr>
+                        <th width="25%">环节</th>
+                        <th width="75%">说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>角色职责</strong></td>
+                        <td>流程中涉及业务员、商户和系统三个主体，各有明确职责界定</td>
+                    </tr>
+                    <tr>
+                        <td><strong>数据追踪</strong></td>
+                        <td>全流程支持数据追踪，确保推广行为与收益分配的透明度</td>
+                    </tr>
+                    <tr>
+                        <td><strong>结算周期</strong></td>
+                        <td>系统自动按设定周期（周/月）进行佣金结算，业务员可实时查看预估收益</td>
+                    </tr>
+                    <tr>
+                        <td><strong>异常处理</strong></td>
+                        <td>推广码失效、重复使用等异常情况有明确处理机制和提示</td>
+                    </tr>
+                    <tr>
+                        <td><strong>绩效分析</strong></td>
+                        <td>提供多维度推广效果分析，包括转化率、客单价、活跃度等指标</td>
+                    </tr>
+                    <tr>
+                        <td><strong>优化建议</strong></td>
+                        <td>基于历史数据，系统可为业务员提供个性化的推广策略优化建议</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>5.3 用户旅程与关键路径</h3>
+            <table class="interaction-table">
+                <thead>
+                    <tr>
+                        <th width="30%">类别</th>
+                        <th width="70%">描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>核心用户旅程</strong></td>
+                        <td>发现权益 → 了解详情 → 购买权益 → 使用权益 → 查看记录 → 续费/升级</td>
+                    </tr>
+                    <tr>
+                        <td><strong>关键转化节点</strong></td>
+                        <td>详情页浏览 → 立即购买按钮点击 → 支付完成</td>
+                    </tr>
+                    <tr>
+                        <td><strong>关键留存节点</strong></td>
+                        <td>权益到期提醒 → 权益使用提醒 → 新权益推荐</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>5.4 基础交互模式</h3>
+            <table class="interaction-table">
+                <thead>
+                    <tr>
+                        <th width="25%">交互类型</th>
+                        <th width="75%">交互细节</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>列表与卡片交互</strong></td>
+                        <td>
+                            <ul>
+                                <li><strong>卡片点击：</strong>整张卡片可点击，点击后展示详情页</li>
+                                <li><strong>列表滑动：</strong>支持上下滑动浏览，支持下拉刷新</li>
+                                <li><strong>卡片状态：</strong>不同状态卡片有明显视觉区分（推荐、热门、已购买）</li>
+                                <li><strong>动效：</strong>卡片点击有轻微缩放反馈，转场动画平滑</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>详情页交互</strong></td>
+                        <td>
+                            <ul>
+                                <li><strong>展开/收起：</strong>长内容区域支持展开/收起操作</li>
+                                <li><strong>锚点导航：</strong>快速跳转到详情页不同区域</li>
+                                <li><strong>悬浮按钮：</strong>购买按钮固定在底部，滚动时保持可见</li>
+                                <li><strong>分享功能：</strong>支持一键分享到微信、朋友圈等渠道</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>表单与支付交互</strong></td>
+                        <td>
+                            <ul>
+                                <li><strong>实时验证：</strong>表单输入实时验证，错误提示明确</li>
+                                <li><strong>支付流程：</strong>简化支付步骤，支持多种支付方式</li>
+                                <li><strong>订单确认：</strong>清晰展示订单信息，二次确认重要操作</li>
+                                <li><strong>结果反馈：</strong>支付成功/失败有明确视觉反馈和后续引导</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>手势与动效</strong></td>
+                        <td>
+                            <ul>
+                                <li><strong>上滑手势：</strong>在详情页可上滑展开更多信息</li>
+                                <li><strong>左右滑动：</strong>在权益列表中支持左右滑动切换分类</li>
+                                <li><strong>下拉刷新：</strong>所有列表页支持下拉刷新获取最新数据</li>
+                                <li><strong>转场动画：</strong>页面切换有平滑过渡效果，提升体验</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>5.5 交互优化与体验提升</h3>
+            <table class="interaction-table">
+                <thead>
+                    <tr>
+                        <th width="25%">优化方向</th>
+                        <th width="75%">具体措施</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>性能优化</strong></td>
+                        <td>首屏加载时间控制在2秒内，列表滚动流畅无卡顿</td>
+                    </tr>
+                    <tr>
+                        <td><strong>错误处理</strong></td>
+                        <td>网络错误、支付异常等情况提供友好提示和恢复建议</td>
+                    </tr>
+                    <tr>
+                        <td><strong>无障碍设计</strong></td>
+                        <td>支持屏幕阅读器，提供足够的色彩对比度，确保信息可访问性</td>
+                    </tr>
+                    <tr>
+                        <td><strong>引导与帮助</strong></td>
+                        <td>首次使用提供功能引导，关键节点提供操作提示，降低使用门槛</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html> 

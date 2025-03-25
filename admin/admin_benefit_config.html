@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员权益配置</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./shared-styles.css">
+    <style>
+        .annotation {
+            font-size: 12px;
+            color: #666;
+            padding: 4px 8px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            margin: 4px 0;
+        }
+        .design-doc {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .card-gold {
+            background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+        }
+        .card-platinum {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed, #6d28d9);
+        }
+        .card-diamond {
+            background: linear-gradient(135deg, #10b981, #059669, #047857);
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .preview-frame {
+            width: 375px;
+            height: 812px;
+            border: none;
+            border-radius: 2rem;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- 侧边导航栏 -->
+        <div id="navigation-container"></div>
+
+        <!-- 主要内容区域 -->
+        <div class="flex-1 overflow-y-auto h-screen">
+            <!-- 顶部导航栏 -->
+            <nav class="bg-white shadow-md sticky top-0 z-10">
+                <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img src="https://placehold.co/32x32/5046e4/white?text=V" alt="Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold">权益包管理系统</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-700">管理员</span>
+                            <img src="https://placehold.co/32x32/5046e4/white?text=A" alt="Avatar" class="h-8 w-8 rounded-full">
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container mx-auto px-6 py-6">
+                <!-- 页面标题和面包屑导航 -->
+                <div class="mb-6">
+                    <div class="flex items-center text-sm text-gray-500 mb-2">
+                        <a href="./admin_config.html" class="hover:text-indigo-600">权益包管理</a>
+                        <i class="fas fa-chevron-right mx-2 text-xs"></i>
+                        <span class="text-gray-700">黄金VIP会员</span>
+                        <i class="fas fa-chevron-right mx-2 text-xs"></i>
+                        <span class="text-gray-700">权益配置</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-gray-800">黄金VIP会员 - 权益配置</h2>
+                        <div class="flex space-x-3">
+                            <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50" id="preview-btn">
+                                <i class="fas fa-eye mr-2"></i>
+                                <span>预览</span>
+                            </button>
+                            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg" id="save-btn">
+                                <i class="fas fa-save mr-2"></i>
+                                <span>保存配置</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 权益包基本信息 -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">基本信息</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="package-name" class="block text-sm font-medium text-gray-700 mb-2">权益包名称</label>
+                            <input type="text" id="package-name" value="黄金VIP会员" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="package-id" class="block text-sm font-medium text-gray-700 mb-2">权益包ID</label>
+                            <input type="text" id="package-id" value="BP10023" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" disabled>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">价格设置 (元)</label>
+                            <div class="flex space-x-4">
+                                <div class="flex-1">
+                                    <label for="original-price" class="block text-xs text-gray-500 mb-1">原价</label>
+                                    <input type="number" id="original-price" value="99" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                </div>
+                                <div class="flex-1">
+                                    <label for="discount-price" class="block text-xs text-gray-500 mb-1">优惠价</label>
+                                    <input type="number" id="discount-price" value="59" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="validity-period" class="block text-sm font-medium text-gray-700 mb-2">有效期 (天)</label>
+                            <input type="number" id="validity-period" value="90" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="target-audience" class="block text-sm font-medium text-gray-700 mb-2">适用人群</label>
+                            <input type="text" id="target-audience" value="适合小微商户的基础会员方案" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">标签</label>
+                            <div class="flex items-center space-x-2">
+                                <select id="tag-select" aria-label="选择标签" class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>热门</option>
+                                    <option>超值</option>
+                                    <option>限量</option>
+                                    <option>新品</option>
+                                    <option>推荐</option>
+                                </select>
+                                <div class="relative">
+                                    <input type="text" id="custom-tag" placeholder="自定义标签" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">卡片样式</label>
+                        <div class="flex space-x-4">
+                            <div class="w-32 h-20 card-gold rounded-lg flex items-center justify-center cursor-pointer ring-2 ring-offset-2 ring-amber-500">
+                                <span class="text-white font-bold">黄金</span>
+                            </div>
+                            <div class="w-32 h-20 card-platinum rounded-lg flex items-center justify-center cursor-pointer">
+                                <span class="text-white font-bold">铂金</span>
+                            </div>
+                            <div class="w-32 h-20 card-diamond rounded-lg flex items-center justify-center cursor-pointer">
+                                <span class="text-white font-bold">钻石</span>
+                            </div>
+                            <div class="w-32 h-20 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center cursor-pointer">
+                                <span class="text-white font-bold">靛蓝</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 权益项配置 -->
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">权益项配置</h3>
+                        <button id="add-benefit-btn" class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg hover:bg-indigo-100">
+                            <i class="fas fa-plus mr-2"></i>
+                            <span>添加权益项</span>
+                        </button>
+                    </div>
+
+                    <!-- 权益项列表 -->
+                    <div id="benefits-container" class="space-y-4">
+                        <!-- 权益项由 JS 动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预览模态框 -->
+    <div class="modal" id="preview-modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800">权益包预览</h3>
+                <button class="text-gray-500 hover:text-gray-700" id="close-preview-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-lg flex justify-center">
+                <iframe src="/preview/benefit_detail_preview.html" class="preview-frame shadow-lg"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加权益项模态框 -->
+    <div class="modal" id="add-benefit-modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800">添加权益项</h3>
+                <button class="text-gray-500 hover:text-gray-700" id="close-add-benefit-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="add-benefit-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">权益类型</label>
+                    <select id="benefit-type" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        <option value="">请选择权益类型</option>
+                        <option value="discount">手续费抵扣券</option>
+                        <option value="service">用卡评测</option>
+                        <option value="support">客服支持</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">权益名称</label>
+                    <input type="text" id="benefit-name" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="例如：满5000-10元手续费抵扣券" required>
+                </div>
+                
+                <!-- 抵扣券特有字段 -->
+                <div id="discount-fields" class="space-y-4 hidden">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">满额条件（元）</label>
+                            <input type="number" id="min-amount" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="例如：5000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">立减金额（元）</label>
+                            <input type="number" id="discount-amount" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="例如：10">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">权益说明</label>
+                    <textarea id="benefit-description" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="请输入权益的详细说明" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">权益数量</label>
+                    <input type="number" id="benefit-quantity" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="请输入权益数量，无限次请输入-1" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">使用规则</label>
+                    <textarea id="benefit-rules" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="请输入使用规则，例如：每笔交易限用1张" required></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200" id="cancel-add-benefit-btn">取消</button>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">确认添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 编辑权益项模态框 -->
+    <div class="modal" id="edit-benefit-modal">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800">编辑权益项</h3>
+                <button class="text-gray-500 hover:text-gray-700" id="close-edit-benefit-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="edit-benefit-form" class="space-y-4">
+                <input type="hidden" id="edit-benefit-id">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">权益类型</label>
+                    <select id="edit-benefit-type" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        <option value="">请选择权益类型</option>
+                        <option value="discount">手续费抵扣券</option>
+                        <option value="service">用卡评测</option>
+                        <option value="support">客服支持</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">权益名称</label>
+                    <input type="text" id="edit-benefit-name" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="例如：满5000-10元手续费抵扣券" required>
+                </div>
+                
+                <!-- 抵扣券特有字段 -->
+                <div id="edit-discount-fields" class="space-y-4 hidden">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">满额条件（元）</label>
+                            <input type="number" id="edit-min-amount" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="例如：5000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">立减金额（元）</label>
+                            <input type="number" id="edit-discount-amount" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="例如：10">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">权益说明</label>
+                    <textarea id="edit-benefit-description" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="请输入权益的详细说明" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">权益数量</label>
+                    <input type="number" id="edit-benefit-quantity" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="请输入权益数量，无限次请输入-1" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">使用规则</label>
+                    <textarea id="edit-benefit-rules" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="请输入使用规则，例如：每笔交易限用1张" required></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200" id="cancel-edit-benefit-btn">取消</button>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">保存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 删除确认对话框 -->
+    <div class="modal" id="delete-confirm-modal">
+        <div class="modal-content p-6 max-w-md">
+            <div class="text-center">
+                <div class="mb-4">
+                    <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">确认删除权益项</h3>
+                <p class="text-gray-600 mb-6" id="delete-confirm-text"></p>
+                <div class="flex justify-center space-x-3">
+                    <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200" id="cancel-delete-btn">取消</button>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" id="confirm-delete-btn">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 载入共享脚本 -->
+    <script src="./components/loader.js"></script>
+    <script src="./components/benefit-card.js"></script>
+    <script>
+        // 在页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化权益项数据
+            initializeBenefits();
+            
+            // 设置事件监听器
+            setupEventListeners();
+        });
+        
+        // 初始化权益项数据
+        function initializeBenefits() {
+            const benefitsContainer = document.getElementById('benefits-container');
+            
+            // 示例权益项数据
+            window.benefitsData = [
+                {
+                    id: 'benefit-1',
+                    title: '满5000-10元手续费抵扣券',
+                    type: '抵扣券',
+                    description: '单笔交易满5000元可抵扣10元手续费',
+                    icon: 'fa-ticket-alt',
+                    iconColor: 'amber',
+                    properties: {
+                        '数量': '30张',
+                        '使用限制': '每笔交易限用1张'
+                    }
+                },
+                {
+                    id: 'benefit-2',
+                    title: '信用卡评测权益',
+                    type: '服务权益',
+                    description: '提供专业信用卡评测和建议服务',
+                    icon: 'fa-chart-line',
+                    iconColor: 'blue',
+                    properties: {
+                        '使用次数': '无限次',
+                        '有效期限': '权益包有效期内'
+                    }
+                },
+                {
+                    id: 'benefit-3',
+                    title: '专属一对一客服支持',
+                    type: '服务权益',
+                    description: '提供一对一的专属客服咨询服务',
+                    icon: 'fa-headset',
+                    iconColor: 'green',
+                    properties: {
+                        '服务方式': '电话、在线客服',
+                        '响应时间': '工作日8小时内'
+                    }
+                }
+            ];
+            
+            // 渲染权益项卡片
+            renderBenefitCards();
+        }
+        
+        // 渲染权益卡片
+        function renderBenefitCards() {
+            const benefitsContainer = document.getElementById('benefits-container');
+            
+            // 清空容器
+            benefitsContainer.innerHTML = '';
+            
+            // 为每个权益创建卡片并直接添加到容器
+            benefitsData.forEach(data => {
+                // 创建卡片元素并绑定事件
+                createBenefitCard(data, benefitsContainer);
+            });
+        }
+        
+        // 创建单个权益卡片
+        function createBenefitCard(data, container) {
+            // 创建卡片元素
+            const cardElement = document.createElement('div');
+            cardElement.id = data.id;
+            cardElement.className = 'benefit-card bg-white rounded-lg shadow-sm p-4 border border-gray-200';
+            
+            // 设置卡片内容
+            cardElement.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-${data.iconColor || 'indigo'}-100 flex items-center justify-center">
+                            <i class="fas ${data.icon} text-${data.iconColor || 'indigo'}-500"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">${data.title}</h4>
+                            <p class="text-sm text-gray-600 mt-1">${data.type}</p>
+                            <p class="text-sm text-gray-500 mt-2">${data.description}</p>
+                            
+                            <div class="mt-3 space-y-1">
+                                ${Object.entries(data.properties).map(([key, value]) => 
+                                    `<div class="text-xs">
+                                        <span class="text-gray-500">${key}:</span> 
+                                        <span class="text-gray-800">${value}</span>
+                                    </div>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button type="button" class="edit-btn text-indigo-600 hover:text-indigo-800" aria-label="编辑">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="delete-btn text-red-600 hover:text-red-800" aria-label="删除">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // 添加到容器
+            container.appendChild(cardElement);
+            
+            // 添加编辑按钮事件监听器 - 使用明确的benefitId来避免闭包问题
+            const editBtn = cardElement.querySelector('.edit-btn');
+            if (editBtn) {
+                const benefitId = data.id; // 捕获当前ID
+                editBtn.addEventListener('click', () => {
+                    editBenefit(benefitId);
+                });
+            }
+            
+            // 添加删除按钮事件监听器 - 同样使用明确的benefitId
+            const deleteBtn = cardElement.querySelector('.delete-btn');
+            if (deleteBtn) {
+                const benefitId = data.id; // 捕获当前ID
+                deleteBtn.addEventListener('click', () => {
+                    deleteBenefit(benefitId);
+                });
+            }
+        }
+        
+        // 添加全局变量
+        let currentDeleteId = null;
+
+        // 编辑权益函数
+        function editBenefit(id) {
+            // 获取权益项数据
+            const benefitData = benefitsData.find(item => item.id === id);
+            if (benefitData) {
+                // 填充编辑表单
+                document.getElementById('edit-benefit-id').value = benefitData.id;
+                document.getElementById('edit-benefit-type').value = benefitData.type === '抵扣券' ? 'discount' : 
+                                                               benefitData.type === '用卡评测' ? 'service' : 'support';
+                document.getElementById('edit-benefit-name').value = benefitData.title;
+                document.getElementById('edit-benefit-description').value = benefitData.description;
+                
+                // 处理数量字段 - 兼容不同的属性键
+                const quantityValue = benefitData.properties['数量'] || benefitData.properties['使用次数'] || '';
+                document.getElementById('edit-benefit-quantity').value = quantityValue.replace(/[^0-9]/g, '') || '';
+                
+                // 处理使用规则字段 - 兼容不同的属性键
+                const rulesValue = benefitData.properties['使用限制'] || benefitData.properties['有效期限'] || 
+                                  benefitData.properties['服务方式'] || '';
+                document.getElementById('edit-benefit-rules').value = rulesValue;
+
+                // 如果是抵扣券，显示并填充特有字段
+                const editDiscountFields = document.getElementById('edit-discount-fields');
+                if (benefitData.type === '抵扣券') {
+                    editDiscountFields.classList.remove('hidden');
+                    // 从标题中提取满额条件和立减金额
+                    const match = benefitData.title.match(/满(\d+)-(\d+)元/);
+                    if (match) {
+                        document.getElementById('edit-min-amount').value = match[1];
+                        document.getElementById('edit-discount-amount').value = match[2];
+                    }
+                } else {
+                    editDiscountFields.classList.add('hidden');
+                }
+
+                // 显示编辑模态框
+                document.getElementById('edit-benefit-modal').classList.add('show');
+            }
+        }
+        
+        // 删除权益函数
+        function deleteBenefit(id) {
+            const benefitData = benefitsData.find(item => item.id === id);
+            if (benefitData) {
+                currentDeleteId = id;
+                const deleteConfirmText = document.getElementById('delete-confirm-text');
+                deleteConfirmText.textContent = `确定要删除权益项 "${benefitData.title}" 吗？此操作不可恢复。`;
+                document.getElementById('delete-confirm-modal').classList.add('show');
+            }
+        }
+        
+        // 设置页面事件监听器
+        function setupEventListeners() {
+            // 预览按钮
+            const previewBtn = document.getElementById('preview-btn');
+            const previewModal = document.getElementById('preview-modal');
+            const closePreviewBtn = document.getElementById('close-preview-btn');
+
+            if (previewBtn && previewModal && closePreviewBtn) {
+                previewBtn.addEventListener('click', () => {
+                    previewModal.classList.add('show');
+                });
+
+                closePreviewBtn.addEventListener('click', () => {
+                    previewModal.classList.remove('show');
+                });
+            }
+
+            // 保存配置按钮
+            const saveBtn = document.getElementById('save-btn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', () => {
+                    showNotification('配置保存成功');
+                    // 延迟跳转，让用户看到保存成功的提示
+                    setTimeout(() => {
+                        window.location.href = './admin_config.html';
+                    }, 1000);
+                });
+            }
+
+            // 添加权益项表单类型切换
+            const benefitType = document.getElementById('benefit-type');
+            const discountFields = document.getElementById('discount-fields');
+            
+            if (benefitType && discountFields) {
+                benefitType.addEventListener('change', () => {
+                    discountFields.classList.toggle('hidden', benefitType.value !== 'discount');
+                });
+            }
+
+            // 编辑权益项表单类型切换
+            const editBenefitType = document.getElementById('edit-benefit-type');
+            const editDiscountFields = document.getElementById('edit-discount-fields');
+            
+            if (editBenefitType && editDiscountFields) {
+                editBenefitType.addEventListener('change', () => {
+                    editDiscountFields.classList.toggle('hidden', editBenefitType.value !== 'discount');
+                });
+            }
+
+            // 添加权益项按钮和模态框
+            const addBenefitBtn = document.getElementById('add-benefit-btn');
+            const addBenefitModal = document.getElementById('add-benefit-modal');
+            const closeAddBenefitBtn = document.getElementById('close-add-benefit-btn');
+            const cancelAddBenefitBtn = document.getElementById('cancel-add-benefit-btn');
+            const addBenefitForm = document.getElementById('add-benefit-form');
+
+            if (addBenefitBtn && addBenefitModal) {
+                addBenefitBtn.addEventListener('click', () => {
+                    addBenefitModal.classList.add('show');
+                });
+
+                const closeAddBenefitModal = () => {
+                    addBenefitModal.classList.remove('show');
+                    addBenefitForm.reset();
+                };
+
+                if (closeAddBenefitBtn) {
+                    closeAddBenefitBtn.addEventListener('click', closeAddBenefitModal);
+                }
+
+                if (cancelAddBenefitBtn) {
+                    cancelAddBenefitBtn.addEventListener('click', closeAddBenefitModal);
+                }
+
+                if (addBenefitForm) {
+                    addBenefitForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        // 这里添加表单处理逻辑
+                        showNotification('权益项添加成功');
+                        closeAddBenefitModal();
+                        // 重新加载权益项列表
+                        initializeBenefits();
+                    });
+                }
+            }
+
+            // 编辑权益项模态框
+            const editBenefitModal = document.getElementById('edit-benefit-modal');
+            const closeEditBenefitBtn = document.getElementById('close-edit-benefit-btn');
+            const cancelEditBenefitBtn = document.getElementById('cancel-edit-benefit-btn');
+            const editBenefitForm = document.getElementById('edit-benefit-form');
+
+            if (editBenefitModal) {
+                const closeEditBenefitModal = () => {
+                    editBenefitModal.classList.remove('show');
+                    editBenefitForm.reset();
+                };
+
+                if (closeEditBenefitBtn) {
+                    closeEditBenefitBtn.addEventListener('click', closeEditBenefitModal);
+                }
+
+                if (cancelEditBenefitBtn) {
+                    cancelEditBenefitBtn.addEventListener('click', closeEditBenefitModal);
+                }
+
+                if (editBenefitForm) {
+                    editBenefitForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        // 这里添加表单处理逻辑
+                        showNotification('权益项修改成功');
+                        closeEditBenefitModal();
+                        // 重新加载权益项列表
+                        initializeBenefits();
+                    });
+                }
+            }
+
+            // 删除确认对话框
+            const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+            
+            const closeDeleteConfirmModal = () => {
+                deleteConfirmModal.classList.remove('show');
+                currentDeleteId = null;
+            };
+
+            if (cancelDeleteBtn) {
+                cancelDeleteBtn.addEventListener('click', closeDeleteConfirmModal);
+            }
+
+            if (confirmDeleteBtn) {
+                confirmDeleteBtn.addEventListener('click', () => {
+                    if (currentDeleteId) {
+                        const card = document.getElementById(currentDeleteId);
+                        if (card) {
+                            card.remove();
+                            showNotification('权益项已删除');
+                        }
+                    }
+                    closeDeleteConfirmModal();
+                });
+            }
+
+            // 点击模态框外部关闭
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('show');
+                }
+            });
+        }
+        
+        // 显示通知消息
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 bg-${type === 'success' ? 'green' : 'red'}-100 border-l-4 border-${type === 'success' ? 'green' : 'red'}-500 text-${type === 'success' ? 'green' : 'red'}-700 p-4 rounded shadow-md z-50`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <div class="py-1"><svg class="h-6 w-6 text-${type === 'success' ? 'green' : 'red'}-500 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12'}" />
+                    </svg></div>
+                    <div>${message}</div>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            // 3秒后自动消失
+            setTimeout(() => {
+                notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

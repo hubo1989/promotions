@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的权益</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #6fb8e2;
+            --primary-dark: #3685b7;
+            --primary-bg: #ECF6FF;
+            --secondary-color: #03dac6;
+            --background: #F7F9FC;
+            --surface: #ffffff;
+            --error: #E53935;
+            --success: #00C48C;
+            --warning: #FF9800;
+            --text-primary: #1A1A1A;
+            --text-secondary: #5E6C84;
+            --text-tertiary: #8993A4;
+            --text-on-primary: #ffffff;
+            --border-color: #E5E9F2;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --elevated-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --phone-width: 380px;
+            --phone-height: 822px;
+            --phone-border-width: 16px;
+            --phone-border-radius: 48px;
+            --phone-notch-width: 126px;
+            --phone-notch-height: 28px;
+            --content-width: 348px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-md: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 22px;
+            --touch-target-size: 44px;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            margin: 2rem auto;
+            position: relative;
+            border: var(--phone-border-width) solid #222;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            background-color: #fff;
+            overflow: hidden;
+            width: var(--phone-width);
+            height: var(--phone-height);
+            color: var(--text-primary);
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--phone-notch-width);
+            height: var(--phone-notch-height);
+            background-color: #222;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 1000;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            top: 120px;
+            right: calc(var(--phone-border-width) * -1 - 1px);
+            width: 4px;
+            height: 40px;
+            background-color: #444;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+
+        .material-card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid var(--border-color);
+            padding: var(--spacing-md);
+        }
+
+        .nav-header {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            height: var(--touch-target-size);
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-md);
+            position: relative;
+            z-index: 10;
+            box-shadow: var(--card-shadow);
+            margin-top: var(--spacing-sm);
+        }
+        
+        .header-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .options-button {
+            width: var(--touch-target-size);
+            height: var(--touch-target-size);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .options-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .content-wrapper {
+            width: var(--content-width);
+            height: calc(100% - var(--phone-border-width) * 2);
+            display: flex;
+            flex-direction: column;
+            padding-top: calc(var(--phone-notch-height) + var(--spacing-sm));
+            margin: var(--phone-border-width) auto;
+            position: relative;
+            z-index: 1;
+            background-color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-md);
+            padding-bottom: calc(80px + var(--spacing-lg));
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .main-content::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            height: 20px;
+            padding: 0 8px;
+            border-radius: 10px;
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            background-color: #e0e0e0;
+            white-space: nowrap;
+        }
+
+        .material-card button {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <!-- 顶部导航栏 -->
+        <div class="nav-header">
+            <div class="options-button">
+                <i class="fas fa-arrow-left text-gray-600"></i>
+            </div>
+            <div class="flex-1 flex justify-center">
+                <h1 class="header-title">我的权益</h1>
+            </div>
+            <div class="options-button">
+                <i class="fas fa-filter text-gray-600"></i>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 会员信息卡片 - 黄金VIP会员（已开通） -->
+            <div class="material-card mb-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                            <span class="material-icons text-[var(--primary-color)]" style="font-size: 16px;">workspace_premium</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[16px] font-medium text-gray-900">黄金VIP会员</h3>
+                            <p class="text-[11px] text-gray-500">有效期至：2024-12-31</p>
+                        </div>
+                    </div>
+                    <div class="chip bg-[var(--primary-bg)] text-[var(--primary-color)]">已开通</div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="material-icons text-[var(--primary-color)] mr-1.5" style="font-size: 11px;">confirmation_number</span>
+                        <span class="text-[11px] text-gray-600">剩余30张抵扣券</span>
+                    </div>
+                    <button class="bg-[var(--primary-color)] text-white px-3 py-1 rounded-full text-[11px] font-medium">查看详情</button>
+                </div>
+            </div>
+
+            <!-- 权益卡片 - 铂金VIP会员（已使用） -->
+            <div class="material-card mb-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
+                            <span class="material-icons text-purple-600" style="font-size: 16px;">diamond</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[16px] font-medium text-gray-900">铂金VIP会员</h3>
+                            <p class="text-[11px] text-gray-500">有效期至：2024-10-15</p>
+                        </div>
+                    </div>
+                    <div class="chip bg-blue-100 text-blue-600">已使用</div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="material-icons text-purple-600 mr-1.5" style="font-size: 11px;">confirmation_number</span>
+                        <span class="text-[11px] text-gray-600">剩余12张抵扣券</span>
+                    </div>
+                    <button class="bg-purple-600 text-white px-3 py-1 rounded-full text-[11px] font-medium">查看详情</button>
+                </div>
+            </div>
+
+            <!-- 权益卡片 - 年度至尊会员（已过期） -->
+            <div class="material-card mb-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-2">
+                            <span class="material-icons text-gray-500" style="font-size: 16px;">stars</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[16px] font-medium text-gray-500">年度至尊会员</h3>
+                            <p class="text-[11px] text-gray-500">已于2023-12-31过期</p>
+                        </div>
+                    </div>
+                    <div class="chip bg-gray-100 text-gray-600">已过期</div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="material-icons text-gray-400 mr-1.5" style="font-size: 11px;">confirmation_number</span>
+                        <span class="text-[11px] text-gray-500">抵扣券已全部使用</span>
+                    </div>
+                    <button class="bg-gray-500 text-white px-3 py-1 rounded-full text-[11px] font-medium">续费会员</button>
+                </div>
+            </div>
+            
+            <!-- 权益卡片 - 新年特别会员（已开通） -->
+            <div class="material-card mb-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
+                            <span class="material-icons text-red-600" style="font-size: 16px;">celebration</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[16px] font-medium text-gray-900">新年特别会员</h3>
+                            <p class="text-[11px] text-gray-500">有效期至：2024-06-30</p>
+                        </div>
+                    </div>
+                    <div class="chip bg-[var(--primary-bg)] text-[var(--primary-color)]">已开通</div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="material-icons text-red-500 mr-1.5" style="font-size: 11px;">confirmation_number</span>
+                        <span class="text-[11px] text-gray-600">剩余8张抵扣券</span>
+                    </div>
+                    <button class="bg-red-600 text-white px-3 py-1 rounded-full text-[11px] font-medium">查看详情</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 添加页面导航功能
+        const pages = [
+            'agent_promotion_preview.html',
+            'benefit_detail_preview.html',
+            'benefit_usage_record_preview.html',
+            'merchant_fee_discount_preview.html',
+            'my_benefits_preview.html',
+            'purchase_confirm_preview.html'
+        ];
+        
+        // 获取当前页面名称
+        const currentPage = window.location.pathname.split('/').pop();
+        const currentIndex = pages.indexOf(currentPage);
+        
+        // 添加返回按钮功能
+        const backButton = document.querySelector('.options-button .fa-arrow-left');
+        if (backButton) {
+            backButton.parentElement.style.cursor = 'pointer';
+            backButton.parentElement.addEventListener('click', function() {
+                // 修改为返回上一级页面，而不是浏览器的后退功能
+                // 定义页面层级结构，将业务员推广页面设为最高级页面
+                const pageHierarchy = {
+                    'benefit_detail_preview.html': 'my_benefits_preview.html',
+                    'benefit_usage_record_preview.html': 'my_benefits_preview.html',
+                    'merchant_fee_discount_preview.html': 'my_benefits_preview.html',
+                    'my_benefits_preview.html': 'merchant_fee_discount_preview.html',
+                    'purchase_confirm_preview.html': 'my_benefits_preview.html'
+                };
+                
+                // 获取上一级页面
+                const parentPage = pageHierarchy[currentPage];
+                if (parentPage) {
+                    window.location.href = parentPage;
+                } else {
+                    // 如果没有定义上一级页面，则回到业务员推广页面
+                    window.location.href = 'agent_promotion_preview.html';
+                }
+            });
+        }
+        
+        // 添加底部操作栏按钮功能
+        const actionButtons = document.querySelectorAll('.action-button');
+        if (actionButtons.length > 0) {
+            actionButtons.forEach((button, index) => {
+                button.style.cursor = 'pointer';
+                button.addEventListener('click', function() {
+                    // 当按钮被点击时，跳转到下一个页面
+                    const nextPage = (currentIndex + index + 1) % pages.length;
+                    window.location.href = pages[nextPage];
+                });
+            });
+        }
+        
+        // 添加其他按钮的功能（如"立即使用"等）
+        const otherButtons = document.querySelectorAll('button');
+        if (otherButtons.length > 0) {
+            otherButtons.forEach(button => {
+                button.style.cursor = 'pointer';
+                button.addEventListener('click', function() {
+                    // 检查是否是"查看详情"按钮
+                    if (button.textContent.trim() === '查看详情') {
+                        // 直接跳转到权益详情页面
+                        window.location.href = 'benefit_detail_preview.html';
+                    } else {
+                        // 其他按钮保持原来的行为
+                        const nextIndex = (currentIndex + 1) % pages.length;
+                        window.location.href = pages[nextIndex];
+                    }
+                });
+            });
+        }
+        
+        // 添加交互效果 - 点击效果
+        const allClickableElements = document.querySelectorAll('.action-button, button, .options-button');
+        allClickableElements.forEach(element => {
+            element.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            element.addEventListener('mouseup', function() {
+                this.style.transform = 'scale(1)';
+            });
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    });
+</script>
+</html> 

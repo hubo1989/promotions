@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>概述 - 商户权益中心需求文档</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3, h4 {
+            color: #4fa1d5;
+            margin-top: 1.5em;
+        }
+
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; }
+
+        /* 固定导航栏样式 */
+        .fixed-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-title {
+            font-weight: bold;
+            color: #4fa1d5;
+            margin-right: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            background-color: #4fa1d5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav-button:hover {
+            background-color: #3a87b7;
+        }
+
+        .nav-button.active {
+            background-color: #3a87b7;
+            font-weight: bold;
+        }
+
+        /* 为固定导航条腾出空间 */
+        .main-content {
+            margin-top: 70px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 固定导航栏 -->
+    <div class="fixed-nav">
+        <div class="nav-container">
+            <div class="nav-title">商户权益中心需求文档</div>
+            <div class="nav-buttons">
+                <button class="nav-button active" onclick="window.location.href='index.html'">1. 概述</button>
+                <button class="nav-button" onclick="window.location.href='requirements.html'">2. 需求说明</button>
+                <button class="nav-button" onclick="window.location.href='architecture.html'">3. 系统架构</button>
+                <button class="nav-button" onclick="window.location.href='prototype.html'">4. 原型设计</button>
+                <button class="nav-button" onclick="window.location.href='interaction.html'">5. 交互设计</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <!-- 概述 -->
+        <div id="overview">
+            <h2>1. 概述</h2>
+            
+            <h3>1.1 项目背景</h3>
+            <div class="highlight">
+                <p><strong>市场痛点：</strong>当前支付行业竞争激烈，商户获客成本高，流失率高，单一的支付服务难以满足商户多样化需求。</p>
+                <p><strong>行业趋势：</strong>支付机构正从单一支付服务向综合金融服务转型，通过增值服务提升商户黏性成为行业共识。</p>
+                <p><strong>竞品分析：</strong>主要竞争对手已开始布局商户会员体系，我司需要快速推出差异化服务抢占市场。</p>
+            </div>
+            
+            <h3>1.2 业务目标</h3>
+            <ul>
+                <li><strong>提升商户交易量和留存率</strong> - 通过权益激励提升商户活跃度，预计可提升交易量15%，降低流失率20%</li>
+                <li><strong>构建商户服务生态</strong> - 打造支付+增值服务的闭环，形成商户服务矩阵</li>
+                <li><strong>通过代理推广扩大用户基数</strong> - 激活代理渠道，降低获客成本，预计首年可新增商户5000家</li>
+                <li><strong>创造新的收入增长点</strong> - 通过权益包销售，预计首年可实现收入300万元</li>
+            </ul>
+
+            <h3>1.3 预期商业价值</h3>
+            <table>
+                <tr>
+                    <th>指标</th>
+                    <th>预期目标</th>
+                    <th>实现路径</th>
+                </tr>
+                <tr>
+                    <td>商户留存率</td>
+                    <td>提升20%</td>
+                    <td>通过权益激励提高商户使用频率和黏性</td>
+                </tr>
+                <tr>
+                    <td>交易额增长</td>
+                    <td>提升15%</td>
+                    <td>通过手续费抵扣等权益鼓励商户增加交易量</td>
+                </tr>
+                <tr>
+                    <td>新增商户数</td>
+                    <td>5000家/年</td>
+                    <td>通过代理推广和权益吸引力获取新商户</td>
+                </tr>
+                <tr>
+                    <td>权益包收入</td>
+                    <td>300万元/年</td>
+                    <td>通过多层级权益包销售实现收入</td>
+                </tr>
+            </table>
+
+            <h3>1.4 核心功能</h3>
+            <ul>
+                <li><strong>会员权益展示与购买</strong> - 多层级权益包设计，满足不同规模商户需求</li>
+                <li><strong>权益使用与管理</strong> - 便捷的权益查询、使用和管理功能</li>
+                <li><strong>代理商推广系统</strong> - 完整的代理佣金体系和推广工具</li>
+                <li><strong>数据统计分析</strong> - 全面的数据看板，支持业务决策</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

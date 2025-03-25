@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的权益设计文档</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #6fb8e0;
+            --primary-dark: #3a89bb;
+            --primary-bg: #ecf5fb;
+            --secondary-color: #03dac6;
+            --background: #F7F9FC;
+            --surface: #ffffff;
+            --error: #E53935;
+            --success: #00C48C;
+            --warning: #FF9800;
+            --text-primary: #1A1A1A;
+            --text-secondary: #5E6C84;
+            --text-tertiary: #8993A4;
+            --text-on-primary: #ffffff;
+            --border-color: #E5E7EB;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --elevated-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --border-radius-md: 0.75rem;
+            --border-radius-sm: 0.375rem;
+            --border-radius-full: 9999px;
+            --phone-width: 380px;
+            --phone-height: 822px;
+            --phone-border-radius: 48px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+            min-width: calc(var(--phone-width) + 600px);
+        }
+
+        /* 左侧预览容器样式 */
+        .preview-container {
+            width: var(--phone-width);
+            height: var(--phone-height);
+            background: white;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            position: fixed;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* 右侧文档样式 */
+        .documentation {
+            margin-left: calc(var(--phone-width) + 120px);
+            padding: 40px 60px;
+            max-width: calc(100% - (var(--phone-width) + 120px));
+        }
+
+        /* 自定义样式 */
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        /* 添加响应式布局 */
+        @media (max-width: 1280px) {
+            .documentation {
+                margin-left: calc(var(--phone-width) + 100px);
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .preview-container {
+                left: 40px;
+            }
+            
+            .documentation {
+                margin-left: calc(var(--phone-width) + 80px);
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- 左侧预览区域 -->
+    <div class="preview-container">
+        <iframe src="../preview/my_benefits_preview.html" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+
+    <!-- 右侧文档区域 -->
+    <div class="documentation">
+        <h1 class="text-3xl font-bold mb-8">我的权益页面说明文档</h1>
+        
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">1. 页面概述</h2>
+            <p class="text-gray-700 leading-relaxed">
+                我的权益页面展示用户已购买的各类权益包，包括有效权益和已过期权益。用户可以查看权益详情、使用记录，并进行权益的使用操作。
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">2. 功能需求</h2>
+            <div class="space-y-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">2.1 权益概览</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>展示用户权益的总体情况，包括总数量、有效数量和已过期数量</li>
+                            <li>数据需实时从后端获取，确保准确性</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">2.2 权益分类查看</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>提供标签切换功能，支持按全部/有效/已过期筛选权益</li>
+                            <li>切换标签时，列表内容应实时更新</li>
+                            <li>每个标签需显示对应分类的权益数量</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">2.3 权益详情展示</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>以卡片形式展示每个权益的基本信息</li>
+                            <li>显示权益名称、状态、内容描述、有效期和使用进度</li>
+                            <li>根据权益状态（有效/已过期）使用不同样式</li>
+                            <li>提供"去使用"和"查看详情"按钮</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">2.4 操作功能</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>"去使用"按钮：对有效权益，点击跳转至权益使用页面；对已过期权益，按钮置灰禁用</li>
+                            <li>"查看详情"按钮：点击跳转至权益详情页面</li>
+                            <li>卡片中的"查看详情"链接：点击跳转至权益使用记录页面</li>
+                            <li>底部"前往购买更多权益"按钮：点击跳转至权益中心首页</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">3. 交互说明</h2>
+            <div class="space-y-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">3.1 页面导航</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>用户可通过顶部返回按钮返回商户中心首页</li>
+                            <li>点击更多按钮显示下拉菜单，提供额外操作选项</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">3.2 标签切换交互</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>点击标签切换不同权益分类视图</li>
+                            <li>当前选中标签以品牌色显示并添加底部边框</li>
+                            <li>切换无加载延迟，提供流畅体验</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">3.3 卡片交互</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>整个卡片区域可点击，点击后默认执行"查看详情"操作</li>
+                            <li>底部按钮点击有轻微按下反馈效果</li>
+                            <li>已过期权益的"去使用"按钮显示禁用状态，点击无反应</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">3.4 空状态处理</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>当用户无任何权益时，显示空状态提示，鼓励用户购买权益</li>
+                            <li>当筛选后无对应权益时，显示"暂无相关权益"提示</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">4. 业务规则</h2>
+            <div class="space-y-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.1 权益状态定义</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>有效：当前时间在权益有效期内，且未被完全使用</li>
+                            <li>即将到期：距离有效期结束不足7天</li>
+                            <li>已过期：当前时间已超过权益有效期</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.2 权益排序规则</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>默认排序：有效权益在前（按到期时间升序），已过期权益在后（按过期时间降序）</li>
+                            <li>同等条件下，高价值权益优先展示</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.3 权益使用规则</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>已过期权益不可使用，相关按钮置灰禁用</li>
+                            <li>权益使用按"先进先出"原则，优先使用即将过期的权益</li>
+                            <li>权益使用后，使用进度实时更新</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">4. 异常处理</h2>
+            <div class="space-y-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.1 网络错误</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>当发生网络连接问题时，显示网络错误提示</li>
+                            <li>提供"重新加载"按钮，点击后重新请求数据</li>
+                            <li>网络恢复后自动重新加载内容</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.2 数据为空</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>当用户没有任何权益时，显示"暂无数据"提示</li>
+                            <li>提供"前往购买"按钮引导用户购买权益</li>
+                            <li>针对不同标签页（有效/已过期）显示相应的空状态提示</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.3 请求超时</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>当请求响应时间超过15秒时，显示请求超时提示</li>
+                            <li>提供"重新加载"按钮，允许用户手动重试</li>
+                            <li>系统默认最多自动重试3次，超过次数后才显示超时提示</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.4 权限错误</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>当用户无权访问此页面时，显示权限不足提示</li>
+                            <li>提供"返回首页"按钮，引导用户返回有权限的页面</li>
+                            <li>说明获取权限的方式，如联系客服或管理员</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.5 加载状态</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>数据加载过程中显示加载动画和提示文字</li>
+                            <li>加载时间超过2秒才显示加载状态，避免界面闪烁</li>
+                            <li>针对不同操作（初始加载/筛选/刷新）显示对应的加载文案</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-lg font-semibold mb-2">4.6 操作反馈</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li>操作成功或失败时，底部显示对应的Toast提示，2秒后自动消失</li>
+                            <li>成功提示使用绿色背景，错误提示使用红色背景</li>
+                            <li>提示内容简明扼要，说明操作结果和后续步骤</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

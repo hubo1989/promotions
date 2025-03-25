@@ -1,0 +1,542 @@
+/* 主要排版样式 */
+:root {
+    --primary-color: #4fa1d5;
+    --primary-light: #6fb8e0;
+    --primary-dark: #3a89bb;
+    --primary-bg: #ecf5fb;
+    --secondary-color: #03dac6;
+    --background: #F7F9FC;
+    --surface: #ffffff;
+    --error: #E53935;
+    --success: #00C48C;
+    --warning: #FF9800;
+    --text-primary: #1A1A1A;
+    --text-secondary: #505A6C;
+    --text-tertiary: #6F7A8C;
+    --text-on-primary: #ffffff;
+    --text-on-dark: #FFFFFF;
+    --text-on-light: #1A1A1A;
+    --border-color: #E5E7EB;
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --border-radius-full: 9999px;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --elevated-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
+    --min-tap-target: 44px;
+}
+
+/* 文字样式 */
+.text-h1 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.text-h2 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.text-h3 {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.text-body {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.text-small {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+/* 无障碍点击区域 */
+.tap-area {
+    min-width: var(--min-tap-target);
+    min-height: var(--min-tap-target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* 增强背景色上的文字对比度 */
+.high-contrast-text {
+    color: var(--text-primary) !important;
+}
+
+.high-contrast-light {
+    color: var(--text-on-dark) !important;
+}
+
+/* 按钮交互状态 */
+button, 
+.btn,
+[type="button"],
+[type="submit"] {
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    min-height: var(--min-tap-target);
+}
+
+/* 默认按钮悬停状态 */
+button:hover:not(:disabled), 
+.btn:hover:not(:disabled),
+[type="button"]:hover:not(:disabled),
+[type="submit"]:hover:not(:disabled) {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+/* 默认按钮激活状态 */
+button:active:not(:disabled), 
+.btn:active:not(:disabled),
+[type="button"]:active:not(:disabled),
+[type="submit"]:active:not(:disabled) {
+    filter: brightness(0.95);
+    transform: translateY(1px);
+}
+
+/* 按钮聚焦状态 */
+button:focus, 
+.btn:focus,
+[type="button"]:focus,
+[type="submit"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+/* 主要按钮悬停状态 */
+button.bg-primary-color:hover:not(:disabled),
+.btn.bg-primary-color:hover:not(:disabled) {
+    background-color: var(--primary-light) !important;
+}
+
+/* 主要按钮激活状态 */
+button.bg-primary-color:active:not(:disabled),
+.btn.bg-primary-color:active:not(:disabled) {
+    background-color: var(--primary-dark) !important;
+}
+
+/* 边框按钮悬停状态 */
+button.border-primary-color:hover:not(:disabled),
+.btn.border-primary-color:hover:not(:disabled) {
+    background-color: var(--primary-bg) !important;
+}
+
+/* 禁用按钮样式 */
+button:disabled,
+.btn:disabled,
+[type="button"]:disabled,
+[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 链接交互状态 */
+a:not(.btn) {
+    transition: all var(--transition-fast);
+}
+
+a:not(.btn):hover {
+    color: var(--primary-light);
+    text-decoration: underline;
+}
+
+a:not(.btn):active {
+    color: var(--primary-dark);
+}
+
+a:not(.btn):focus {
+    outline: none;
+    text-decoration: underline;
+}
+
+/* 输入框交互状态 */
+input, 
+select, 
+textarea {
+    transition: all var(--transition-fast);
+}
+
+input:hover, 
+select:hover, 
+textarea:hover {
+    border-color: var(--primary-light) !important;
+}
+
+input:focus, 
+select:focus, 
+textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(79, 161, 213, 0.25) !important;
+    outline: none;
+}
+
+/* 表单验证样式 */
+.form-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+/* 错误状态 */
+.has-error input,
+.has-error select,
+.has-error textarea,
+input.error, 
+select.error, 
+textarea.error {
+    border-color: var(--error) !important;
+}
+
+.has-error input:focus,
+.has-error select:focus,
+.has-error textarea:focus,
+input.error:focus, 
+select.error:focus, 
+textarea.error:focus {
+    box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.25) !important;
+}
+
+.error-message {
+    color: var(--error);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* 成功状态 */
+.has-success input,
+.has-success select,
+.has-success textarea,
+input.success, 
+select.success, 
+textarea.success {
+    border-color: var(--success) !important;
+}
+
+.has-success input:focus,
+.has-success select:focus,
+.has-success textarea:focus,
+input.success:focus, 
+select.success:focus, 
+textarea.success:focus {
+    box-shadow: 0 0 0 2px rgba(0, 196, 140, 0.25) !important;
+}
+
+/* 加载状态样式 */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--text-on-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.loading-text:before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    border: 2px solid rgba(79, 161, 213, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+}
+
+.btn.loading {
+    color: transparent !important;
+}
+
+.btn.loading.border-primary-color:after {
+    border-top-color: var(--primary-color);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 卡片交互状态 */
+.interactive-card {
+    transition: all var(--transition-normal);
+}
+
+.interactive-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--elevated-shadow);
+}
+
+.interactive-card:active {
+    transform: translateY(0);
+}
+
+/* 空状态样式 */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.empty-state-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.empty-state-message {
+    font-size: 14px;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state-action {
+    display: inline-block;
+}
+
+/* 骨架屏加载效果 */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading-skeleton 1.5s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+@keyframes loading-skeleton {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* 提示和标签 */
+.badge {
+    display: inline-block;
+    padding: 0.25em 0.5em;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 10px;
+    transition: all var(--transition-fast);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    width: auto;
+    min-width: 120px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity var(--transition-fast);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}
+
+/* 切换组件交互状态 */
+.tab-button {
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.tab-button:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+    transition: all var(--transition-fast);
+}
+
+.tab-button:hover:not(.active) {
+    color: var(--primary-color);
+}
+
+.tab-button:hover:not(.active):after {
+    background-color: rgba(79, 161, 213, 0.3);
+}
+
+.tab-button.active:after {
+    background-color: var(--primary-color);
+}
+
+/* 复选框和单选按钮交互 */
+.checkbox-container,
+.radio-container {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.checkbox-container input,
+.radio-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: relative;
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    margin-right: 8px;
+    transition: all var(--transition-fast);
+}
+
+.radio-mark {
+    border-radius: 50%;
+}
+
+.checkbox-container:hover input ~ .checkmark,
+.radio-container:hover input ~ .checkmark {
+    border-color: var(--primary-light);
+}
+
+.checkbox-container input:checked ~ .checkmark,
+.radio-container input:checked ~ .checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after,
+.radio-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.radio-container .checkmark:after {
+    top: 5px;
+    left: 5px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: white;
+}
+
+/* 统一卡片样式 */
+.card {
+    background-color: var(--surface);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-footer {
+    padding: 0.75rem 1rem;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-top: 1px solid var(--border-color);
+}
+
+/* 统一图标尺寸 */
+.icon-sm {
+    font-size: 1rem;
+}
+
+.icon-md {
+    font-size: 1.25rem;
+}
+
+.icon-lg {
+    font-size: 1.5rem;
+}
+
+.icon-xl {
+    font-size: 2rem;
+} 

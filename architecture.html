@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统架构 - 商户权益中心需求文档</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3, h4 {
+            color: #4fa1d5;
+            margin-top: 1.5em;
+        }
+
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.2em; }
+
+        /* 固定导航栏样式 */
+        .fixed-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-title {
+            font-weight: bold;
+            color: #4fa1d5;
+            margin-right: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            background-color: #4fa1d5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav-button:hover {
+            background-color: #3a87b7;
+        }
+
+        .nav-button.active {
+            background-color: #3a87b7;
+            font-weight: bold;
+        }
+
+        /* 为固定导航条腾出空间 */
+        .main-content {
+            margin-top: 70px;
+        }
+
+        .image-placeholder {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+    </style>
+    <!-- 在头部引入导航脚本，以便在DOM加载时处理 -->
+    <script src="fixSvgPaths.js"></script>
+</head>
+<body>
+    <!-- 固定导航栏 -->
+    <div class="fixed-nav">
+        <div class="nav-container">
+            <div class="nav-title">商户权益中心需求文档</div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="window.location.href='index.html'">1. 概述</button>
+                <button class="nav-button" onclick="window.location.href='requirements.html'">2. 需求说明</button>
+                <button class="nav-button active" onclick="window.location.href='architecture.html'">3. 系统架构</button>
+                <button class="nav-button" onclick="window.location.href='prototype.html'">4. 原型设计</button>
+                <button class="nav-button" onclick="window.location.href='interaction.html'">5. 交互设计</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <div id="architecture">
+            <h2>3. 系统架构</h2>
+            
+            <!-- Use iframe instead of object for better local file support -->
+            <div class="architecture-diagram">
+                <iframe src="images/system_architecture.svg" style="width:100%; height:1900px; border:none;" scrolling="no"></iframe>
+            </div>
+            
+            <h3>3.1 功能架构说明</h3>
+            <div class="highlight">
+                <p><strong>功能架构说明：</strong>商户权益中心的功能架构分为多个层级，从入口页面到四级页面，通过合理的页面跳转和数据流转实现完整的业务流程。</p>
+            </div>
+            
+            <table>
+                <tr>
+                    <th>节点层级</th>
+                    <th>颜色标识</th>
+                    <th>主要功能</th>
+                    <th>页面说明</th>
+                </tr>
+                <tr>
+                    <td>入口页面</td>
+                    <td style="color: #10B981; font-weight: bold;">绿色</td>
+                    <td>系统入口节点</td>
+                    <td>包括业务员推广入口和商户App浏览权益入口，是用户进入系统的主要通道</td>
+                </tr>
+                <tr>
+                    <td>一级页面</td>
+                    <td style="color: #4fa1d5; font-weight: bold;">蓝色</td>
+                    <td>主要功能导航</td>
+                    <td>代理推广页和权益中心首页，为用户提供核心功能导航</td>
+                </tr>
+                <tr>
+                    <td>二级页面</td>
+                    <td style="color: #6366F1; font-weight: bold;">浅蓝色</td>
+                    <td>功能实现</td>
+                    <td>包括推广数据统计、购买确认页、我的权益页，提供具体功能操作</td>
+                </tr>
+                <tr>
+                    <td>三级页面</td>
+                    <td style="color: #8B5CF6; font-weight: bold;">紫色</td>
+                    <td>详情展示</td>
+                    <td>权益详情页，展示权益的具体内容和使用方式</td>
+                </tr>
+                <tr>
+                    <td>四级页面</td>
+                    <td style="color: #EC4899; font-weight: bold;">粉色</td>
+                    <td>明细记录</td>
+                    <td>权益使用记录，展示权益的历史使用情况</td>
+                </tr>
+            </table>
+            
+            <table>
+                <tr>
+                    <th>连接类型</th>
+                    <th>线条样式</th>
+                    <th>功能说明</th>
+                </tr>
+                <tr>
+                    <td>页面跳转</td>
+                    <td>实线箭头</td>
+                    <td>表示用户在页面间的正常导航流程</td>
+                </tr>
+                <tr>
+                    <td>平级跳转</td>
+                    <td>红色虚线箭头</td>
+                    <td>表示同级页面之间的横向跳转关系</td>
+                </tr>
+                <tr>
+                    <td>数据流向</td>
+                    <td>橙色虚线箭头</td>
+                    <td>表示数据在不同功能模块间的传递关系</td>
+                </tr>
+            </table>
+
+            <h3>3.2 系统架构说明</h3>
+            <div class="highlight">
+                <p><strong>系统架构说明：</strong>商户权益中心采用分层架构设计，包括用户访问层、应用服务层、数据存储层和底层技术方案，通过清晰的职责划分和模块化设计提供高可用、高扩展的系统支持。</p>
+            </div>
+            
+            <table>
+                <tr>
+                    <th>架构层级</th>
+                    <th>主要组件</th>
+                    <th>功能职责</th>
+                </tr>
+                <tr>
+                    <td>用户访问层</td>
+                    <td>商户Web端、代理商Web端、运营管理后台</td>
+                    <td>提供用户界面，负责与用户交互，展示数据和接收用户操作</td>
+                </tr>
+                <tr>
+                    <td>应用服务层</td>
+                    <td>权益包管理、商户权益、代理推广、订单支付、数据统计、系统管理</td>
+                    <td>实现业务逻辑，处理用户请求，协调各个服务模块的工作</td>
+                </tr>
+                <tr>
+                    <td>数据存储层</td>
+                    <td>MySQL、Redis、MongoDB</td>
+                    <td>MySQL存储核心业务数据，Redis提供缓存服务，MongoDB存储日志和统计数据</td>
+                </tr>
+                <tr>
+                    <td>技术方案</td>
+                    <td>前端技术栈、后端技术栈、DevOps与安全</td>
+                    <td>支持系统开发与运维的技术选型与标准，保障系统可靠性和安全性</td>
+                </tr>
+            </table>
+            
+            <h3>3.3 技术选型说明</h3>
+            <table>
+                <tr>
+                    <th>技术领域</th>
+                    <th>技术选型</th>
+                    <th>选用理由</th>
+                </tr>
+                <tr>
+                    <td>前端技术栈</td>
+                    <td>VUE 3.0、Ant Design 5.0、TypeScript</td>
+                    <td>提供现代化UI框架，支持组件化开发，类型安全保障开发质量</td>
+                </tr>
+                <tr>
+                    <td>后端技术栈</td>
+                    <td>Spring Boot 3.0、MyBatis Plus</td>
+                    <td>高效的Java开发框架，简化数据库操作，提供丰富的企业级功能</td>
+                </tr>
+                <tr>
+                    <td>缓存与消息</td>
+                    <td>Redis、RabbitMQ</td>
+                    <td>高性能缓存提升系统响应速度，消息队列保障系统解耦和可靠通信</td>
+                </tr>
+                <tr>
+                    <td>部署与安全</td>
+                    <td>Docker、Kubernetes、Spring Security</td>
+                    <td>容器化部署提升环境一致性，编排工具简化运维，安全框架保障数据安全</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html> 

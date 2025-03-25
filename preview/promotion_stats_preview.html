@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推广数据统计</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../prototype_h5/typography.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #6fb8e0;
+            --primary-dark: #3a89bb;
+            --primary-bg: #ecf5fb;
+            --secondary-color: #03dac6;
+            --background: #F7F9FC;
+            --surface: #ffffff;
+            --error: #E53935;
+            --success: #00C48C;
+            --warning: #FF9800;
+            --text-primary: #1A1A1A;
+            --text-secondary: #505A6C;
+            --text-tertiary: #6F7A8C;
+            --text-on-primary: #ffffff;
+            --border-color: #E5E7EB;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --elevated-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --border-radius-md: 8px;
+            --border-radius-sm: 4px;
+            --phone-width: 380px;
+            --phone-height: 822px;
+            --phone-border-width: 16px;
+            --phone-border-radius: 48px;
+            --phone-notch-width: 126px;
+            --phone-notch-height: 28px;
+            --content-width: 348px;
+        }
+        
+        .swipe-up-tip {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+        .chart-container {
+            width: 100%;
+            height: 180px;
+            position: relative;
+            border-radius: 8px;
+        }
+        
+        .mobile-body {
+            font-family: 'Noto Sans SC', sans-serif;
+            margin: 2rem 0;
+            position: relative;
+            border: var(--phone-border-width) solid #222;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            background-color: #fff;
+            overflow: hidden;
+            width: var(--phone-width);
+            height: var(--phone-height);
+            color: var(--text-primary);
+        }
+        
+        .mobile-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--phone-notch-width);
+            height: var(--phone-notch-height);
+            background-color: #222;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 1000;
+        }
+        
+        .mobile-body::after {
+            content: '';
+            position: absolute;
+            top: 120px;
+            right: calc(var(--phone-border-width) * -1 - 1px);
+            width: 4px;
+            height: 40px;
+            background-color: #444;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .content-wrapper {
+            width: var(--content-width);
+            height: calc(100% - var(--phone-border-width) * 2);
+            display: flex;
+            flex-direction: column;
+            padding-top: calc(var(--phone-notch-height) + 8px);
+            margin: var(--phone-border-width) auto;
+            position: relative;
+            z-index: 1;
+            background-color: var(--background);
+        }
+        
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+        
+        .main-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .main-content::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+        
+        .prototype-additional-content {
+            margin: 2rem 0;
+            width: var(--content-width);
+            padding: 0;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        
+        .card-body {
+            padding: 16px;
+        }
+        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .empty-state-icon {
+            font-size: 48px;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+        }
+        
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        
+        .empty-state-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        
+        .empty-state-action {
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .error-message {
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        
+        .icon-xl {
+            font-size: 48px;
+        }
+        
+        .tap-area {
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+        
+        .prototype-title {
+            text-align: left;
+            margin: 2rem 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .page-container {
+            max-width: var(--phone-width);
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="prototype-title">推广数据统计页面展示</div>
+        
+        <!-- 手机外壳 -->
+        <div class="mobile-body">
+            <div class="content-wrapper">
+                <div class="main-content">
+                    <!-- 顶部导航栏 -->
+                    <div class="bg-white shadow-sm py-3 px-4 flex items-center justify-between sticky top-0 z-10">
+                        <div class="flex items-center">
+                            <button class="tap-area text-gray-600 mr-2" aria-label="返回">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h1 class="text-h2 font-bold">推广数据统计</h1>
+                        </div>
+                        <button class="tap-area text-gray-600" aria-label="更多选项">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+
+                    <!-- 主内容区域 -->
+                    <div class="container mx-auto px-4 py-6">
+                        <!-- 数据概览卡片 -->
+                        <div class="bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg p-5 text-white mb-6" style="border-radius: var(--border-radius-md);">
+                            <h2 class="text-h2 font-bold mb-4 text-white">数据概览</h2>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <p class="text-sm opacity-90">累计推广商户</p>
+                                    <p class="text-xl font-bold">28户</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-90">活跃商户</p>
+                                    <p class="text-xl font-bold">20户</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-90">累计佣金</p>
+                                    <p class="text-xl font-bold">¥3,680</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-90">本月新增</p>
+                                    <p class="text-xl font-bold">6户</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 日期筛选 -->
+                        <div class="card mb-6">
+                            <div class="card-body">
+                                <div class="flex justify-between items-center">
+                                    <h2 class="text-h3 font-bold text-gray-800">数据周期</h2>
+                                    <div class="flex border border-gray-300 rounded-lg overflow-hidden" style="border-radius: var(--border-radius-md);">
+                                        <button class="px-3 py-1 text-sm bg-indigo-600 text-white tap-area h-auto">近7天</button>
+                                        <button class="px-3 py-1 text-sm text-gray-600 tap-area h-auto">近30天</button>
+                                        <button class="px-3 py-1 text-sm text-gray-600 tap-area h-auto">全部</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 业绩趋势图 -->
+                        <div class="card mb-6">
+                            <div class="card-body">
+                                <h2 class="text-h3 font-bold text-gray-800 mb-4">业绩趋势</h2>
+                                <div class="chart-container mb-3">
+                                    <canvas id="trendChart"></canvas>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-700">
+                                    <span>06-12</span>
+                                    <span>06-14</span>
+                                    <span>06-16</span>
+                                    <span>06-18</span>
+                                    <span>06-20</span>
+                                    <span>06-22</span>
+                                    <span>06-24</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 商户分布 -->
+                        <div class="card mb-6">
+                            <div class="card-body">
+                                <h2 class="text-h3 font-bold text-gray-800 mb-4">商户分布</h2>
+                                <div class="chart-container">
+                                    <canvas id="distributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 推广订单列表 -->
+                        <div class="card mb-6">
+                            <div class="card-body">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-h3 font-bold text-gray-800">推广订单</h2>
+                                    <button class="tap-area flex items-center text-sm text-indigo-600 h-auto" aria-label="筛选">
+                                        <span>筛选</span>
+                                        <i class="fas fa-filter ml-1"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- 订单列表 -->
+                                <div class="space-y-4">
+                                    <!-- 订单1 -->
+                                    <div class="border border-gray-100 rounded-lg p-3" style="border-radius: var(--border-radius-md);">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div>
+                                                <div class="text-base font-medium text-gray-800">李四小店</div>
+                                                <div class="text-sm text-gray-500">商户ID: 10023456</div>
+                                            </div>
+                                            <div class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs" style="border-radius: var(--border-radius-sm);">已结算</div>
+                                        </div>
+                                        <div class="flex justify-between items-center text-sm">
+                                            <div>
+                                                <span class="text-gray-700">黄金VIP会员</span>
+                                                <span class="text-gray-400 mx-2">|</span>
+                                                <span class="text-gray-700">¥59.00</span>
+                                            </div>
+                                            <div class="text-indigo-600 font-medium">佣金 ¥10.00</div>
+                                        </div>
+                                        <div class="mt-2 text-xs text-gray-700">
+                                            购买时间: 2023-06-18 14:30
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 订单2 -->
+                                    <div class="border border-gray-100 rounded-lg p-3" style="border-radius: var(--border-radius-md);">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div>
+                                                <div class="text-base font-medium text-gray-800">张三餐厅</div>
+                                                <div class="text-sm text-gray-500">商户ID: 10024567</div>
+                                            </div>
+                                            <div class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs" style="border-radius: var(--border-radius-sm);">待结算</div>
+                                        </div>
+                                        <div class="flex justify-between items-center text-sm">
+                                            <div>
+                                                <span class="text-gray-700">铂金VIP会员</span>
+                                                <span class="text-gray-400 mx-2">|</span>
+                                                <span class="text-gray-700">¥199.00</span>
+                                            </div>
+                                            <div class="text-indigo-600 font-medium">佣金 ¥40.00</div>
+                                        </div>
+                                        <div class="mt-2 text-xs text-gray-700">
+                                            购买时间: 2023-06-20 09:15
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 订单3 -->
+                                    <div class="border border-gray-100 rounded-lg p-3" style="border-radius: var(--border-radius-md);">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div>
+                                                <div class="text-base font-medium text-gray-800">王五商店</div>
+                                                <div class="text-sm text-gray-500">商户ID: 10025678</div>
+                                            </div>
+                                            <div class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs" style="border-radius: var(--border-radius-sm);">已结算</div>
+                                        </div>
+                                        <div class="flex justify-between items-center text-sm">
+                                            <div>
+                                                <span class="text-gray-700">黄金VIP会员</span>
+                                                <span class="text-gray-400 mx-2">|</span>
+                                                <span class="text-gray-700">¥59.00</span>
+                                            </div>
+                                            <div class="text-indigo-600 font-medium">佣金 ¥10.00</div>
+                                        </div>
+                                        <div class="mt-2 text-xs text-gray-700">
+                                            购买时间: 2023-06-15 11:20
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 底部上滑提示 -->
+                    <div class="swipe-up-tip">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-chevron-up text-gray-400 animate-bounce"></i>
+                            <span class="text-xs text-gray-400">上滑查看更多订单</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 原型附加内容 - 手机壳外展示 -->
+        <div class="prototype-additional-content">
+            <h2 class="text-2xl font-bold mb-6 mt-8">原型附加内容</h2>
+            
+            <!-- 空状态示例 -->
+            <div class="card mb-6">
+                <div class="card-body">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-h3 font-bold text-gray-800">空状态示例</h3>
+                    </div>
+                    
+                    <!-- 空状态展示 -->
+                    <div class="empty-state py-10">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-file-invoice-dollar opacity-60 icon-xl"></i>
+                        </div>
+                        <h4 class="empty-state-title">暂无推广订单</h4>
+                        <p class="empty-state-message">您还没有推广订单记录<br>分享您的推广链接，获得更多佣金收入</p>
+                        <a href="#" class="empty-state-action bg-primary-color text-white px-4 py-2 rounded-lg text-sm hover:bg-primary-light focus:ring-2 focus:ring-primary-light focus:ring-opacity-50 transition-all" style="border-radius: var(--border-radius-md);">
+                            开始推广
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 表单验证示例 -->
+            <div class="card mb-20">
+                <div class="card-body">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-h3 font-bold text-gray-800">表单验证示例</h3>
+                    </div>
+                    
+                    <form class="space-y-4">
+                        <!-- 成功状态的表单域 -->
+                        <div class="form-group has-success">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">商户名称</label>
+                            <input type="text" value="张三餐厅" class="success w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none" title="商户名称" placeholder="请输入商户名称">
+                            <div class="text-success text-xs mt-1">
+                                <i class="fas fa-check-circle mr-1"></i>商户名称有效
+                            </div>
+                        </div>
+                        
+                        <!-- 错误状态的表单域 -->
+                        <div class="form-group has-error">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">联系电话</label>
+                            <input type="text" value="123" class="error w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none" title="联系电话" placeholder="请输入11位手机号码">
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle mr-1"></i>请输入有效的11位手机号码
+                            </div>
+                        </div>
+                        
+                        <!-- 加载状态按钮 -->
+                        <div>
+                            <button type="button" class="bg-primary-color text-white px-4 py-2 rounded-md text-sm w-full">
+                                提交表单
+                            </button>
+                            <button type="button" class="bg-primary-color text-white px-4 py-2 rounded-md text-sm w-full mt-2 loading">
+                                加载中
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 业绩趋势图
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        const trendChart = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['06-12', '06-14', '06-16', '06-18', '06-20', '06-22', '06-24'],
+                datasets: [
+                    {
+                        label: '推广商户数',
+                        data: [3, 4, 2, 5, 6, 4, 7],
+                        borderColor: '#4F46E5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#4F46E5',
+                        pointRadius: 3,
+                    },
+                    {
+                        label: '佣金金额(元)',
+                        data: [150, 280, 120, 320, 450, 300, 580],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#10B981',
+                        pointRadius: 3,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            boxWidth: 10,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#1A1A1A',
+                        bodyColor: '#505A6C',
+                        borderColor: '#E5E7EB',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: true,
+                        usePointStyle: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y;
+                                    if (context.datasetIndex === 1) {
+                                        label += '元';
+                                    } else {
+                                        label += '户';
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false,
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                        },
+                        ticks: {
+                            font: {
+                                size: 10,
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '商户数',
+                            font: {
+                                size: 10,
+                            }
+                        },
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        ticks: {
+                            font: {
+                                size: 10,
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '佣金(元)',
+                            font: {
+                                size: 10,
+                            }
+                        },
+                    }
+                }
+            }
+        });
+
+        // 商户分布图
+        const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+        const distributionChart = new Chart(distributionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['黄金VIP', '铂金VIP', '钻石VIP', '其他'],
+                datasets: [{
+                    data: [12, 8, 5, 3],
+                    backgroundColor: [
+                        '#EAB308',
+                        '#6366F1', 
+                        '#06B6D4',
+                        '#94A3B8'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                layout: {
+                    padding: 10
+                },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            padding: 15,
+                            boxWidth: 10,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: {
+                                size: 10
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#1A1A1A',
+                        bodyColor: '#505A6C',
+                        borderColor: '#E5E7EB',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: true,
+                        usePointStyle: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                const value = context.raw;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round(value / total * 100);
+                                return `${label}${value}户 (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 添加交互效果 - 点击效果
+        const allClickableElements = document.querySelectorAll('button, .tap-area');
+        allClickableElements.forEach(element => {
+            element.style.cursor = 'pointer';
+            element.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            element.addEventListener('mouseup', function() {
+                this.style.transform = 'scale(1)';
+            });
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>权益详情</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #4fa1d5;
+            --primary-light: #6fb8e0;
+            --primary-dark: #3a89b8;
+            --primary-bg: #ecf5fb;
+            --secondary-color: #03dac6;
+            --background: #F7F9FC;
+            --surface: #ffffff;
+            --error: #E53935;
+            --success: #00C48C;
+            --warning: #FF9800;
+            --text-primary: #1A1A1A;
+            --text-secondary: #5E6C84;
+            --text-tertiary: #8993A4;
+            --text-on-primary: #ffffff;
+            --border-color: #E5E9F2;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --elevated-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --phone-width: 380px;
+            --phone-height: 822px;
+            --phone-border-width: 16px;
+            --phone-border-radius: 48px;
+            --phone-notch-width: 126px;
+            --phone-notch-height: 28px;
+            --content-width: 348px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-md: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 22px;
+            --touch-target-size: 44px;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            margin: 2rem auto;
+            position: relative;
+            border: var(--phone-border-width) solid #222;
+            border-radius: var(--phone-border-radius);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.05);
+            background-color: #fff;
+            overflow: hidden;
+            width: var(--phone-width);
+            height: var(--phone-height);
+            color: var(--text-primary);
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--phone-notch-width);
+            height: var(--phone-notch-height);
+            background-color: #222;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 1000;
+        }
+        
+        body::after {
+            content: '';
+            position: absolute;
+            top: 120px;
+            right: calc(var(--phone-border-width) * -1 - 1px);
+            width: 4px;
+            height: 40px;
+            background-color: #444;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        /* 内容容器样式 */
+        .content-wrapper {
+            width: var(--content-width);
+            height: calc(100% - var(--phone-border-width) * 2);
+            display: flex;
+            flex-direction: column;
+            padding-top: calc(var(--phone-notch-height) + var(--spacing-sm));
+            margin: var(--phone-border-width) auto;
+            position: relative;
+            z-index: 1;
+            background-color: white;
+        }
+        
+        /* 调整主内容区域的内边距，不再为底部导航栏预留空间 */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-md);
+            padding-bottom: var(--spacing-lg);
+        }
+        
+        /* 添加滚动条样式 */
+        .main-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .main-content::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+        
+        /* 顶部导航样式 */
+        .nav-header {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            height: var(--touch-target-size);
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-md);
+            position: relative;
+            z-index: 10;
+            box-shadow: var(--card-shadow);
+            margin-top: var(--spacing-sm);
+        }
+        
+        .header-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .options-button {
+            width: var(--touch-target-size);
+            height: var(--touch-target-size);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        
+        .options-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .material-card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid var(--border-color);
+            padding: var(--spacing-md);
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            height: 20px;
+            padding: 0 8px;
+            border-radius: 10px;
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            background-color: #e0e0e0;
+            white-space: nowrap;
+        }
+        
+        /* 添加按钮样式规范 */
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--text-on-primary);
+            border-radius: 20px;
+            padding: var(--spacing-xs) var(--spacing-md);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            border: none;
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+        
+        /* 统一图标样式 */
+        .icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-bg);
+            margin-right: var(--spacing-sm);
+        }
+        
+        .icon-container .material-icons {
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <!-- 顶部导航栏 -->
+        <div class="nav-header">
+            <div class="options-button">
+                <i class="fas fa-arrow-left text-gray-600"></i>
+            </div>
+            <div class="flex-1 flex justify-center">
+                <h1 class="header-title">权益详情</h1>
+            </div>
+            <div class="w-[var(--touch-target-size)]"></div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 权益卡片 -->
+            <div class="material-card mb-4">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <div class="icon-container">
+                            <span class="material-icons">workspace_premium</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[var(--font-size-md)] font-medium text-[var(--text-primary)]">黄金VIP会员</h3>
+                            <p class="text-[var(--font-size-xs)] text-[var(--text-secondary)]">有效期至：2024-12-31</p>
+                        </div>
+                    </div>
+                    <div class="chip bg-blue-50 text-[var(--primary-color)]">已开通</div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="material-icons text-[var(--primary-color)] mr-1.5" style="font-size: var(--font-size-xs);">confirmation_number</span>
+                        <span class="text-[var(--font-size-xs)] text-[var(--text-secondary)]">剩余30张抵扣券</span>
+                    </div>
+                    <button class="btn-primary">使用记录</button>
+                </div>
+            </div>
+
+            <!-- 权益说明 -->
+            <div class="material-card">
+                <h3 class="text-[var(--font-size-md)] font-medium text-[var(--text-primary)] mb-3">权益说明</h3>
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                        <div class="icon-container" style="width: 24px; height: 24px;">
+                            <span class="material-icons" style="font-size: 14px;">info</span>
+                        </div>
+                        <div>
+                            <p class="text-[var(--font-size-xs)] text-[var(--text-primary)] font-medium mb-1">抵扣券使用规则</p>
+                            <p class="text-[var(--font-size-xs)] text-[var(--text-secondary)]">单笔交易满5000元可使用一张抵扣券，每张抵扣券可抵扣10元手续费</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="icon-container" style="width: 24px; height: 24px;">
+                            <span class="material-icons" style="font-size: 14px;">schedule</span>
+                        </div>
+                        <div>
+                            <p class="text-[var(--font-size-xs)] text-[var(--text-primary)] font-medium mb-1">有效期</p>
+                            <p class="text-[var(--font-size-xs)] text-[var(--text-secondary)]">抵扣券自开通之日起30天内有效</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="icon-container" style="width: 24px; height: 24px;">
+                            <span class="material-icons" style="font-size: 14px;">warning</span>
+                        </div>
+                        <div>
+                            <p class="text-[var(--font-size-xs)] text-[var(--text-primary)] font-medium mb-1">使用限制</p>
+                            <p class="text-[var(--font-size-xs)] text-[var(--text-secondary)]">每笔交易仅可使用一张抵扣券，不可叠加使用</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 添加页面导航功能
+        const pages = [
+            'agent_promotion_preview.html',
+            'benefit_detail_preview.html',
+            'benefit_usage_record_preview.html',
+            'merchant_fee_discount_preview.html',
+            'my_benefits_preview.html',
+            'purchase_confirm_preview.html'
+        ];
+        
+        // 获取当前页面名称
+        const currentPage = window.location.pathname.split('/').pop();
+        const currentIndex = pages.indexOf(currentPage);
+        
+        // 添加返回按钮功能
+        const backButton = document.querySelector('.options-button .fa-arrow-left');
+        if (backButton) {
+            backButton.parentElement.style.cursor = 'pointer';
+            backButton.parentElement.addEventListener('click', function() {
+                // 修改为返回上一级页面，而不是浏览器的后退功能
+                // 定义页面层级结构，将业务员推广页面设为最高级页面
+                const pageHierarchy = {
+                    'benefit_detail_preview.html': 'my_benefits_preview.html',
+                    'benefit_usage_record_preview.html': 'my_benefits_preview.html',
+                    'merchant_fee_discount_preview.html': 'my_benefits_preview.html',
+                    'my_benefits_preview.html': 'agent_promotion_preview.html',
+                    'purchase_confirm_preview.html': 'my_benefits_preview.html'
+                };
+                
+                // 获取上一级页面
+                const parentPage = pageHierarchy[currentPage];
+                if (parentPage) {
+                    window.location.href = parentPage;
+                } else {
+                    // 如果没有定义上一级页面，则回到业务员推广页面
+                    window.location.href = 'agent_promotion_preview.html';
+                }
+            });
+        }
+        
+        // 添加底部操作栏按钮功能
+        const actionButtons = document.querySelectorAll('.action-button');
+        if (actionButtons.length > 0) {
+            actionButtons.forEach((button, index) => {
+                button.style.cursor = 'pointer';
+                button.addEventListener('click', function() {
+                    // 当按钮被点击时，跳转到下一个页面
+                    const nextPage = (currentIndex + index + 1) % pages.length;
+                    window.location.href = pages[nextPage];
+                });
+            });
+        }
+        
+        // 添加其他按钮的功能（如"立即使用"等）
+        const otherButtons = document.querySelectorAll('button');
+        if (otherButtons.length > 0) {
+            otherButtons.forEach(button => {
+                button.style.cursor = 'pointer';
+                button.addEventListener('click', function() {
+                    const nextIndex = (currentIndex + 1) % pages.length;
+                    window.location.href = pages[nextIndex];
+                });
+            });
+        }
+        
+        // 添加交互效果 - 点击效果
+        const allClickableElements = document.querySelectorAll('.action-button, button, .options-button');
+        allClickableElements.forEach(element => {
+            element.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            element.addEventListener('mouseup', function() {
+                this.style.transform = 'scale(1)';
+            });
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    });
+</script>
+</html> 
